@@ -1,7 +1,4 @@
 #!/bin/bash
-cd Desktop
-git clone https://github.com/zeta-technologies/tests-raspberry
-cd tests-raspberry
 sudo apt update && sudo apt full-upgrade
 wget --quiet -O - https://deb.nodesource.com/setup_8.x | sudo -E bash -
 sudo apt install nodejs
