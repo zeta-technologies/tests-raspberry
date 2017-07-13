@@ -11,3 +11,4 @@ sudo apt-get -y install python-pyaudio
 npm install openbci-ganglion
 npm install lodash
 npm install clone
+sudo reboot
