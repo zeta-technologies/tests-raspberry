@@ -79,9 +79,9 @@ thread.start()
 
 '''REsting state'''
 timerImage = pg.image.load(timer[0])
-timerImage = pg.image.transform(timerImage, (70*w_display/1024, 90*h_display/576))
+timerImage = pg.transform.scale(timerImage, (70*w_display/1024, 90*h_display/576))
 restingStateImage = pg.image.load(restingState)
-restingStateImage = pg.image.transform(restingStateImage, (w_display, h_display))
+restingStateImage = pg.transform.scale(restingStateImage, (w_display, h_display))
 
 '''MAIN LOOP'''
 continuer = 1
