@@ -316,7 +316,7 @@ while continuer:
                 deltaPosy = (newPosy - oldPosy) / steps
                 screen.blit(sky, (0, 0))
                 # screen.blit(plane, (300, oldPosy + deltaPosy * step))
-                screen.blit(plane, (300, newPosy))
+                screen.blit(plane, (300*w_display/1024, newPosy*h_display/576))
                 print oldPosy, newPosy
                 # pg.time.delay(400)
                 pg.display.flip()
