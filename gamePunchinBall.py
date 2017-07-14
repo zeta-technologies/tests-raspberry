@@ -31,6 +31,7 @@ from functions import *
 
 screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
 fond = pg.image.load(image_ring).convert()
+fond = pg.transform.scale( fond, (w_display, h_display)
 
 '''Punching ball'''
 punchBall = pg.image.load(punchBallImage)
