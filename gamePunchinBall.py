@@ -56,7 +56,8 @@ scoreDigit = pg.transform.scale(scoreDigit, (70*w_display/1024, 90*h_display/576
 '''Fly game'''
 sky = pg.image.load(skyImage).convert()
 sky = pg.transform.scale(sky, (1024*w_display/1024, 576*h_display/576))
-cloud = pg.image.load(cloudImage).convert()
+# cloud = pg.image.load(cloudImage ( )).convert()
+cloud = pg.image.transform(cloud, ())
 plane = pg.image.load(planeImage).convert()
 # plane = plane.set_colorkey((255, 255, 255))
 

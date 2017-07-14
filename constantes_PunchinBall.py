@@ -13,7 +13,7 @@ cote_fenetre = nombre_sprite_cote * taille_sprite
 titre_fenetre = "ZETA GAMES"
 image_icone = "images/dk_droite.png"
 w_display = 480
-h_display = 320  
+h_display = 300  
 # Listes des images du jeu
 image_accueil = "images/accueil.png"
 image_fond = "images/fond.jpg"
