@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo apt -y update
+sudo apt update
 sudo apt -y full-upgrade
 wget --quiet -O - https://deb.nodesource.com/setup_8.x | sudo -E bash -
 sudo apt -y install nodejs
@@ -11,4 +11,3 @@ sudo apt-get -y install python-pyaudio
 npm install openbci-ganglion
 npm install lodash
 npm install clone
-sudo reboot

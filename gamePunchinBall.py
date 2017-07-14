@@ -28,33 +28,34 @@ from requests import *
 
 from functions import *
 '''background'''
-screen = pg.display.set_mode((1024, 576), RESIZABLE)
+
+screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
 fond = pg.image.load(image_ring).convert()
 
 '''Punching ball'''
 punchBall = pg.image.load(punchBallImage)
-punchBall = pg.transform.scale(punchBall, (250, 450))
+punchBall = pg.transform.scale(punchBall, (250*w_display/1024, 450*h_display/576))
 
 '''Score Bar'''
 scoreBar = pg.image.load(levels_images[level]).convert_alpha()
-scoreBar = pg.transform.scale(scoreBar, (90, 400))
+scoreBar = pg.transform.scale(scoreBar, (90/1024*w_display, 400*h_display/576))
 scoreBar = pg.transform.rotate(scoreBar, -90)
 # test =pg.transform.scale(scoreBar, (90, 400))
 
 '''Winner image'''
 winImg = pg.image.load(winImg).convert_alpha()
-winImg = pg.transform.scale(winImg, (700, 440))
+winImg = pg.transform.scale(winImg, (700*w_display/1024, 440*h_display/576))
 # punchBall = punch.set_colorkey((255,255,255))
 
 '''Score digit '''
 scoreTxt = pg.image.load(image_score)
-scoreTxt = pg.transform.scale(scoreTxt, (150, 50))
+scoreTxt = pg.transform.scale(scoreTxt, (150*w_display/1024, 50*h_display/576))
 scoreDigit = pg.image.load(scoreDigitImages[0])
-scoreDigit = pg.transform.scale(scoreDigit, (70, 90))
+scoreDigit = pg.transform.scale(scoreDigit, (70*w_display/1024, 90*h_display/576))
 
 '''Fly game'''
 sky = pg.image.load(skyImage).convert()
-sky = pg.transform.scale(sky, (1024, 576))
+sky = pg.transform.scale(sky, (1024*w_display/1024, 576*h_display/576))
 cloud = pg.image.load(cloudImage).convert()
 plane = pg.image.load(planeImage).convert()
 # plane = plane.set_colorkey((255, 255, 255))
@@ -83,7 +84,7 @@ continuer = 1
 while continuer:
 
     home = pg.image.load(image_home).convert() #TODO add image_home
-    home = pg.transform.scale(home, (1024, 576))
+    home = pg.transform.scale(home, (1024*w_display/1024, 576*h_display/576))
     screen.blit(home, (0,0))
     pg.display.flip()
 
@@ -123,9 +124,9 @@ while continuer:
         '''Position everything on the screen'''
         screen.blit(scoreTxt, (670, 30))
         screen.blit(fond, (0, 0))
-        screen.blit(punchBall, (350, -5))
-        screen.blit(scoreBar, (317, 460))
-        screen.blit(scoreDigit, (800, 30))
+        screen.blit(punchBall, (350*w_display/1024, -5*h_display/576))
+        screen.blit(scoreBar, (317*w_display/1024, 460*h_display/576))
+        screen.blit(scoreDigit, (800*w_display/1024, 30*h_display/576))
         # screen.blit(test, (317, 460))
         pg.display.flip()
         # punch_noise = pg.mixer.Sound("songs/punch.ogg") # TODO resolve the MemoryError due to pg.mixer.Sound
@@ -143,8 +144,8 @@ while continuer:
     if fly:
         '''Position everything on the screen'''
         screen.blit(sky, (0, 0))
-        screen.blit(cloud, (800, 100))
-        screen.blit(plane, (300, 200))
+        screen.blit(cloud, (800*w_display/1024, 100*h_display/576))
+        screen.blit(plane, (300*w_display/1024, 200*h_display/576))
         # screen.blit(scoreBar, (317, 460))
         # screen.blit(scoreDigit, (800, 30))
         # screen.blit(test, (317, 460))
@@ -225,19 +226,19 @@ while continuer:
                     score = score + 1
                     # punch_noise.play()
                     scoreDigit = pg.image.load(scoreDigitImages[score]).convert()
-                    scoreDigit = pg.transform.scale(scoreDigit, (70, 90))
+                    scoreDigit = pg.transform.scale(scoreDigit, (70*w_display/1024, 90*h_display/576))
                     screen.blit(fond, (0, 0))
-                    screen.blit(scoreDigit, (800, 30))
-                    screen.blit(winImg, (100, 100))
+                    screen.blit(scoreDigit, (800*w_display/1024, 30*h_display/576))
+                    screen.blit(winImg, (100*w_display/1024, 100*h_display/576))
 
                 if level != 7:
                     scoreBar = pg.image.load(levels_images[level]).convert_alpha()
-                    scoreBar = pg.transform.scale(scoreBar, (90, 400))
+                    scoreBar = pg.transform.scale(scoreBar, (90*w_display/1024, 400*h_display/576))
                     scoreBar = pg.transform.rotate(scoreBar, -90)
                     screen.blit(fond, (0, 0))
-                    screen.blit(punchBall, (350,-5))
-                    screen.blit(scoreBar, (317, 460))
-                    screen.blit(scoreDigit, (800, 30))
+                    screen.blit(punchBall, (350*w_display/1024,-5*h_display/576))
+                    screen.blit(scoreBar, (317*w_display/1024, 460*h_display/576))
+                    screen.blit(scoreDigit, (800*w_display/1024, 30*h_display/576))
                 print "level", level
 
                 pg.display.update()
@@ -358,8 +359,8 @@ while continuer:
             timerSec = pg.image.load(timer[int(str(sec)[2])]).convert()
             timerDiz = pg.image.load(timer[int(str(sec)[1])]).convert()
             timerCen = pg.image.load(timer[int(str(sec)[0])]).convert()
-            screen.blit(timerSec, (230, 0))
-            screen.blit(timerDiz, (115, 0))
+            screen.blit(timerSec, (230*w_display/1024, 0*h_display/576))
+            screen.blit(timerDiz, (115*w_display/1024, 0*h_display/576))
             screen.blit(timerCen, (0, 0))
 
         elif sec < 10:
@@ -369,8 +370,8 @@ while continuer:
         elif sec >= 10 & sec < 100:
             timerSec = pg.image.load(timer[int(str(sec)[1])]).convert()
             timerDiz = pg.image.load(timer[int(str(sec)[0])]).convert()
-            screen.blit(timerSec, (115, 0))
-            screen.blit(timerDiz, (0, 0))
+            screen.blit(timerSec, (115*w_display/1024, 0*h_display/576))
+            screen.blit(timerDiz, (0, 0*h_display/576))
 
 
         # timerSec = pg.image.load(timer[sec%10]).convert()
