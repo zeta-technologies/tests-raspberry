@@ -360,8 +360,11 @@ while continuer:
         # print sec
         if sec >= 100:
             timerSec = pg.image.load(timer[int(str(sec)[2])]).convert()
+            timerSec = pg.transform.scale(timerSec, (70*w_display/1024, 90*h_display/576))
             timerDiz = pg.image.load(timer[int(str(sec)[1])]).convert()
+            timerDiz = pg.transform.scale(timerDiz, (70*w_display/1024, 90*h_display/576))
             timerCen = pg.image.load(timer[int(str(sec)[0])]).convert()
+            timerCen = pg.transform.scale(timerCen, (70*w_display/1024, 90*h_display/576))
             screen.blit(timerSec, (230*w_display/1024, 0*h_display/576))
             screen.blit(timerDiz, (115*w_display/1024, 0*h_display/576))
             screen.blit(timerCen, (0, 0))
