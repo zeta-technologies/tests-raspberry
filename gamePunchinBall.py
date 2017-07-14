@@ -312,10 +312,15 @@ while continuer:
                     a = 1. * 300 / (minAlpha - maxAlpha)
                     b = 250 - 1. * (maxAlpha + minAlpha) * a / 2
                     newPosy = a * newMean_alpha + b
-
                 # screen.blit(fond, (0, 0))
-
                 deltaPosy = (newPosy - oldPosy) / steps
+                screen.blit(sky, (0, 0))
+                # screen.blit(plane, (300, oldPosy + deltaPosy * step))
+                screen.blit(plane, (300, newPosy))
+                print oldPosy, newPosy
+                # pg.time.delay(400)
+                pg.display.flip()
+
                 print "new Mean of 4 channels", newMean_alpha, maxAlpha, minAlpha
 
                 # scoreBar = pg.image.load(levels_images[level]).convert_alpha()
@@ -332,12 +337,6 @@ while continuer:
                 #     # sys.stdout.write(char)
 
 
-                # screen.blit(sky, (0, 0))
-                # screen.blit(plane, (300, oldPosy + deltaPosy * step))
-                # screen.blit(plane, (300, newPosy))
-                # print oldPosy + deltaPosy * step
-                # pg.time.delay(400)
-                # pg.display.flip()
 
         except Empty:
             continue # do stuff
