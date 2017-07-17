@@ -1,5 +1,4 @@
 # coding=utf-8
-
 import pygame as pg
 from pygame.locals import *
 from constantes_PunchinBall import *
@@ -25,8 +24,8 @@ from requests import *
 # import math
 # import time
 # from pyaudio import PyAudio
-
 from functions import *
+
 '''background'''
 
 screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
@@ -84,19 +83,19 @@ timerImage = pg.transform.scale(timerImage, (70*w_display/1024, 90*h_display/576
 restingStateImage = pg.image.load(restingState)
 restingStateImage = pg.transform.scale(restingStateImage, (w_display, h_display))
 
-'''Tinnitus Questionnary '''
+'''Tinnitus questionnaire '''
 questionsSerie1Image = pg.image.load(questionsSerie1)
 questionsSerie1Image = pg.transform.scale(questionsSerie1Image, (w_display, h_display))
-
-
 
 '''MAIN LOOP'''
 continuer = 1
 while continuer:
 
+    #LOAD screen Image
     home = pg.image.load(image_home).convert() #TODO add image_home
     home = pg.transform.scale(home, (1024*w_display/1024, 576*h_display/576))
     screen.blit(home, (0,0))
+    # load home menu buttons
     gameA = 'Jeu A'
     gameASurf, gameARect = text_objects(gameA, buttonText)
     gameARect.center = (1.*w_display/4, 3.3*h_display/4)
@@ -106,21 +105,22 @@ while continuer:
     settings = 'Reglages'
     settingsSurf, settingsRect = text_objects(settings, buttonText)
     settingsRect.center = (1.*w_display/4*3, 3.3*h_display/4)
-    # pg.draw.rect(screen, (255, 255, 255), (1.*w_display/13*(nb+1),58,1.*w_display/13,20))
 
     screen.blit(gameASurf, gameARect)
     screen.blit(gameBSurf, gameBRect)
     screen.blit(settingsSurf, settingsRect)
     pg.display.flip()
 
+    # booleans for each window
     punchinBall = 0
     homeOn = 1
     fly = 0
     restingState = 0
-    questionnary = 0
+    questionnaire = 0
 
+    # Home window loop
     while homeOn:
-        pg.time.Clock().tick(60)
+        pg.time.Clock().tick(30)
 
         for event in pg.event.get():
             if event.type == QUIT:
@@ -128,35 +128,32 @@ while continuer:
                 sys.exit()
             elif event.type == MOUSEBUTTONUP:
                 mouseHome = pg.mouse.get_pos()
-                # print math.floor(1.*mouse[0]/(w_display/13))
-                print mouseHome
                 choice = whichButtonHome(mouseHome, w_display, h_display)
-                print choice
-
-                if choice == 1:
+                if choice == 1: # 1 is for punchinBall game
                     homeOn = 0
                     punchinBall = 1
                     fly = 0
                     restingState = 0
-                    questionnary = 0
-                elif choice == 2:
+                    questionnaire = 0
+                elif choice == 2: #  is for flying game
                     homeOn = 0
                     punchinBall = 0
                     fly = 1
-                    questionnary = 0
+                    questionnaire = 0
                     restingState = 0
-                elif choice == 3:
+                elif choice == 3: # 3 is for resting state
                     homeOn = 0
                     punchinBall = 0
                     fly = 0
                     restingState = 1
-                    questionnary = 0
+                    questionnaire = 0
                 # elif :
                 #     homeOn = 0
                 #     punchinBall = 0
                 #     fly = 0
                 #     restingState = 0
-                #     questionnary = 1
+                #     questionnaire = 1
+
     if punchinBall :
         # Chargement du fond
 
@@ -198,7 +195,7 @@ while continuer:
         # sec = sec + 1
         # print sec
 
-    if questionnary:
+    if questionnaire:
 
         screen.blit(questionsSerie1Image, (0,0))
         pg.display.flip()
@@ -246,7 +243,7 @@ while continuer:
                     punchinBall = 0
                     fly = 0
                     restingState = 0
-                    questionnary = 0
+                    questionnaire = 0
         try:
             while cpt < buffersize * nb_channels :
                 buffer_1.append(queue.get_nowait())
@@ -346,7 +343,7 @@ while continuer:
                     punchinBall = 0
                     fly = 0
                     restingState = 0
-                    questionnary = 0
+                    questionnaire = 0
         try:
             while cpt < buffersize * nb_channels:
                 buffer_1.append(queue.get_nowait())
@@ -441,8 +438,8 @@ while continuer:
                     punchinBall = 0
                     fly = 0
                     restingState = 0
-                    questionnary = 0
-                    
+                    questionnaire = 0
+
         # time.sleep(1)
         pg.time.delay(990)
         # print sec
@@ -481,7 +478,7 @@ while continuer:
         pg.display.update()
         sec = sec + 1
 
-    while questionnary:
+    while questionnaire:
         # pg.time.Clock().tick(30)
         mouse = pg.mouse.get_pos()
         for event in pg.event.get():
