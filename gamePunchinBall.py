@@ -63,7 +63,8 @@ plane = pg.image.load(planeImage).convert()
 # plane = plane.set_colorkey((255, 255, 255))
 
 '''launch node process'''
-process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
+# process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
+process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
 queue = Queue()
 thread = Thread(target=enqueue_output, args=(process.stdout, queue))
 thread.daemon = True # kill all on exit
@@ -83,6 +84,12 @@ timerImage = pg.transform.scale(timerImage, (70*w_display/1024, 90*h_display/576
 restingStateImage = pg.image.load(restingState)
 restingStateImage = pg.transform.scale(restingStateImage, (w_display, h_display))
 
+'''Tinnitus Questionnary '''
+questionsSerie1Image = pg.image.load(questionsSerie1)
+questionsSerie1Image = pg.transform.scale(questionsSerie1Image, (w_display, h_display))
+
+
+
 '''MAIN LOOP'''
 continuer = 1
 while continuer:
@@ -92,11 +99,11 @@ while continuer:
     screen.blit(home, (0,0))
     pg.display.flip()
 
-    punchinBall = 1
+    punchinBall = 0
     homeOn = 1
-    fly = 1
-    restingState = 1
-
+    fly = 0
+    restingState = 0
+    questionnary = 0
 
     while homeOn:
         pg.time.Clock().tick(60)
@@ -111,17 +118,25 @@ while continuer:
                     punchinBall = 1
                     fly = 0
                     restingState = 0
+                    questionnary = 0
                 elif event.key == K_2:
                     homeOn = 0
                     punchinBall = 0
                     fly = 1
+                    questionnary = 0
                     restingState = 0
                 elif event.key == K_RETURN:
                     homeOn = 0
                     punchinBall = 0
                     fly = 0
                     restingState = 1
-
+                    questionnary = 0
+                elif event.key == K_3:
+                    homeOn = 0
+                    punchinBall = 0
+                    fly = 0
+                    restingState = 0
+                    questionnary = 1
     if punchinBall :
         # Chargement du fond
 
@@ -160,6 +175,37 @@ while continuer:
         screen.blit(restingStateImage, (0,0))
         screen.blit(timerImage, (0,0))
         pg.display.flip()
+        # sec = sec + 1
+        # print sec
+
+    if questionnary:
+
+        screen.blit(questionsSerie1Image, (0,0))
+        pg.display.flip()
+        # questionText = pg.font.Font('freesansbold.ttf',15)
+        smallText = pg.font.Font("freesansbold.ttf",15)
+        question = questions[0]
+        textQSurf, textQRect = text_objects(question, smallText)
+        textQRect.center = (1.*w_display/2, 29)
+        screen.blit(textQSurf, textQRect)
+
+
+        for nb in range(11):
+
+
+            # TextSurf, TextRect = text_objects("question serie 1", questionText)
+            # TextRect.center = ((display_width/2),(display_height/2))
+            # gameDisplay.blit(TextSurf, TextRect)
+
+            # pg.draw.rect(screen, (218, 227, 243), (1.*w_display/12*(nb+1),58,1.*w_display/12*(nb+2),75))
+            pg.draw.rect(screen, (255, 255, 255), (1.*w_display/13*(nb+1),58,1.*w_display/13,20))
+            text =  "{}%".format(nb)
+            textSurf, textRect = text_objects(text, smallText)
+            textRect.center = ( 1. * w_display/13*(nb+1) + 1.*w_display/13/2, 58 + 10 )
+            screen.blit(textSurf, textRect)
+
+        pg.display.update()
+
         # sec = sec + 1
         # print sec
 
@@ -392,3 +438,32 @@ while continuer:
 
         pg.display.update()
         sec = sec + 1
+
+    while questionnary:
+        # pg.time.Clock().tick(30)
+        mouse = pg.mouse.get_pos()
+        for event in pg.event.get():
+            if event.type == QUIT:
+                pg.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    restingState = 0
+            if event.type == MOUSEBUTTONUP:
+                # print int(mouse[1])
+                if (int(mouse[1]) >= 58) & (int(mouse[1]) <= 80 ) :
+                    answers.append('question 1 in %')
+                    answers.append(math.floor(1.*mouse[0]/(w_display/13)))
+                    print answers
+
+                if (int(mouse[1]) >= 58) & (int(mouse[1]) <= 80 ) :
+                    answers.append('question 2 in %')
+                    answers.append(math.floor(1.*mouse[0]/(w_display/13)))
+                    print answers
+
+                if (int(mouse[1]) >= 58) & (int(mouse[1]) <= 80 ) :
+                    answers.append('question 3 in %')
+                    answers.append(math.floor(1.*mouse[0]/(w_display/13)))
+                    print answers
+
+        pg.display.update()

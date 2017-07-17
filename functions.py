@@ -99,7 +99,7 @@ def enqueue_output(out, queue):
         lines = out.readline()
         out.flush()
         #if lines != '\n' :
-            #queue.put(float(lines))        
+            #queue.put(float(lines))
         queue.put(float(lines))
             #print queue
 
@@ -171,3 +171,35 @@ def movePunchinBall(angle, screen, scoreBar, scoreDigit, fond, image):
 
 #TODO function that returns the next position in flying game
 # def newPosition ( ):
+
+def text_objects(text, font):
+    textSurface = font.render(text, True, (0,0,0))
+    return textSurface, textSurface.get_rect()
+
+
+# def whichCase(posx, posy, serie):
+#     if serie == 1:
+#         if posx < 67 & posx > 37  :
+#           
+#         if posy < 75 & posy > 58 :
+#
+#     if serie == 2:
+#         if posx < & posx >  :
+#
+#         if posy < & posy > :
+#     if serie == 2:
+#         if posx < & posx >  :
+#
+#         if posy < & posy > :
+#     if serie == 2:
+#         if posx < & posx >  :
+#
+#         if posy < & posy > :
+#     if serie == 2:
+#         if posx < & posx >  :
+#
+#         if posy < & posy > :
+#     if serie == 2:
+#         if posx < & posx >  :
+#
+#         if posy < & posy > :

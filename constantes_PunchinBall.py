@@ -13,7 +13,11 @@ cote_fenetre = nombre_sprite_cote * taille_sprite
 titre_fenetre = "ZETA GAMES"
 image_icone = "images/dk_droite.png"
 w_display = 480
-h_display = 280  
+h_display = 280
+pg.font.init()
+black = (0,0,0)
+white = (255,255,255)
+red = (255,0,0)
 # Listes des images du jeu
 image_accueil = "images/accueil.png"
 image_fond = "images/fond.jpg"
@@ -50,3 +54,9 @@ timer = ['images/0.png', 'images/1.png', 'images/2.png', 'images/3.png', 'images
                     'images/6.png', 'images/7.png', 'images/8.png', 'images/9.png']
 restingState = 'images/restingStateImage.png'
 sec = 0
+
+
+'''Tinnitus Questionnary '''
+questionsSerie1 = 'images/questionsSerie1.png'
+answers = []
+questions = ['Pour quel pourcentage de votre temps éveillé \n étiez-vous conscient de vos acouphènes?','Sur une echelle de 0-10, quelle force avaient vos acouphènes ?','Vos acouphènes vous ont géné quel % de votre temps ?','À quel degré avez-vous eu le sentiment que vous pouviez contrôler vos acouphènes?','quelle facilité avez-vous eue à gérer vos acouphènes?','À quel point était-ce facile pour vous d’ignorer vos acouphènes?']
