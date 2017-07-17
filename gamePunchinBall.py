@@ -130,7 +130,7 @@ while continuer:
                 mouseHome = pg.mouse.get_pos()
                 # print math.floor(1.*mouse[0]/(w_display/13))
                 choice = whichButtonHome(mouseHome, w_display)
-                print mouseHome
+                print choice
 
                 if choice == 'gameA':
                     homeOn = 0
