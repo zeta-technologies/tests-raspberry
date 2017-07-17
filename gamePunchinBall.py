@@ -63,8 +63,8 @@ plane = pg.image.load(planeImage).convert()
 # plane = plane.set_colorkey((255, 255, 255))
 
 '''launch node process'''
-# process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
-process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
+process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
+# process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
 queue = Queue()
 thread = Thread(target=enqueue_output, args=(process.stdout, queue))
 thread.daemon = True # kill all on exit
@@ -97,6 +97,20 @@ while continuer:
     home = pg.image.load(image_home).convert() #TODO add image_home
     home = pg.transform.scale(home, (1024*w_display/1024, 576*h_display/576))
     screen.blit(home, (0,0))
+    gameA = 'Jeu A'
+    gameASurf, gameARect = text_objects(gameA, buttonText)
+    gameARect.center = (1.*w_display/4, 3.3*h_display/4)
+    gameB = 'Jeu B'
+    gameBSurf, gameBRect = text_objects(gameB, buttonText)
+    gameBRect.center = (1.*w_display/2, 3.3*h_display/4)
+    settings = 'Reglages'
+    settingsSurf, settingsRect = text_objects(settings, buttonText)
+    settingsRect.center = (1.*w_display/4*3, 3.3*h_display/4)
+    # pg.draw.rect(screen, (255, 255, 255), (1.*w_display/13*(nb+1),58,1.*w_display/13,20))
+
+    screen.blit(gameASurf, gameARect)
+    screen.blit(gameBSurf, gameBRect)
+    screen.blit(settingsSurf, settingsRect)
     pg.display.flip()
 
     punchinBall = 0
@@ -112,31 +126,36 @@ while continuer:
             if event.type == QUIT:
                 pg.quit()
                 sys.exit()
-            elif event.type == KEYDOWN:
-                if event.key == K_1:
+            elif event.type == MOUSEBUTTONUP:
+                mouseHome = pg.mouse.get_pos()
+                # print math.floor(1.*mouse[0]/(w_display/13))
+                choice = whichButtonHome(mouseHome, w_display)
+                print mouseHome
+
+                if choice == 'gameA':
                     homeOn = 0
                     punchinBall = 1
                     fly = 0
                     restingState = 0
                     questionnary = 0
-                elif event.key == K_2:
+                elif choice == 'gameB':
                     homeOn = 0
                     punchinBall = 0
                     fly = 1
                     questionnary = 0
                     restingState = 0
-                elif event.key == K_RETURN:
+                elif choice == 'settings':
                     homeOn = 0
                     punchinBall = 0
                     fly = 0
                     restingState = 1
                     questionnary = 0
-                elif event.key == K_3:
-                    homeOn = 0
-                    punchinBall = 0
-                    fly = 0
-                    restingState = 0
-                    questionnary = 1
+                # elif :
+                #     homeOn = 0
+                #     punchinBall = 0
+                #     fly = 0
+                #     restingState = 0
+                #     questionnary = 1
     if punchinBall :
         # Chargement du fond
 

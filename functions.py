@@ -180,7 +180,7 @@ def text_objects(text, font):
 # def whichCase(posx, posy, serie):
 #     if serie == 1:
 #         if posx < 67 & posx > 37  :
-#           
+#
 #         if posy < 75 & posy > 58 :
 #
 #     if serie == 2:
@@ -203,3 +203,13 @@ def text_objects(text, font):
 #         if posx < & posx >  :
 #
 #         if posy < & posy > :
+def whichButtonHome(mouse, w_display):
+    button = ''
+    if (mouse[0] <= w_display / 4 - 10) & (mouse[0] >= w_display / 4 + 10) & (mouse[1] <= 230) & (mouse[1] <= 180):
+        button = 'gameA'
+    if (mouse[0] <= w_display / 2 - 10) & (mouse[0] >= w_display / 2 + 10) & (mouse[1] <= 230) & (mouse[1] <= 180):
+        button = 'gameB'
+    if (mouse[0] <= 3.*w_display / 4 - 10) & (mouse[0] >= 3.*w_display / 4 + 10) & (mouse[1] <= 230) & (mouse[1] <= 180):
+        button = 'settings'
+
+    return button

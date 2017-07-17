@@ -1,4 +1,8 @@
 #!/bin/bash
+sudo apt-get clean
+sudo apt-get autoremove
+sudo aptitude hold wolfram-engine
+sudo aptitude hold libreoffice
 sudo apt update
 sudo apt -y full-upgrade
 wget --quiet -O - https://deb.nodesource.com/setup_8.x | sudo -E bash -

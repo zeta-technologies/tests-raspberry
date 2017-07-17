@@ -18,7 +18,10 @@ pg.font.init()
 black = (0,0,0)
 white = (255,255,255)
 red = (255,0,0)
+choice = ''
 # Listes des images du jeu
+buttonText = pg.font.Font('/Users/jonathanschmutz/Library/Fonts/couture/couture-bld.otf', 15)
+
 image_accueil = "images/accueil.png"
 image_fond = "images/fond.jpg"
 image_mur = "images/mur.png"
