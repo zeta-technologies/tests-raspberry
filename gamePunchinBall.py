@@ -129,22 +129,23 @@ while continuer:
             elif event.type == MOUSEBUTTONUP:
                 mouseHome = pg.mouse.get_pos()
                 # print math.floor(1.*mouse[0]/(w_display/13))
-                choice = whichButtonHome(mouseHome, w_display)
+                print mouseHome
+                choice = whichButtonHome(mouseHome, w_display, h_display)
                 print choice
 
-                if choice == 'gameA':
+                if choice == 1:
                     homeOn = 0
                     punchinBall = 1
                     fly = 0
                     restingState = 0
                     questionnary = 0
-                elif choice == 'gameB':
+                elif choice == 2:
                     homeOn = 0
                     punchinBall = 0
                     fly = 1
                     questionnary = 0
                     restingState = 0
-                elif choice == 'settings':
+                elif choice == 3:
                     homeOn = 0
                     punchinBall = 0
                     fly = 0
@@ -238,7 +239,14 @@ while continuer:
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     punchinBall = 0
-
+            elif event.type == MOUSEBUTTONUP:
+                mouseReturn = pg.mouse.get_pos()
+                if whichButtonReturn(mouseReturn, w_display, h_display):
+                    homeOn = 1
+                    punchinBall = 0
+                    fly = 0
+                    restingState = 0
+                    questionnary = 0
         try:
             while cpt < buffersize * nb_channels :
                 buffer_1.append(queue.get_nowait())
@@ -331,7 +339,14 @@ while continuer:
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     fly = 0
-
+            elif event.type == MOUSEBUTTONUP:
+                mouseReturn = pg.mouse.get_pos()
+                if whichButtonReturn(mouseReturn, w_display, h_display):
+                    homeOn = 1
+                    punchinBall = 0
+                    fly = 0
+                    restingState = 0
+                    questionnary = 0
         try:
             while cpt < buffersize * nb_channels:
                 buffer_1.append(queue.get_nowait())
@@ -419,7 +434,15 @@ while continuer:
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     restingState = 0
-
+            elif event.type == MOUSEBUTTONUP:
+                mouseReturn = pg.mouse.get_pos()
+                if whichButtonReturn(mouseReturn, w_display, h_display):
+                    homeOn = 1
+                    punchinBall = 0
+                    fly = 0
+                    restingState = 0
+                    questionnary = 0
+                    
         # time.sleep(1)
         pg.time.delay(990)
         # print sec

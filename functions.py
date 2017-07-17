@@ -203,13 +203,23 @@ def text_objects(text, font):
 #         if posx < & posx >  :
 #
 #         if posy < & posy > :
-def whichButtonHome(mouse, w_display):
-    button = ''
-    if (mouse[0] <= w_display / 4 - 10) & (mouse[0] >= w_display / 4 + 10) & (mouse[1] <= 230) & (mouse[1] <= 180):
-        button = 'gameA'
-    if (mouse[0] <= w_display / 2 - 10) & (mouse[0] >= w_display / 2 + 10) & (mouse[1] <= 230) & (mouse[1] <= 180):
-        button = 'gameB'
-    if (mouse[0] <= 3.*w_display / 4 - 10) & (mouse[0] >= 3.*w_display / 4 + 10) & (mouse[1] <= 230) & (mouse[1] <= 180):
-        button = 'settings'
+def whichButtonHome(mouse, w_display, h_display):
+    button = 0
 
+    if (int(mouse[0]) <= 1.*w_display / 4 + 30) & (int(mouse[0]) >= 1.* w_display / 4 - 30) & (int(mouse[1]) <= h_display - 50) & (int(mouse[1]) >= h_display - 100):
+        button = 1
+
+    elif (int(mouse[0]) <= 1.* w_display / 2 + 30) & (int(mouse[0]) >= 1.*w_display / 2 - 30) & (int(mouse[1]) <= h_display - 50) & (int(mouse[1]) >= h_display - 100):
+        button = 2
+
+    elif (int(mouse[0]) <= 3.*w_display / 4 + 30) & (int(mouse[0]) >= 3.*w_display / 4 - 30) & (int(mouse[1]) <= h_display - 50) & (int(mouse[1]) >= h_display - 100):
+        button = 3
+    # print button
+    # return 1
+    return button
+
+def whichButtonReturn(mouse, w_display, h_display):
+    button = 0
+    if (int(mouse[0]) <= 1.* w_display / 6) & (int(mouse[1]) <= 50):
+        button = 1
     return button
