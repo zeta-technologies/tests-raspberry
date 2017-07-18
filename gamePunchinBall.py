@@ -64,8 +64,8 @@ plane = pg.transform.scale(plane, (50, 50))
 # plane = plane.set_colorkey((255, 255, 255))
 
 '''launch node process'''
-# process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
-process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
+process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
+# process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
 queue = Queue()
 thread = Thread(target=enqueue_output, args=(process.stdout, queue))
 thread.daemon = True # kill all on exit
@@ -348,8 +348,21 @@ while continuer:
                     fly = 0
                     restingState = 0
                     questionnaire = 0
+        try:
 
-        mainNeuro(queue, buffer_1, OPB1_data, oldPosy)  # function that move the bird according to the metric
+            newPosy = mainNeuro(screen, sky, plane, queue, buffer_1, OPB1_data, oldPosy)  # function that move the bird according to the metric
+
+
+        except Empty:
+            continue  # do stuff
+        else:
+            str(buffer_1)
+            # sys.stdout.write(char)
+
+        pg.display.update()
+        oldPosy = newPosy
+        cpt = 0
+        buffer_1 = []
 
     while restingState:
         # pg.time.Clock().tick(30)

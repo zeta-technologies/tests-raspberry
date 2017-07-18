@@ -10,7 +10,10 @@ sudo apt -y full-upgrade
 wget --quiet -O - https://deb.nodesource.com/setup_8.x | sudo -E bash -
 sudo apt -y install nodejs
 sudo apt-get -y install npm
-sudo apt-get -y install Bluetooth bluez-utils blueman bluez python-gobject python-gobject-2
+sudo apt-get -y install Bluetooth
+sudo apt-get -y install bluez-utils
+sudo apt-get -y install blueman
+sudo apt-get -y install bluez
 sudo apt-get -y install libbluetooth-dev
 sudo apt-get -y install python-numpy
 sudo apt-get -y install python-scipy
