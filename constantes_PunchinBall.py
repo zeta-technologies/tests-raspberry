@@ -46,8 +46,10 @@ level = 0
 score = 0
 
 '''Fly game'''
-skyImage = 'images/sky.png'
-planeImage = 'images/plane.jpg'
+skyImage = 'images/beach.png'
+planeImage = 'images/bird.png'
+# skyImage = 'images/sky.png'
+# planeImage = 'images/plane.jpg'
 cloudImage = 'images/cloud.png'
 oldPosy = 200
 steps = 10

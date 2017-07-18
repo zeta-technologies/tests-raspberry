@@ -56,9 +56,10 @@ scoreDigit = pg.transform.scale(scoreDigit, (70*w_display/1024, 90*h_display/576
 '''Fly game'''
 sky = pg.image.load(skyImage).convert()
 sky = pg.transform.scale(sky, (1024*w_display/1024, 576*h_display/576))
-cloud = pg.image.load(cloudImage).convert()
+# cloud = pg.image.load(cloudImage).convert()
 # cloud = pg.image.transform(cloud, ())
-plane = pg.image.load(planeImage).convert()
+plane = pg.image.load(planeImage).convert_alpha()
+plane = pg.transform.scale(plane, (50, 50))
 # plane = plane.set_colorkey((255, 255, 255))
 
 '''launch node process'''
@@ -147,6 +148,7 @@ while continuer:
                     fly = 0
                     restingState = 1
                     questionnaire = 0
+
                 # elif :
                 #     homeOn = 0
                 #     punchinBall = 0
@@ -180,8 +182,9 @@ while continuer:
     if fly:
         '''Position everything on the screen'''
         screen.blit(sky, (0, 0))
-        screen.blit(cloud, (800*w_display/1024, 100*h_display/576))
-        screen.blit(plane, (300*w_display/1024, 200*h_display/576))
+        # screen.blit(cloud, (800*w_display/1024, 100*h_display/576))
+        # screen.blit(plane, (300*w_display/1024, 200*h_display/576))
+        screen.blit(plane, ( 5.* w_display / 12, 1. * h_display / 5))
         # screen.blit(scoreBar, (317, 460))
         # screen.blit(scoreDigit, (800, 30))
         # screen.blit(test, (317, 460))
