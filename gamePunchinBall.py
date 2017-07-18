@@ -25,6 +25,7 @@ from requests import *
 # import time
 # from pyaudio import PyAudio
 from functions import *
+from gamePunchinBall import *
 
 '''background'''
 
@@ -63,8 +64,8 @@ plane = pg.transform.scale(plane, (50, 50))
 # plane = plane.set_colorkey((255, 255, 255))
 
 '''launch node process'''
-process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
-# process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
+# process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
+process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
 queue = Queue()
 thread = Thread(target=enqueue_output, args=(process.stdout, queue))
 thread.daemon = True # kill all on exit
@@ -81,8 +82,8 @@ thread.start()
 '''REsting state'''
 timerImage = pg.image.load(timer[0])
 timerImage = pg.transform.scale(timerImage, (70*w_display/1024, 90*h_display/576))
-restingStateImage = pg.image.load(restingState)
-restingStateImage = pg.transform.scale(restingStateImage, (w_display, h_display))
+# restingStateImage = pg.image.load(restingState)
+# restingStateImage = pg.transform.scale(restingStateImage, (w_display, h_display))
 
 '''Tinnitus questionnaire '''
 questionsSerie1Image = pg.image.load(questionsSerie1)
@@ -347,82 +348,8 @@ while continuer:
                     fly = 0
                     restingState = 0
                     questionnaire = 0
-        try:
-            while cpt < buffersize * nb_channels:
-                buffer_1.append(queue.get_nowait())
-                cpt += 1
-                cpt2 = 0
 
-            while cpt2 < 1:
-
-                cpt2 += 1
-                buffer_1_array = np.asarray(buffer_1)
-
-                OPB1_data[0, :] = buffer_1_array[ind_channel_1]
-                OPB1_data[1, :] = buffer_1_array[ind_channel_2]
-                OPB1_data[2, :] = buffer_1_array[ind_channel_3]
-                OPB1_data[3, :] = buffer_1_array[ind_channel_4]
-
-                OPB1_fdata[0, :] = filter_data(OPB1_data[0, :], fs_hz)
-                OPB1_fdata[1, :] = filter_data(OPB1_data[1, :], fs_hz)
-                OPB1_fdata[2, :] = filter_data(OPB1_data[2, :], fs_hz)
-                OPB1_fdata[3, :] = filter_data(OPB1_data[3, :], fs_hz)
-
-                # OPB1_bandmean_delta = np.zeros(nb_channels)
-                OPB1_bandmean_alpha = np.zeros(nb_channels)
-
-                OPB1_bandmax_alpha = np.zeros(nb_channels)
-                OPB1_bandmin_alpha = np.zeros(nb_channels)
-
-                for channel in range(4):
-                    OPB1_bandmean_alpha[channel] = extract_freqbandmean(200, fs_hz, OPB1_fdata[channel, :], 6, 11)
-                    # OPB1_bandmean_delta[channel] = extract_freqbandmean(200, fs_hz, OPB1_data[channel,:], 1, 4)
-
-                ''' Get the mean, min and max of the last result of all channels'''
-                newMean_alpha = np.average(OPB1_bandmean_alpha)  # mean of the 4 channels, not the best metric I guess
-                OPB1_mean_array_uv.append(newMean_alpha)
-                maxAlpha = np.amax(OPB1_mean_array_uv)
-                minAlpha = np.min(OPB1_mean_array_uv)
-
-                if newMean_alpha == maxAlpha:
-                    newPosy = 100
-                elif newMean_alpha == minAlpha:
-                    newPosy = 400
-                else:
-                    a = 1. * 300 / (minAlpha - maxAlpha)
-                    b = 250 - 1. * (maxAlpha + minAlpha) * a / 2
-                    newPosy = a * newMean_alpha + b
-                # screen.blit(fond, (0, 0))
-                deltaPosy = (newPosy - oldPosy) / steps
-                screen.blit(sky, (0, 0))
-                # screen.blit(plane, (300, oldPosy + deltaPosy * step))
-                screen.blit(plane, (300*w_display/1024, newPosy*h_display/576))
-                print oldPosy, newPosy
-                # pg.time.delay(400)
-                pg.display.flip()
-
-                print "new Mean of 4 channels", newMean_alpha, maxAlpha, minAlpha
-
-                # scoreBar = pg.image.load(levels_images[level]).convert_alpha()
-                # scoreBar = pg.transform.scale(scoreBar, (90, 400))
-                # scoreBar = pg.transform.rotate(scoreBar, -90)
-                oldPosy = newPosy
-                cpt = 0
-                buffer_1 = []
-
-                # except Empty:
-                #     continue  # do stuff
-                # # else:
-                #     # str(buffer_1)
-                #     # sys.stdout.write(char)
-
-
-
-        except Empty:
-            continue # do stuff
-        # else:
-        #     str(buffer_1)
-        #     #sys.stdout.write(char)
+        mainNeuro(queue, buffer_1, OPB1_data, oldPosy)  # function that move the bird according to the metric
 
     while restingState:
         # pg.time.Clock().tick(30)

@@ -53,6 +53,9 @@ planeImage = 'images/bird.png'
 cloudImage = 'images/cloud.png'
 oldPosy = 200
 steps = 10
+minDisplayY = 10
+maxDisplayY = 150
+
 
 '''resting state'''
 timer = ['images/0.png', 'images/1.png', 'images/2.png', 'images/3.png', 'images/4.png', 'images/5.png',
@@ -65,3 +68,11 @@ sec = 0
 questionsSerie1 = 'images/questionsSerie1.png'
 answers = []
 questions = ['Pour quel pourcentage de votre temps éveillé \n étiez-vous conscient de vos acouphènes?','Sur une echelle de 0-10, quelle force avaient vos acouphènes ?','Vos acouphènes vous ont géné quel % de votre temps ?','À quel degré avez-vous eu le sentiment que vous pouviez contrôler vos acouphènes?','quelle facilité avez-vous eue à gérer vos acouphènes?','À quel point était-ce facile pour vous d’ignorer vos acouphènes?']
+
+# booleans for each window
+punchinBall = 0
+homeOn = 1
+fly = 0
+restingState = 0
+questionnaire = 0
+

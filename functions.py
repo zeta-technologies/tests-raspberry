@@ -17,6 +17,8 @@ import math
 from time import sleep
 import pygame as pg
 from pyaudio import PyAudio
+from constantesDataStream import *
+from constantes_PunchinBall import *
 
 def filter_data(data, fs_hz):
     '''
@@ -223,3 +225,74 @@ def whichButtonReturn(mouse, w_display, h_display):
     if (int(mouse[0]) <= 1.* w_display / 6) & (int(mouse[1]) <= 50):
         button = 1
     return button
+
+def mainNeuro(queue, buffer_1, OPB1_data, oldPosy ):
+    cpt = 0
+    try:
+        while cpt < buffersize * nb_channels:
+            buffer_1.append(queue.get_nowait())
+            cpt += 1
+            cpt2 = 0
+
+        while cpt2 < 1:
+
+            cpt2 += 1
+            buffer_1_array = np.asarray(buffer_1)
+
+            OPB1_data[0, :] = buffer_1_array[ind_channel_1]
+            OPB1_data[1, :] = buffer_1_array[ind_channel_2]
+            OPB1_data[2, :] = buffer_1_array[ind_channel_3]
+            OPB1_data[3, :] = buffer_1_array[ind_channel_4]
+
+            OPB1_fdata[0, :] = filter_data(OPB1_data[0, :], fs_hz)
+            OPB1_fdata[1, :] = filter_data(OPB1_data[1, :], fs_hz)
+            OPB1_fdata[2, :] = filter_data(OPB1_data[2, :], fs_hz)
+            OPB1_fdata[3, :] = filter_data(OPB1_data[3, :], fs_hz)
+
+            # OPB1_bandmean_delta = np.zeros(nb_channels)
+            OPB1_bandmean_alpha = np.zeros(nb_channels)
+
+            OPB1_bandmax_alpha = np.zeros(nb_channels)
+            OPB1_bandmin_alpha = np.zeros(nb_channels)
+
+            for channel in range(4):
+                OPB1_bandmean_alpha[channel] = extract_freqbandmean(200, fs_hz, OPB1_fdata[channel, :], 6, 11)
+                # OPB1_bandmean_delta[channel] = extract_freqbandmean(200, fs_hz, OPB1_data[channel,:], 1, 4)
+
+            ''' Get the mean, min and max of the last result of all channels'''
+            newMean_alpha = np.average(OPB1_bandmean_alpha)  # mean of the 4 channels, not the best metric I guess
+            OPB1_mean_array_uv.append(newMean_alpha)
+            maxAlpha = np.amax(OPB1_mean_array_uv)
+            minAlpha = np.min(OPB1_mean_array_uv)
+
+            if newMean_alpha == maxAlpha:
+                newPosy = minDisplayY
+            elif newMean_alpha == minAlpha:
+                newPosy = maxDisplayY
+            else:
+                a = 1. * (maxDisplayY-minDisplayY) / (minAlpha - maxAlpha)
+                b = maxDisplayY - minAlpha * a
+                newPosy = a * newMean_alpha + b
+            # screen.blit(fond, (0, 0))
+
+            deltaPosy = 1.* (newPosy - oldPosy) / steps
+            screen.blit(sky, (0, 0))
+            print newPosy
+            # screen.blit(plane, (, oldPosy + deltaPosy * steps))
+            screen.blit(plane, (5. * w_display / 12, newPosy))
+            # print oldPosy, newPosy
+            # pg.time.delay(400)
+            pg.display.flip()
+
+            # print "new Mean of 4 channels", newMean_alpha, maxAlpha, minAlpha
+
+            # scoreBar = pg.image.load(levels_images[level]).convert_alpha()
+            # scoreBar = pg.transform.scale(scoreBar, (90, 400))
+            # scoreBar = pg.transform.rotate(scoreBar, -90)
+            oldPosy = newPosy
+            cpt = 0
+            buffer_1 = []
+
+    except Empty:
+        # print 'ERROR : outside main try '
+        return
