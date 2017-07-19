@@ -1,4 +1,4 @@
-# coding=utf-8
+#!/usr/bin/python
 import pygame as pg
 from pygame.locals import *
 from constantes_PunchinBall import *
@@ -6,6 +6,8 @@ from constantesDataStream import *
 import sys
 from subprocess import Popen, PIPE
 from threading  import Thread
+from sys import platform
+
 # from Queue import Queue, Empty
 # from subprocess import call
 # import binascii
@@ -28,7 +30,6 @@ from functions import *
 from gamePunchinBall import *
 
 '''background'''
-
 screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
 fond = pg.image.load(image_ring).convert()
 fond = pg.transform.scale( fond, (w_display, h_display))
@@ -63,60 +64,46 @@ plane = pg.image.load(planeImage).convert_alpha()
 plane = pg.transform.scale(plane, (50, 50))
 # plane = plane.set_colorkey((255, 255, 255))
 
-
-#try:
-#    pipe = subprocess.Popen('sudo node openBCIDataStream.js', stdout=subprocess.PIPE,stderr=subprocess.STDOUT, shell=True)
-#except Exception as e:
-#     logging.error(str(e))
-#queue = Queue()
-#thread = Thread(target=enqueue_output, args=(pipe.stdout, queue))
-#thread.daemon = True # kill all on exit
-#thread.start()
-
 '''Resting state'''
 timerImage = pg.image.load(timer[0])
 timerImage = pg.transform.scale(timerImage, (70*w_display/1024, 90*h_display/576))
 restingImage = pg.image.load('images/restingState.png').convert()
 restingStateImage = pg.transform.scale(restingImage, (w_display, h_display))
 
-'''Tinnitus questionnaire '''
-questionsSerie1Image = pg.image.load(questionsSerie1)
-questionsSerie1Image = pg.transform.scale(questionsSerie1Image, (w_display, h_display))
+# '''Tinnitus questionnaire '''
+# questionsSerie1Image = pg.image.load(questionsSerie1)
+# questionsSerie1Image = pg.transform.scale(questionsSerie1Image, (w_display, h_display))
 
 '''MAIN LOOP'''
-continuer = 1
-while continuer:
+gameOn = 1
+while gameOn:
 
     #LOAD screen Image
     home = pg.image.load(image_home).convert() #TODO add image_home
     home = pg.transform.scale(home, (1024*w_display/1024, 576*h_display/576))
     screen.blit(home, (0,0))
+
     # load home menu buttons
+    settings = 'Étalonnage'
+    settingsSurf, settingsRect = text_objects(settings, buttonText)
+    settingsRect.center = (1.*w_display/4, 3.3*h_display/4)
+
     gameA = 'Jeu A'
     gameASurf, gameARect = text_objects(gameA, buttonText)
-    gameARect.center = (1.*w_display/4, 3.3*h_display/4)
+    gameARect.center = (1.*w_display/2, 3.3*h_display/4)
     gameB = 'Jeu B'
     gameBSurf, gameBRect = text_objects(gameB, buttonText)
-    gameBRect.center = (1.*w_display/2, 3.3*h_display/4)
-    settings = 'Reglages'
-    settingsSurf, settingsRect = text_objects(settings, buttonText)
-    settingsRect.center = (1.*w_display/4*3, 3.3*h_display/4)
+    gameBRect.center = (3.*w_display/4, 3.3*h_display/4)
 
     screen.blit(gameASurf, gameARect)
     screen.blit(gameBSurf, gameBRect)
     screen.blit(settingsSurf, settingsRect)
     pg.display.flip()
 
-    # booleans for each window
-    punchinBall = 0
-    homeOn = 1
-    fly = 0
-    restingState = 0
-    questionnaire = 0
 
     # Home window loop
     while homeOn:
-        pg.time.Clock().tick(30)
+        pg.time.Clock().tick(60)
 
         for event in pg.event.get():
             if event.type == QUIT:
@@ -144,22 +131,18 @@ while continuer:
                     restingState = 1
                     questionnaire = 0
 
-                # elif :
-                #     homeOn = 0
-                #     punchinBall = 0
-                #     fly = 0
-                #     restingState = 0
-                #     questionnaire = 1
-
     if punchinBall :
+
         '''launch node process'''
-        # process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
-        processPB = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
+        if platform == 'darwin': # mac
+            processPB = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
+        elif platform == 'linux' or platform == 'linux2': #linux
+            processPB = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for LINUX
+
         queuePB = Queue()
         threadPB = Thread(target=enqueue_output, args=(processPB.stdout, queuePB))
-        threadPB.daemon = True # kill all on exit
+        threadPB.daemon = True
         threadPB.start()
-        # Chargement du fond
         bufferPB = []
 
         '''Position everything on the screen'''
@@ -168,24 +151,16 @@ while continuer:
         screen.blit(punchBall, (350*w_display/1024, -5*h_display/576))
         screen.blit(scoreBar, (317*w_display/1024, 460*h_display/576))
         screen.blit(scoreDigit, (800*w_display/1024, 30*h_display/576))
-        # screen.blit(test, (317, 460))
         pg.display.flip()
         # punch_noise = pg.mixer.Sound("songs/punch.ogg") # TODO resolve the MemoryError due to pg.mixer.Sound
 
-
-        # Génération d'un niveau à partir d'un fichier
-        # game = Game(gameChoice) # TODO create Game class
-        # game.generer()
-        # game.afficher(screen)
-        #
-        # # Création de  Kong
-        # gauge = Level("images/dk_droite.png", "images/dk_gauche.png",
-        #            "images/dk_haut.png", "images/dk_bas.png", niveau) # TODO create Level class
-
     if fly:
         '''launch node process'''
-        # process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
-        processF = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
+        if platform == 'darwin': # mac
+            processF = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
+        elif platform == 'linux' or platform == 'linux2': #linux
+            processF = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for LINUX
+
         queueF = Queue()
         threadF = Thread(target=enqueue_output, args=(processF.stdout, queueF))
         threadF.daemon = True # kill all on exit
@@ -204,14 +179,18 @@ while continuer:
         pg.display.flip()
 
     if restingState:
+
+        if platform == 'darwin': # mac
+            processRS = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
+        elif platform == 'linux' or platform == 'linux2': #linux
+            processRS = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for LINUX
+
         '''launch node process'''
-        # process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
-        processRS = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
         queueRS = Queue()
         threadRS = Thread(target=enqueue_output, args=(processRS.stdout, queueRS))
-        threadRS.daemon = True # kill all on exit
+        threadRS.daemon = True
         threadRS.start()
-        # Chargement du fond
+
         bufferRS = []
         band_alphaRS_ch1 = []
         band_alphaRS_ch2 = []
@@ -223,12 +202,9 @@ while continuer:
         band_deltaRS_ch3 = []
         band_deltaRS_ch4 = []
 
-        # timerImage = pg.image.load(timer[]).convert()
         screen.blit(restingStateImage, (0,0))
         displayNumber(0, screen, 'down')
         pg.display.flip()
-        # sec = sec + 1
-        # print sec
 
     if questionnaire:
 
@@ -263,7 +239,7 @@ while continuer:
 
     while punchinBall:
 
-        pg.time.Clock().tick(30)
+        pg.time.Clock().tick(60)
         for event in pg.event.get():
             if event.type == QUIT:
                 pg.quit()
@@ -279,17 +255,15 @@ while continuer:
                     fly = 0
                     restingState = 0
                     questionnaire = 0
-                    processPB.terminate()
+                    processPB.terminate() # terminates the node process to close connection with openBCI
                     bufferPB = []
                     cpt = 0
                     queuePB.queue.clear()
-
 
         try:
             while cpt < buffersize * nb_channels :
                 bufferPB.append(queuePB.get_nowait())
                 cpt += 1
-                # cpt2 = 0
 
             bufferPB_array = np.asarray(bufferPB)
 
@@ -303,7 +277,6 @@ while continuer:
             fdataPB[2, :] = filter_data(dataPB[2, :], fs_hz)
             fdataPB[3, :] = filter_data(dataPB[3, :], fs_hz)
 
-            # OPB1_bandmean_delta = np.zeros(nb_channels)
             bandmean_alphaPB = np.zeros(nb_channels)
             bandmax_alphaPB = np.zeros(nb_channels)
             bandmin_alphaPB = np.zeros(nb_channels)
@@ -319,28 +292,26 @@ while continuer:
             ''' Get the mean, min and max of the last result of all channels'''
             newMean_alphaPB = np.average(bandmean_alphaPB) #mean of the 4 channels, not the best metric I guess
             newMean_deltaPB = np.average(bandmean_deltaPB)
-            # ratio = newMean_alpha / newMean_delta
-            # print 'ratio', ratio
+
             ''' increment the mean, min and max arrays of the freqRange studied'''
             mean_array_uvPB.append(newMean_alphaPB)
 
             if len(mean_array_uvPB) != 0:
-                deltaPB = np.amax(mean_array_uvPB) - np.min(mean_array_uvPB)  # Calculate delta before or after adding newMean_alpha?
+                deltaPB = np.amax(mean_array_uvPB) - np.min(mean_array_uvPB)
             if len(mean_array_uvPB) == 0:
                 deltaPB = 0
-            print "new Mean of 4 channels", newMean_alphaPB
-            print "Max - Min ", deltaPB
+            # print "new Mean of 4 channels", newMean_alphaPB
+            # print "Max - Min ", deltaPB
 
             if deltaPB == 0:
                 level = 0
 
             if deltaPB !=0:
-                level = int(math.floor(7*(newMean_alphaPB-np.min(mean_array_uvPB))/deltaPB)) #we dont take the newMean
+                level = int(math.floor(7*(newMean_alphaPB-np.min(mean_array_uvPB))/deltaPB))
 
             if level == 7:
                 scorePB = scorePB + 1
                 # punch_noise.play()
-                # scorePB = int(math.floor(scorePB))
                 scoreDigit = pg.image.load(scoreDigitImages[scorePB]).convert()
                 scoreDigit = pg.transform.scale(scoreDigit, (70*w_display/1024, 90*h_display/576))
                 screen.blit(fond, (0, 0))
@@ -355,10 +326,9 @@ while continuer:
                 screen.blit(punchBall, (350*w_display/1024,-5*h_display/576))
                 screen.blit(scoreBar, (317*w_display/1024, 460*h_display/576))
                 screen.blit(scoreDigit, (800*w_display/1024, 30*h_display/576))
+
             print "level", level
-
             pg.display.update()
-
             cpt = 0
             bufferPB = []
 
@@ -419,7 +389,7 @@ while continuer:
                 bandmean_alphaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
                 bandmean_deltaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], 3, 4)
 
-            ''' Get the mean, min and max of the last result of all channels'''
+            ''' Get the mean, min and max of the last reslt of all channels'''
             newMean_alphaF = np.average(bandmean_alphaF)  # mean of the 4 channels, not the best metric I guess
             mean_array_uvF.append(newMean_alphaF)
             maxAlphaF = np.amax(mean_array_uvF)
@@ -435,11 +405,8 @@ while continuer:
                 a = (maxDisplayY - minDisplayY) * 1. / (minAlphaF - maxAlphaF)
                 b = maxDisplayY - minAlphaF * a
                 newPosy = a * newMean_alphaF + b
-                # screen.blit(fond, (0, 0))
 
             scoreF = scoreF + flyScore(newPosy)
-
-            # newPosy, OPB1_mean_array_uv = mainNeuro(queue, bufferF, OPB1_data, oldPosy)  # function that returns the new Y Position of the bird
 
             deltaPosy = 1. * (newPosy - oldPosy) / steps
             screen.blit(sky, (0, 0))
@@ -493,7 +460,7 @@ while continuer:
                     queueRS.queue.clear()
                     bufferRS = []
 
-        if sec == 3 :
+        if sec == restingStateDuration :
             # np.zeros(nb_freq_alpha)
             band_alphaRS_ch1 = np.asarray(band_alphaRS_ch1)
             band_alphaRS_ch2 = np.asarray(band_alphaRS_ch2)
@@ -514,7 +481,7 @@ while continuer:
             restingState = 0
             homeOn = 1
 
-        elif sec < 3:
+        elif sec < restingStateDuration:
 
             try:
                 while cpt < buffersize * nb_channels:
@@ -533,22 +500,17 @@ while continuer:
                 fdataRS[2, :] = filter_data(dataRS[2, :], fs_hz)
                 fdataRS[3, :] = filter_data(dataRS[3, :], fs_hz)
 
-                alphabandch1 = extract_freqband(200, fs_hz, fdataRS[0, :], 6, 13)
-                # print 'alphabandch1', alphabandch1[1]
-
                 band_alphaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:], 6, 13)[0])
                 band_alphaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:], 6, 13)[0])
                 band_alphaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:], 6, 13)[0])
                 band_alphaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:], 6, 13)[0])
                 nb_freq_alpha = extract_freqband(200, fs_hz, fdataRS[0,:], 6, 13)[1]
-                # print 'band_alphaRS_ch1[0]', band_alphaRS_ch1[:]
 
                 band_deltaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:], 3, 4)[0])
                 band_deltaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:], 3, 4)[0])
                 band_deltaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:], 3, 4)[0])
                 band_deltaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:], 3, 4)[0])
                 nb_freq_delta = extract_freqband(200, fs_hz, fdataRS[3,:], 3, 4)[1]
-                # print extract_freqband(200, fs_hz, fdataRS[3,:], 3, 4)[1]
 
                 # for channel in range(4):
                 #     band_alphaRS[channel] = extract_freqband(200, fs_hz, fdataRS[channel,:], 6, 11)
@@ -558,7 +520,7 @@ while continuer:
                 cpt = 0
                 bufferRS = []
                 displayNumber(sec, screen, 'down')
-                # checkImp() # TODO write check impedances function
+                # checkImp() # TODO  check impedances function
                 pg.display.update()
                 sec = sec + 1
 
