@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/Users/jonathanschmutz/anaconda/bin/python
+
 import pygame as pg
 from pygame.locals import *
 from constantes_PunchinBall import *
@@ -7,7 +8,6 @@ import sys
 from subprocess import Popen, PIPE
 from threading  import Thread
 from sys import platform
-
 # from Queue import Queue, Empty
 # from subprocess import call
 # import binascii
@@ -76,6 +76,7 @@ restingStateImage = pg.transform.scale(restingImage, (w_display, h_display))
 
 '''MAIN LOOP'''
 gameOn = 1
+print 'You are running Zeta Game on ', platform
 while gameOn:
 
     #LOAD screen Image
@@ -84,7 +85,7 @@ while gameOn:
     screen.blit(home, (0,0))
 
     # load home menu buttons
-    settings = 'Étalonnage'
+    settings = 'Etalonnage'
     settingsSurf, settingsRect = text_objects(settings, buttonText)
     settingsRect.center = (1.*w_display/4, 3.3*h_display/4)
 
@@ -112,11 +113,11 @@ while gameOn:
             elif event.type == MOUSEBUTTONUP:
                 mouseHome = pg.mouse.get_pos()
                 choice = whichButtonHome(mouseHome, w_display, h_display)
-                if choice == 1: # 1 is for punchinBall game
+                if choice == 1: # 1 is for resting state
                     homeOn = 0
-                    punchinBall = 1
+                    punchinBall = 0
                     fly = 0
-                    restingState = 0
+                    restingState = 1
                     questionnaire = 0
                 elif choice == 2: #  is for flying game
                     homeOn = 0
@@ -124,11 +125,11 @@ while gameOn:
                     fly = 1
                     questionnaire = 0
                     restingState = 0
-                elif choice == 3: # 3 is for resting state
+                elif choice == 3: # 3 is for punchinBall
                     homeOn = 0
-                    punchinBall = 0
+                    punchinBall = 1
                     fly = 0
-                    restingState = 1
+                    restingState = 0
                     questionnaire = 0
 
     if punchinBall :
@@ -455,7 +456,7 @@ while gameOn:
                     fly = 0
                     restingState = 0
                     questionnaire = 0
-                    print band_alphaRS_ch1
+                    # print band_alphaRS_ch1
                     processRS.terminate()
                     queueRS.queue.clear()
                     bufferRS = []
@@ -472,9 +473,9 @@ while gameOn:
             freqMaxAlphaCh2 = getfreqmax(band_alphaRS_ch2, 'alpha', nb_freq_alpha)
             freqMaxAlphaCh3 = getfreqmax(band_alphaRS_ch3, 'alpha', nb_freq_alpha)
             freqMaxAlphaCh4 = getfreqmax(band_alphaRS_ch4, 'alpha', nb_freq_alpha)
-            freqMaxAlpha = np.average([freqMaxAlphaCh1, freqMaxAlphaCh2, freqMaxAlphaCh3, freqMaxAlphaCh4])
+            freqMaxAlpha = int(np.average([freqMaxAlphaCh1, freqMaxAlphaCh2, freqMaxAlphaCh3, freqMaxAlphaCh4]))
 
-            print 'fin de la seance de reglage', freqMaxCh1
+            print 'fin de la seance de reglage', freqMaxAlpha
             processRS.terminate()
             queueRS.queue.clear()
             bufferRS = []
