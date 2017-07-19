@@ -56,13 +56,22 @@ def extract_freqbandmean(N, fe, signal, fmin, fmax):
     mean = np.mean(fftsig)
     return mean
 
+def extract_freqband(N, fe, signal, fmin, fmax):
+    fftsig = abs(np.fft.fft(signal))
+    # print fftsig.shape
+    fftsig = fftsig[fmin:fmax+1]
+    length = len(fftsig)
+    # freq = np.fft.fftfreq(N, timestep)
+    return fftsig, length
+
 def extract_freqbandmin(N, fe, signal, fmin, fmax):
     #f = np.linspace(0,fe/2,int(np.floor(N/2)))
     fftsig = abs(np.fft.fft(signal))
     # print fftsig.shape
+    # freq = np.fft.fftfreq(200, timestep)
     fftsig = fftsig[fmin:fmax]
     min = np.min(fftsig)
-    return min
+    return fftsig
 
 def extract_freqbandmax(N, fe, signal, fmin, fmax):
     #f = np.linspace(0,fe/2,int(np.floor(N/2)))
@@ -178,33 +187,6 @@ def text_objects(text, font):
     textSurface = font.render(text, True, (0,0,0))
     return textSurface, textSurface.get_rect()
 
-
-# def whichCase(posx, posy, serie):
-#     if serie == 1:
-#         if posx < 67 & posx > 37  :
-#
-#         if posy < 75 & posy > 58 :
-#
-#     if serie == 2:
-#         if posx < & posx >  :
-#
-#         if posy < & posy > :
-#     if serie == 2:
-#         if posx < & posx >  :
-#
-#         if posy < & posy > :
-#     if serie == 2:
-#         if posx < & posx >  :
-#
-#         if posy < & posy > :
-#     if serie == 2:
-#         if posx < & posx >  :
-#
-#         if posy < & posy > :
-#     if serie == 2:
-#         if posx < & posx >  :
-#
-#         if posy < & posy > :
 def whichButtonHome(mouse, w_display, h_display):
     button = 0
 
@@ -220,86 +202,37 @@ def whichButtonHome(mouse, w_display, h_display):
     # return 1
     return button
 
+
 def whichButtonReturn(mouse, w_display, h_display):
     button = 0
     if (int(mouse[0]) <= 1.* w_display / 6) & (int(mouse[1]) <= 50):
         button = 1
     return button
 
-def mainNeuro(screen, sky, plane, queue, buffer_1, OPB1_data, oldPosy ):
-    cpt = 0
-    # try:
 
-    while cpt < buffersize * nb_channels:
-        buffer_1.append(queue.get_nowait())
-        cpt += 1
-        cpt2 = 0
+def mainNeuro(OPB1_bandmean_alpha, OPB1_mean_array_uv, minDisplayY, maxDisplayY):
 
-    while cpt2 < 1:
+    newMean_alpha = np.average(OPB1_bandmean_alpha)  # mean of the 4 channels, not the best metric I guess
+    OPB1_mean_array_uv.append(newMean_alpha)
+    maxAlpha = np.amax(OPB1_mean_array_uv)
+    minAlpha = np.min(OPB1_mean_array_uv)
 
-        cpt2 += 1
-        buffer_1_array = np.asarray(buffer_1)
+    if newMean_alpha == maxAlpha:
+        newPosy = minDisplayY
 
-        OPB1_data[0, :] = buffer_1_array[ind_channel_1]
-        OPB1_data[1, :] = buffer_1_array[ind_channel_2]
-        OPB1_data[2, :] = buffer_1_array[ind_channel_3]
-        OPB1_data[3, :] = buffer_1_array[ind_channel_4]
+    elif newMean_alpha == minAlpha:
+        newPosy = maxDisplayY
 
-        OPB1_fdata[0, :] = filter_data(OPB1_data[0, :], fs_hz)
-        OPB1_fdata[1, :] = filter_data(OPB1_data[1, :], fs_hz)
-        OPB1_fdata[2, :] = filter_data(OPB1_data[2, :], fs_hz)
-        OPB1_fdata[3, :] = filter_data(OPB1_data[3, :], fs_hz)
+    else:
+        a = (maxDisplayY-minDisplayY) * 1. / (minAlpha - maxAlpha)
+        b = maxDisplayY - minAlpha * a
+        newPosy = a * newMean_alpha + b
+    # screen.blit(fond, (0, 0))
 
-        # OPB1_bandmean_delta = np.zeros(nb_channels)
-        OPB1_bandmean_alpha = np.zeros(nb_channels)
+    return [newPosy, OPB1_mean_array_uv]
 
-        OPB1_bandmax_alpha = np.zeros(nb_channels)
-        OPB1_bandmin_alpha = np.zeros(nb_channels)
 
-        for channel in range(4):
-            OPB1_bandmean_alpha[channel] = extract_freqbandmean(200, fs_hz, OPB1_fdata[channel, :], 6, 11)
-            # OPB1_bandmean_delta[channel] = extract_freqbandmean(200, fs_hz, OPB1_data[channel,:], 1, 4)
-
-        ''' Get the mean, min and max of the last result of all channels'''
-        newMean_alpha = np.average(OPB1_bandmean_alpha)  # mean of the 4 channels, not the best metric I guess
-        OPB1_mean_array_uv.append(newMean_alpha)
-        maxAlpha = np.amax(OPB1_mean_array_uv)
-        minAlpha = np.min(OPB1_mean_array_uv)
-
-        if newMean_alpha == maxAlpha:
-            newPosy = minDisplayY
-        elif newMean_alpha == minAlpha:
-            newPosy = maxDisplayY
-        else:
-            a = 1. * (maxDisplayY-minDisplayY) / (minAlpha - maxAlpha)
-            b = maxDisplayY - minAlpha * a
-            newPosy = a * newMean_alpha + b
-        # screen.blit(fond, (0, 0))
-
-        deltaPosy = 1.* (newPosy - oldPosy) / steps
-        screen.blit(sky, (0, 0))
-        print newPosy
-        # screen.blit(plane, (, oldPosy + deltaPosy * steps))
-        screen.blit(plane, (5. * w_display / 12, newPosy))
-        # print oldPosy, newPosy
-        # pg.time.delay(400)
-        pg.display.flip()
-
-        # print "new Mean of 4 channels", newMean_alpha, maxAlpha, minAlpha
-
-        # scoreBar = pg.image.load(levels_images[level]).convert_alpha()
-        # scoreBar = pg.transform.scale(scoreBar, (90, 400))
-        # scoreBar = pg.transform.rotate(scoreBar, -90)
-        return newPosy
-
-def punchinBall(screen, sky, plane, queue, buffer_1, OPB1_data, oldPosy ):
-    cpt = 0
-    # try:
-
-    while cpt < buffersize * nb_channels:
-        buffer_1.append(queue.get_nowait())
-        cpt += 1
-        cpt2 = 0
+def punchinballmain(screen, cpt2, fond, punchBall, buffer_1, OPB1_data ):
 
     while cpt2 < 1:
 
@@ -364,8 +297,124 @@ def punchinBall(screen, sky, plane, queue, buffer_1, OPB1_data, oldPosy ):
             screen.blit(scoreBar, (317 * w_display / 1024, 460 * h_display / 576))
             screen.blit(scoreDigit, (800 * w_display / 1024, 30 * h_display / 576))
         print "level", level
-
         pg.display.update()
 
-        cpt = 0
-        buffer_1 = []
+
+def flyScore(posY):
+
+    newscore = 1.* (maxScore - minScore)/(minDisplayY - maxDisplayY) * ( posY - minDisplayY) + maxScore
+    # print newscore
+    return newscore
+
+
+def displayNumber(nb, screen, position):
+    print nb
+    nb = int(nb)
+    if position == 'up':
+        if nb >= 1000:
+            timerSec = pg.image.load(timer[int(str(nb)[3])]).convert()
+            timerSec = pg.transform.scale(timerSec, (int(1. * w_display / 15), int(1. * h_display / 10)))
+            timerDiz = pg.image.load(timer[int(str(nb)[2])]).convert()
+            timerDiz = pg.transform.scale(timerDiz, (int(1. * w_display / 15), int(1. * h_display / 10)))
+            timerCen = pg.image.load(timer[int(str(nb)[1])]).convert()
+            timerCen = pg.transform.scale(timerCen, (int(1. * w_display / 15), int(1. * h_display / 10)))
+            timerThou = pg.image.load(timer[int(str(nb)[0])]).convert()
+            timerThou = pg.transform.scale(timerThou, (int(1. * w_display / 15), int(1. * h_display / 10)))
+            screen.blit(timerSec, (3. * w_display / 15, 0))
+            screen.blit(timerDiz, (2. * w_display / 15, 0))
+            screen.blit(timerCen, (1. * w_display / 15, 0))
+            screen.blit(timerThou, (0, 0))
+
+        elif nb >= 100:
+            timerSec = pg.image.load(timer[int(str(nb)[2])]).convert()
+            timerSec = pg.transform.scale(timerSec, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            timerDiz = pg.image.load(timer[int(str(nb)[1])]).convert()
+            timerDiz = pg.transform.scale(timerDiz, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            timerCen = pg.image.load(timer[int(str(nb)[0])]).convert()
+            timerCen = pg.transform.scale(timerCen, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            screen.blit(timerSec, (2.* w_display / 15, 0))
+            screen.blit(timerDiz, (1.* w_display / 15, 0))
+            screen.blit(timerCen, (0, 0))
+
+
+        elif nb >= 10 :
+            timerSec = pg.image.load(timer[int(str(nb)[1])]).convert()
+            timerSec = pg.transform.scale(timerSec, (int(1. * w_display / 15), int(1. * h_display / 10)))
+            timerDiz = pg.image.load(timer[int(str(nb)[0])]).convert()
+            timerDiz = pg.transform.scale(timerDiz, (int(1. * w_display / 15), int(1. * h_display / 10)))
+            screen.blit(timerSec, (1. * w_display / 15, 0))
+            screen.blit(timerDiz, (0, 0))
+
+        elif nb < 10:
+            timerSec = pg.image.load(timer[int(str(nb)[0])]).convert()
+            timerSec = pg.transform.scale(timerSec, (int(1. * w_display / 15), int(1. * h_display / 10)))
+            screen.blit(timerSec, (0, 0))
+
+    elif position == 'down':
+
+        if nb >= 1000:
+            timerSec = pg.image.load(timer[int(str(nb)[3])]).convert()
+            timerSec = pg.transform.scale(timerSec, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            timerDiz = pg.image.load(timer[int(str(nb)[2])]).convert()
+            timerDiz = pg.transform.scale(timerDiz, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            timerCen = pg.image.load(timer[int(str(nb)[1])]).convert()
+            timerCen = pg.transform.scale(timerCen, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            timerThou = pg.image.load(timer[int(str(nb)[0])]).convert()
+            timerThou = pg.transform.scale(timerThou, (int(1. * w_display / 15), int(1. * h_display / 10)))
+            screen.blit(timerSec, (14.* w_display / 15, 9.* h_display / 10))
+            screen.blit(timerDiz, (13.* w_display / 15, 9.* h_display / 10))
+            screen.blit(timerCen, (12.* w_display / 15, 9.* h_display / 10))
+            screen.blit(timerThou, (11. * w_display / 15, 9. * h_display / 10))
+
+
+        elif nb >= 100:
+            timerSec = pg.image.load(timer[int(str(nb)[2])]).convert()
+            timerSec = pg.transform.scale(timerSec, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            timerDiz = pg.image.load(timer[int(str(nb)[1])]).convert()
+            timerDiz = pg.transform.scale(timerDiz, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            timerCen = pg.image.load(timer[int(str(nb)[0])]).convert()
+            timerCen = pg.transform.scale(timerCen, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            screen.blit(timerSec, (14.* w_display / 15, 9.* h_display / 10))
+            screen.blit(timerDiz, (13.* w_display / 15, 9.* h_display / 10))
+            screen.blit(timerCen, (12.* w_display / 15, 9.* h_display / 10))
+
+        elif nb >= 10 :
+            timerSec = pg.image.load(timer[int(str(nb)[1])]).convert()
+            timerSec = pg.transform.scale(timerSec,(int(1.* w_display / 15), int(1.*h_display / 10)))
+            timerDiz = pg.image.load(timer[int(str(nb)[0])]).convert()
+            timerDiz = pg.transform.scale(timerDiz, (int(1.* w_display / 15), int(1.*h_display / 10)))
+
+            screen.blit(timerSec, (14.* w_display / 15, 9.* h_display / 10))
+            screen.blit(timerDiz, (13.* w_display / 15, 9.* h_display / 10))
+
+        elif nb < 10:
+            timerSec = pg.image.load(timer[int(str(nb)[0])]).convert()
+            timerSec = pg.transform.scale(timerSec, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            screen.blit(timerSec, (14.* w_display / 15, 9.* h_display / 10))
+
+
+def cleanData(cdata, data):
+
+    cdata[0, :] = data[ind_channel_1]
+    cdata[1, :] = data[ind_channel_2]
+    cdata[2, :] = data[ind_channel_3]
+    cdata[3, :] = data[ind_channel_4]
+    return cdata
+
+def getfreqmax(data, rangefreq, nb_freq):
+    # this function finds the peak of the alpha band and returns the freq associated to the peak
+    maxBandAlpha = 0
+    for ind in range(nb_freq): # for each channel, first we need to get the average of each freq during the period
+        if np.average(data[:, ind]) >= maxBandAlpha :
+            ind_freqMax = ind
+        else:
+            pass
+
+    # maxBandAlpha = np.average(band_alphaRS_ch1[ind_freqMax])
+
+    if rangefreq == 'alpha':
+        frequencies = [6, 7, 8, 9, 10, 11, 12, 13]
+    elif rangefreq == 'delta':
+        frequencies = [3, 4]
+
+    return frequencies[ind_freqMax]

@@ -2,10 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a9368fb0-e4b3-4408-a19a-07bd63b1628a" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/restingStateImage.png" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/images/ring.jpg" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/images/beach.png" afterPath="$PROJECT_DIR$/images/beach.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/constantesDataStream.py" afterPath="$PROJECT_DIR$/constantesDataStream.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/constantes_PunchinBall.py" afterPath="$PROJECT_DIR$/constantes_PunchinBall.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/functions.py" afterPath="$PROJECT_DIR$/functions.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gamePunchinBall.py" afterPath="$PROJECT_DIR$/gamePunchinBall.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/openbciSetup.sh" afterPath="$PROJECT_DIR$/openbciSetup.sh" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -20,12 +24,10 @@
       <file leaf-file-name="functions.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="227">
-              <caret line="294" column="4" lean-forward="false" selection-start-line="294" selection-start-column="4" selection-end-line="294" selection-end-column="4" />
+            <state relative-caret-position="2151">
+              <caret line="309" column="40" lean-forward="false" selection-start-line="309" selection-start-column="40" selection-end-line="309" selection-end-column="40" />
               <folding>
                 <element signature="e#0#10#0" expanded="true" />
-                <element signature="e#7418#7487#0" expanded="false" />
-                <element signature="e#9952#10021#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -34,18 +36,21 @@
       <file leaf-file-name="gamePunchinBall.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/gamePunchinBall.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="68" column="7" lean-forward="true" selection-start-line="68" selection-start-column="7" selection-end-line="68" selection-end-column="7" />
+            <state relative-caret-position="-369">
+              <caret line="288" column="24" lean-forward="false" selection-start-line="288" selection-start-column="24" selection-end-line="288" selection-end-column="24" />
               <folding>
                 <element signature="e#15#34#0" expanded="true" />
-                <element signature="e#5439#6357#0" expanded="false" />
-                <element signature="e#6379#6816#0" expanded="false" />
-                <element signature="e#6847#7049#0" expanded="false" />
-                <element signature="e#7082#8201#0" expanded="false" />
-                <element signature="e#12634#13614#0" expanded="false" />
-                <element signature="e#13648#16082#0" expanded="false" />
-                <element signature="e#16117#17226#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="constantesDataStream.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/constantesDataStream.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="32" column="7" lean-forward="true" selection-start-line="32" selection-start-column="7" selection-end-line="32" selection-end-column="7" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -53,8 +58,8 @@
       <file leaf-file-name="constantes_PunchinBall.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/constantes_PunchinBall.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="364">
-              <caret line="53" column="7" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="7" />
+            <state relative-caret-position="302">
+              <caret line="65" column="35" lean-forward="false" selection-start-line="65" selection-start-column="35" selection-end-line="65" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -65,6 +70,9 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>resting</find>
+      <find>sec</find>
+      <find>ring.pn</find>
+      <find>ring.png</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -73,8 +81,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/constantes_PunchinBall.py" />
         <option value="$PROJECT_DIR$/functions.py" />
+        <option value="$PROJECT_DIR$/constantes_PunchinBall.py" />
+        <option value="$PROJECT_DIR$/constantesDataStream.py" />
         <option value="$PROJECT_DIR$/gamePunchinBall.py" />
       </list>
     </option>
@@ -119,6 +128,11 @@
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="FullScreen" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/images" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -220,9 +234,9 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32876712" sideWeight="0.503231" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.06712329" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.13150685" sideWeight="0.49676898" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.42465752" sideWeight="0.49676898" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -240,7 +254,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="1" />
+      <option name="time" value="3" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -250,47 +264,38 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/constantesDataStream.py">
+    <entry file="file://$PROJECT_DIR$/functions.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="26" column="7" lean-forward="true" selection-start-line="26" selection-start-column="7" selection-end-line="26" selection-end-column="7" />
-          <folding />
+        <state relative-caret-position="2151">
+          <caret line="309" column="40" lean-forward="false" selection-start-line="309" selection-start-column="40" selection-end-line="309" selection-end-column="40" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/constantes_PunchinBall.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="53" column="7" lean-forward="false" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="7" />
+        <state relative-caret-position="302">
+          <caret line="65" column="35" lean-forward="false" selection-start-line="65" selection-start-column="35" selection-end-line="65" selection-end-column="35" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/functions.py">
+    <entry file="file://$PROJECT_DIR$/constantesDataStream.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="294" column="4" lean-forward="false" selection-start-line="294" selection-start-column="4" selection-end-line="294" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#10#0" expanded="true" />
-            <element signature="e#7418#7487#0" expanded="false" />
-            <element signature="e#9952#10021#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="17">
+          <caret line="32" column="7" lean-forward="true" selection-start-line="32" selection-start-column="7" selection-end-line="32" selection-end-column="7" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gamePunchinBall.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="68" column="7" lean-forward="true" selection-start-line="68" selection-start-column="7" selection-end-line="68" selection-end-column="7" />
+        <state relative-caret-position="-369">
+          <caret line="288" column="24" lean-forward="false" selection-start-line="288" selection-start-column="24" selection-end-line="288" selection-end-column="24" />
           <folding>
             <element signature="e#15#34#0" expanded="true" />
-            <element signature="e#5439#6357#0" expanded="false" />
-            <element signature="e#6379#6816#0" expanded="false" />
-            <element signature="e#6847#7049#0" expanded="false" />
-            <element signature="e#7082#8201#0" expanded="false" />
-            <element signature="e#12634#13614#0" expanded="false" />
-            <element signature="e#13648#16082#0" expanded="false" />
-            <element signature="e#16117#17226#0" expanded="false" />
           </folding>
         </state>
       </provider>

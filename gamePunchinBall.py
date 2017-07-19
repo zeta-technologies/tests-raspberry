@@ -63,13 +63,7 @@ plane = pg.image.load(planeImage).convert_alpha()
 plane = pg.transform.scale(plane, (50, 50))
 # plane = plane.set_colorkey((255, 255, 255))
 
-'''launch node process'''
-process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
-# process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
-queue = Queue()
-thread = Thread(target=enqueue_output, args=(process.stdout, queue))
-thread.daemon = True # kill all on exit
-thread.start()
+
 #try:
 #    pipe = subprocess.Popen('sudo node openBCIDataStream.js', stdout=subprocess.PIPE,stderr=subprocess.STDOUT, shell=True)
 #except Exception as e:
@@ -79,11 +73,11 @@ thread.start()
 #thread.daemon = True # kill all on exit
 #thread.start()
 
-'''REsting state'''
+'''Resting state'''
 timerImage = pg.image.load(timer[0])
 timerImage = pg.transform.scale(timerImage, (70*w_display/1024, 90*h_display/576))
-# restingStateImage = pg.image.load(restingState)
-# restingStateImage = pg.transform.scale(restingStateImage, (w_display, h_display))
+restingImage = pg.image.load('images/restingState.png').convert()
+restingStateImage = pg.transform.scale(restingImage, (w_display, h_display))
 
 '''Tinnitus questionnaire '''
 questionsSerie1Image = pg.image.load(questionsSerie1)
@@ -158,7 +152,15 @@ while continuer:
                 #     questionnaire = 1
 
     if punchinBall :
+        '''launch node process'''
+        # process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
+        processPB = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
+        queuePB = Queue()
+        threadPB = Thread(target=enqueue_output, args=(processPB.stdout, queuePB))
+        threadPB.daemon = True # kill all on exit
+        threadPB.start()
         # Chargement du fond
+        bufferPB = []
 
         '''Position everything on the screen'''
         screen.blit(scoreTxt, (670, 30))
@@ -181,6 +183,16 @@ while continuer:
         #            "images/dk_haut.png", "images/dk_bas.png", niveau) # TODO create Level class
 
     if fly:
+        '''launch node process'''
+        # process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
+        processF = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
+        queueF = Queue()
+        threadF = Thread(target=enqueue_output, args=(processF.stdout, queueF))
+        threadF.daemon = True # kill all on exit
+        threadF.start()
+        # Chargement du fond
+        bufferF = []
+
         '''Position everything on the screen'''
         screen.blit(sky, (0, 0))
         # screen.blit(cloud, (800*w_display/1024, 100*h_display/576))
@@ -192,9 +204,28 @@ while continuer:
         pg.display.flip()
 
     if restingState:
+        '''launch node process'''
+        # process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
+        processRS = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE)
+        queueRS = Queue()
+        threadRS = Thread(target=enqueue_output, args=(processRS.stdout, queueRS))
+        threadRS.daemon = True # kill all on exit
+        threadRS.start()
+        # Chargement du fond
+        bufferRS = []
+        band_alphaRS_ch1 = []
+        band_alphaRS_ch2 = []
+        band_alphaRS_ch3 = []
+        band_alphaRS_ch4 = []
+
+        band_deltaRS_ch1 = []
+        band_deltaRS_ch2 = []
+        band_deltaRS_ch3 = []
+        band_deltaRS_ch4 = []
+
         # timerImage = pg.image.load(timer[]).convert()
         screen.blit(restingStateImage, (0,0))
-        screen.blit(timerImage, (0,0))
+        displayNumber(0, screen, 'down')
         pg.display.flip()
         # sec = sec + 1
         # print sec
@@ -248,86 +279,93 @@ while continuer:
                     fly = 0
                     restingState = 0
                     questionnaire = 0
+                    processPB.terminate()
+                    bufferPB = []
+                    cpt = 0
+                    queuePB.queue.clear()
+
+
         try:
             while cpt < buffersize * nb_channels :
-                buffer_1.append(queue.get_nowait())
+                bufferPB.append(queuePB.get_nowait())
                 cpt += 1
-                cpt2 = 0
+                # cpt2 = 0
 
-            while cpt2 <1 :
+            bufferPB_array = np.asarray(bufferPB)
 
-                cpt2 += 1
-                buffer_1_array = np.asarray(buffer_1)
+            dataPB[0, :] = bufferPB_array[ind_channel_1]
+            dataPB[1, :] = bufferPB_array[ind_channel_2]
+            dataPB[2, :] = bufferPB_array[ind_channel_3]
+            dataPB[3, :] = bufferPB_array[ind_channel_4]
 
-                OPB1_data[0, :] = buffer_1_array[ind_channel_1]
-                OPB1_data[1, :] = buffer_1_array[ind_channel_2]
-                OPB1_data[2, :] = buffer_1_array[ind_channel_3]
-                OPB1_data[3, :] = buffer_1_array[ind_channel_4]
+            fdataPB[0, :] = filter_data(dataPB[0, :], fs_hz)
+            fdataPB[1, :] = filter_data(dataPB[1, :], fs_hz)
+            fdataPB[2, :] = filter_data(dataPB[2, :], fs_hz)
+            fdataPB[3, :] = filter_data(dataPB[3, :], fs_hz)
 
-                OPB1_fdata[0, :] = filter_data(OPB1_data[0, :], fs_hz)
-                OPB1_fdata[1, :] = filter_data(OPB1_data[1, :], fs_hz)
-                OPB1_fdata[2, :] = filter_data(OPB1_data[2, :], fs_hz)
-                OPB1_fdata[3, :] = filter_data(OPB1_data[3, :], fs_hz)
+            # OPB1_bandmean_delta = np.zeros(nb_channels)
+            bandmean_alphaPB = np.zeros(nb_channels)
+            bandmax_alphaPB = np.zeros(nb_channels)
+            bandmin_alphaPB = np.zeros(nb_channels)
 
-                # OPB1_bandmean_delta = np.zeros(nb_channels)
-                OPB1_bandmean_alpha = np.zeros(nb_channels)
+            bandmean_deltaPB = np.zeros(nb_channels)
+            bandmax_deltaPB = np.zeros(nb_channels)
+            bandmin_deltaPB = np.zeros(nb_channels)
 
-                OPB1_bandmax_alpha = np.zeros(nb_channels)
-                OPB1_bandmin_alpha = np.zeros(nb_channels)
+            for channel in range(4):
+                bandmean_alphaPB[channel] = extract_freqbandmean(200, fs_hz, fdataPB[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
+                bandmean_deltaPB[channel] = extract_freqbandmean(200, fs_hz, fdataPB[channel,:], 3, 4)
 
-                for channel in range(4):
-                    OPB1_bandmean_alpha[channel] = extract_freqbandmean(200, fs_hz, OPB1_fdata[channel,:], 6, 11)
-                    # OPB1_bandmean_delta[channel] = extract_freqbandmean(200, fs_hz, OPB1_data[channel,:], 1, 4)
+            ''' Get the mean, min and max of the last result of all channels'''
+            newMean_alphaPB = np.average(bandmean_alphaPB) #mean of the 4 channels, not the best metric I guess
+            newMean_deltaPB = np.average(bandmean_deltaPB)
+            # ratio = newMean_alpha / newMean_delta
+            # print 'ratio', ratio
+            ''' increment the mean, min and max arrays of the freqRange studied'''
+            mean_array_uvPB.append(newMean_alphaPB)
 
-                ''' Get the mean, min and max of the last result of all channels'''
-                newMean_alpha = np.average(OPB1_bandmean_alpha) #mean of the 4 channels, not the best metric I guess
-                # newMean_delta = np.average(OPB1_bandmean_delta)
-                # ratio = newMean_alpha / newMean_delta
-                # print 'ratio', ratio
-                ''' increment the mean, min and max arrays of the freqRange studied'''
-                OPB1_mean_array_uv.append(newMean_alpha)
+            if len(mean_array_uvPB) != 0:
+                deltaPB = np.amax(mean_array_uvPB) - np.min(mean_array_uvPB)  # Calculate delta before or after adding newMean_alpha?
+            if len(mean_array_uvPB) == 0:
+                deltaPB = 0
+            print "new Mean of 4 channels", newMean_alphaPB
+            print "Max - Min ", deltaPB
 
-                if len(OPB1_mean_array_uv) != 0:
-                    delta = np.amax(OPB1_mean_array_uv) - np.min(OPB1_mean_array_uv)  # Calculate delta before or after adding newMean_alpha?
-                if len(OPB1_mean_array_uv) == 0:
-                    delta = 0
-                print "new Mean of 4 channels", newMean_alpha
-                print "Max - Min ", delta
+            if deltaPB == 0:
+                level = 0
 
-                if delta == 0:
-                    level = 0
+            if deltaPB !=0:
+                level = int(math.floor(7*(newMean_alphaPB-np.min(mean_array_uvPB))/deltaPB)) #we dont take the newMean
 
-                if delta !=0:
-                    level = int(math.floor(7*(newMean_alpha-np.min(OPB1_mean_array_uv))/delta)) #we dont take the newMean
+            if level == 7:
+                scorePB = scorePB + 1
+                # punch_noise.play()
+                # scorePB = int(math.floor(scorePB))
+                scoreDigit = pg.image.load(scoreDigitImages[scorePB]).convert()
+                scoreDigit = pg.transform.scale(scoreDigit, (70*w_display/1024, 90*h_display/576))
+                screen.blit(fond, (0, 0))
+                screen.blit(scoreDigit, (800*w_display/1024, 30*h_display/576))
+                screen.blit(winImg, (100*w_display/1024, 100*h_display/576))
 
-                if level == 7:
-                    score = score + 1
-                    # punch_noise.play()
-                    scoreDigit = pg.image.load(scoreDigitImages[score]).convert()
-                    scoreDigit = pg.transform.scale(scoreDigit, (70*w_display/1024, 90*h_display/576))
-                    screen.blit(fond, (0, 0))
-                    screen.blit(scoreDigit, (800*w_display/1024, 30*h_display/576))
-                    screen.blit(winImg, (100*w_display/1024, 100*h_display/576))
+            if level != 7:
+                scoreBar = pg.image.load(levels_images[level]).convert_alpha()
+                scoreBar = pg.transform.scale(scoreBar, (90*w_display/1024, 400*h_display/576))
+                scoreBar = pg.transform.rotate(scoreBar, -90)
+                screen.blit(fond, (0, 0))
+                screen.blit(punchBall, (350*w_display/1024,-5*h_display/576))
+                screen.blit(scoreBar, (317*w_display/1024, 460*h_display/576))
+                screen.blit(scoreDigit, (800*w_display/1024, 30*h_display/576))
+            print "level", level
 
-                if level != 7:
-                    scoreBar = pg.image.load(levels_images[level]).convert_alpha()
-                    scoreBar = pg.transform.scale(scoreBar, (90*w_display/1024, 400*h_display/576))
-                    scoreBar = pg.transform.rotate(scoreBar, -90)
-                    screen.blit(fond, (0, 0))
-                    screen.blit(punchBall, (350*w_display/1024,-5*h_display/576))
-                    screen.blit(scoreBar, (317*w_display/1024, 460*h_display/576))
-                    screen.blit(scoreDigit, (800*w_display/1024, 30*h_display/576))
-                print "level", level
+            pg.display.update()
 
-                pg.display.update()
-
-                cpt = 0
-                buffer_1 = []
+            cpt = 0
+            bufferPB = []
 
         except Empty:
             continue # do stuff
         else:
-            str(buffer_1)
+            str(bufferPB)
             #sys.stdout.write(char)
 
     while fly:
@@ -348,21 +386,89 @@ while continuer:
                     fly = 0
                     restingState = 0
                     questionnaire = 0
+                    processF.terminate()
+                    queueF.queue.clear()
+                    bufferF = []
+                    cpt = 0
         try:
+            while cpt < buffersize * nb_channels:
+                bufferF.append(queueF.get_nowait())
+                cpt += 1
 
-            newPosy = mainNeuro(screen, sky, plane, queue, buffer_1, OPB1_data, oldPosy)  # function that move the bird according to the metric
+            bufferF_array = np.asarray(bufferF)
 
+            dataF[0, :] = bufferF_array[ind_channel_1]
+            dataF[1, :] = bufferF_array[ind_channel_2]
+            dataF[2, :] = bufferF_array[ind_channel_3]
+            dataF[3, :] = bufferF_array[ind_channel_4]
+
+            fdataF[0, :] = filter_data(dataF[0, :], fs_hz)
+            fdataF[1, :] = filter_data(dataF[1, :], fs_hz)
+            fdataF[2, :] = filter_data(dataF[2, :], fs_hz)
+            fdataF[3, :] = filter_data(dataF[3, :], fs_hz)
+
+            bandmean_alphaF = np.zeros(nb_channels)
+            bandmax_alphaF = np.zeros(nb_channels)
+            bandmin_alphaF = np.zeros(nb_channels)
+
+            bandmean_deltaF = np.zeros(nb_channels)
+            bandmax_deltaF = np.zeros(nb_channels)
+            bandmin_deltaF = np.zeros(nb_channels)
+
+            for channel in range(4):
+                bandmean_alphaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
+                bandmean_deltaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], 3, 4)
+
+            ''' Get the mean, min and max of the last result of all channels'''
+            newMean_alphaF = np.average(bandmean_alphaF)  # mean of the 4 channels, not the best metric I guess
+            mean_array_uvF.append(newMean_alphaF)
+            maxAlphaF = np.amax(mean_array_uvF)
+            minAlphaF = np.min(mean_array_uvF)
+
+            if newMean_alphaF == maxAlphaF:
+                newPosy = minDisplayY
+
+            elif newMean_alphaF == minAlphaF:
+                newPosy = maxDisplayY
+
+            else:
+                a = (maxDisplayY - minDisplayY) * 1. / (minAlphaF - maxAlphaF)
+                b = maxDisplayY - minAlphaF * a
+                newPosy = a * newMean_alphaF + b
+                # screen.blit(fond, (0, 0))
+
+            scoreF = scoreF + flyScore(newPosy)
+
+            # newPosy, OPB1_mean_array_uv = mainNeuro(queue, bufferF, OPB1_data, oldPosy)  # function that returns the new Y Position of the bird
+
+            deltaPosy = 1. * (newPosy - oldPosy) / steps
+            screen.blit(sky, (0, 0))
+            # print newPosy
+            # screen.blit(plane, (, oldPosy + deltaPosy * steps))
+            screen.blit(plane, (5. * w_display / 12, newPosy))
+            displayNumber(math.floor(scoreF), screen, 'down')
+            # screen.blit(scoreImg, ())
+            # print oldPosy, newPosy
+            # pg.time.delay(400)
+
+            pg.display.flip()
+
+            # print "new Mean of 4 channels", newMean_alpha, maxAlpha, minAlpha
+
+            # scoreBar = pg.image.load(levels_images[level]).convert_alpha()
+            # scoreBar = pg.transform.scale(scoreBar, (90, 400))
+            # scoreBar = pg.transform.rotate(scoreBar, -90)
 
         except Empty:
             continue  # do stuff
         else:
-            str(buffer_1)
+            str(bufferF)
             # sys.stdout.write(char)
 
         pg.display.update()
         oldPosy = newPosy
         cpt = 0
-        buffer_1 = []
+        bufferF = []
 
     while restingState:
         # pg.time.Clock().tick(30)
@@ -382,44 +488,88 @@ while continuer:
                     fly = 0
                     restingState = 0
                     questionnaire = 0
+                    print band_alphaRS_ch1
+                    processRS.terminate()
+                    queueRS.queue.clear()
+                    bufferRS = []
 
-        # time.sleep(1)
-        pg.time.delay(990)
-        # print sec
-        if sec >= 100:
-            timerSec = pg.image.load(timer[int(str(sec)[2])]).convert()
-            timerSec = pg.transform.scale(timerSec, (70*w_display/1024, 90*h_display/576))
-            timerDiz = pg.image.load(timer[int(str(sec)[1])]).convert()
-            timerDiz = pg.transform.scale(timerDiz, (70*w_display/1024, 90*h_display/576))
-            timerCen = pg.image.load(timer[int(str(sec)[0])]).convert()
-            timerCen = pg.transform.scale(timerCen, (70*w_display/1024, 90*h_display/576))
-            screen.blit(timerSec, (230*w_display/1024, 0*h_display/576))
-            screen.blit(timerDiz, (115*w_display/1024, 0*h_display/576))
-            screen.blit(timerCen, (0, 0))
+        if sec == 3 :
+            # np.zeros(nb_freq_alpha)
+            band_alphaRS_ch1 = np.asarray(band_alphaRS_ch1)
+            band_alphaRS_ch2 = np.asarray(band_alphaRS_ch2)
+            band_alphaRS_ch3 = np.asarray(band_alphaRS_ch3)
+            band_alphaRS_ch4 = np.asarray(band_alphaRS_ch4)
+            # print 'band_alphaRS_ch1', band_alphaRS_ch1
+            # print 'band_alphaRS_ch1[:, 0]', np.average(band_alphaRS_ch1[:,0])
+            freqMaxAlphaCh1 = getfreqmax(band_alphaRS_ch1, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh2 = getfreqmax(band_alphaRS_ch2, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh3 = getfreqmax(band_alphaRS_ch3, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh4 = getfreqmax(band_alphaRS_ch4, 'alpha', nb_freq_alpha)
+            freqMaxAlpha = np.average([freqMaxAlphaCh1, freqMaxAlphaCh2, freqMaxAlphaCh3, freqMaxAlphaCh4])
 
-        elif sec < 10:
-            timerSec = pg.image.load(timer[int(str(sec)[0])]).convert()
-            timerSec = pg.transform.scale(timerSec, (70*w_display/1024, 90*h_display/576))
+            print 'fin de la seance de reglage', freqMaxCh1
+            processRS.terminate()
+            queueRS.queue.clear()
+            bufferRS = []
+            restingState = 0
+            homeOn = 1
 
-            screen.blit(timerSec, (0, 0))
+        elif sec < 3:
 
-        elif sec >= 10 & sec < 100:
-            timerSec = pg.image.load(timer[int(str(sec)[1])]).convert()
-            timerSec = pg.transform.scale(timerSec, (70*w_display/1024, 90*h_display/576))
-            timerDiz = pg.image.load(timer[int(str(sec)[0])]).convert()
-            timerDiz = pg.transform.scale(timerDiz, (70*w_display/1024, 90*h_display/576))
+            try:
+                while cpt < buffersize * nb_channels:
+                    bufferRS.append(queueRS.get_nowait())
+                    cpt += 1
 
-            screen.blit(timerSec, (115*w_display/1024, 0*h_display/576))
-            screen.blit(timerDiz, (0, 0*h_display/576))
+                bufferRS_array = np.asarray(bufferRS)
 
+                dataRS[0, :] = bufferRS_array[ind_channel_1]
+                dataRS[1, :] = bufferRS_array[ind_channel_2]
+                dataRS[2, :] = bufferRS_array[ind_channel_3]
+                dataRS[3, :] = bufferRS_array[ind_channel_4]
 
-        # timerSec = pg.image.load(timer[sec%10]).convert()
-        # timerDiz = pg.image.load(timer[int(math.floor(sec/10))%100]).convert()
-        # timerCen = pg.image.load(timer[int(math.floor(sec/100))]).convert()
-        # checkImp() # TODO write check impedances function
+                fdataRS[0, :] = filter_data(dataRS[0, :], fs_hz)
+                fdataRS[1, :] = filter_data(dataRS[1, :], fs_hz)
+                fdataRS[2, :] = filter_data(dataRS[2, :], fs_hz)
+                fdataRS[3, :] = filter_data(dataRS[3, :], fs_hz)
 
-        pg.display.update()
-        sec = sec + 1
+                alphabandch1 = extract_freqband(200, fs_hz, fdataRS[0, :], 6, 13)
+                # print 'alphabandch1', alphabandch1[1]
+
+                band_alphaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:], 6, 13)[0])
+                band_alphaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:], 6, 13)[0])
+                band_alphaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:], 6, 13)[0])
+                band_alphaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:], 6, 13)[0])
+                nb_freq_alpha = extract_freqband(200, fs_hz, fdataRS[0,:], 6, 13)[1]
+                # print 'band_alphaRS_ch1[0]', band_alphaRS_ch1[:]
+
+                band_deltaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:], 3, 4)[0])
+                band_deltaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:], 3, 4)[0])
+                band_deltaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:], 3, 4)[0])
+                band_deltaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:], 3, 4)[0])
+                nb_freq_delta = extract_freqband(200, fs_hz, fdataRS[3,:], 3, 4)[1]
+                # print extract_freqband(200, fs_hz, fdataRS[3,:], 3, 4)[1]
+
+                # for channel in range(4):
+                #     band_alphaRS[channel] = extract_freqband(200, fs_hz, fdataRS[channel,:], 6, 11)
+                #     bandmean_deltaRS[channel] = extract_freqband(200, fs_hz, fdataRS[channel,:], 3, 4)
+                # globalAlpha.append(bandmean_alphaRS)
+
+                cpt = 0
+                bufferRS = []
+                displayNumber(sec, screen, 'down')
+                # checkImp() # TODO write check impedances function
+                pg.display.update()
+                sec = sec + 1
+
+            except Empty:
+                continue  # do stuff
+            else:
+                str(bufferRS)
+                # sys.stdout.write(char)
+            # time.sleep(1)
+            # pg.time.delay(993) # wait to display the next second on screen
+            # print sec
 
     while questionnaire:
         # pg.time.Clock().tick(30)

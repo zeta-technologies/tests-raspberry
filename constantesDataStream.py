@@ -28,15 +28,28 @@ cpt = 0
 cpt2 = 0
 buffersize = 200 # a bit more than one second of data,
 buffer_1 = []
+bufferRS = []
+bufferPB = []
+bufferF = []
 nb_channels = 4
 ind_2_remove_in_buffer1 = []
 ind_channel_1 = []
 ind_channel_2 = []
 ind_channel_3 = []
 ind_channel_4 = []
-OPB1_mean_array_uv = []
-OPB1_data = np.zeros((nb_channels, buffersize))
-OPB1_fdata = np.zeros((nb_channels, buffersize))
+
+mean_array_uvPB = []
+mean_array_uvF = []
+mean_array_uvRS = []
+
+dataPB = np.zeros((nb_channels, buffersize))
+fdataPB = np.zeros((nb_channels, buffersize))
+
+dataF = np.zeros((nb_channels, buffersize))
+fdataF = np.zeros((nb_channels, buffersize))
+
+dataRS = np.zeros((nb_channels, buffersize))
+fdataRS = np.zeros((nb_channels, buffersize))
 
 ''' Save buffer, to keep data records somewhere'''
 saved_buffer = []
@@ -50,9 +63,17 @@ fs_hz = 200
 '''Neurofeedback loop'''
 # newMean = 0 # useless now
 # oldMean = 5E-13 # useless now
-mean_array_alpha = []
-mean_array_delta = []
-ratio_array = []
+mean_array_alphaPB = []
+mean_array_deltaPB = []
+ratio_arrayPB = []
+
+mean_array_alphaF = []
+mean_array_deltaF = []
+ratio_arrayF = []
+
+mean_array_alphaRS = []
+mean_array_deltaRS = []
+ratio_arrayRS = []
 
 '''reorder channels index'''
 # the following loop saves the index of the buffer that are interesting, without the channel id every 0 [nb_channels]
