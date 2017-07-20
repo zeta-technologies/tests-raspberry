@@ -79,26 +79,12 @@ restingStateImage = pg.transform.scale(restingImage, (w_display, h_display))
 '''MAIN LOOP'''
 gameOn = 1
 now = datetime.datetime.now()
-os.mkdir('data-'+str(now.day)+'_'+str(now.hour)+'_'+str(now.minute)+'_'+str(now.second))
+os.mkdir('data-'+str(now.month)+'_'+str(now.day)+'_'+str(now.hour)+'_'+str(now.minute)+'_'+str(now.second))
 path = str('data-'+str(now.month)+'_'+str(now.day)+'_'+str(now.hour)+'_'+str(now.minute)+'_'+str(now.second)+'/')
 
 print '\n \n \n You are running Zeta Game on ', platform
-print ' \n \n                     -----------------------------'
-print '                     ------ Z E T A    A C S -----'
-print '                     -----------------------------'
-
-print '\n\n                     -------------------------------------------------------------'
-print '                     -----  ________    ________   _________        .         -----'
-print '                     -----         /   |               |           / \        -----'
-print '                     -----        /    |               |          /   \       -----'
-print '                     -----       /     |               |         /     \      -----'
-print '                     -----      /      |____           |        /       \     -----'
-print '                     -----     /       |               |       /_________\    -----'
-print '                     -----    /        |               |      /           \   -----'
-print '                     -----   /         |               |     /             \  -----'
-print '                     -----  /_______   |_______        |    /               \ -----'
-print '                     --------------------------------------------------------------'
-
+print ' \n \n                     -----------------------------\n                     ------ Z E T A    A C S -----\n                     -----------------------------'
+print '\n\n                     -------------------------------------------------------------\n                     -----  ________    ________   _________        .         -----\n                     -----         /   |               |           / \        -----\n                     -----        /    |               |          /   \       -----\n                     -----       /     |               |         /     \      -----\n                     -----      /      |____           |        /       \     -----\n                     -----     /       |               |       /_________\    -----\n                     -----    /        |               |      /           \   -----\n                     -----   /         |               |     /             \  -----\n                     -----  /_______   |_______        |    /               \ -----\n                     --------------------------------------------------------------'
 print ' \n  Data will be saved here : ', path
 while gameOn:
 
