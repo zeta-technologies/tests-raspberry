@@ -418,3 +418,15 @@ def getfreqmax(data, rangefreq, nb_freq):
         frequencies = [3, 4]
 
     return frequencies[ind_freqMax]
+
+
+def saveData(path, session, kind, channel, data):
+    # kind is either 'F', 'PB', or 'RS'
+    outfile = path+kind+'_'+channel+'_'+'session'+str(session)+'_'+'.txt'
+    np.savetxt(outfile, np.asarray(data), delimiter=',')
+
+def saveAllChannelsData(path, session, kind, data1, data2, data3, data4):
+    saveData(path, session, kind, 'ch1', data1)
+    saveData(path, session, kind, 'ch2', data2)
+    saveData(path, session, kind, 'ch3', data3)
+    saveData(path, session, kind, 'ch4', data4)

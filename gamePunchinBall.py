@@ -1,13 +1,15 @@
 #!/Users/jonathanschmutz/anaconda/bin/python
-
 import pygame as pg
 from pygame.locals import *
 from constantes_PunchinBall import *
 from constantesDataStream import *
+import os
 import sys
 from subprocess import Popen, PIPE
 from threading  import Thread
 from sys import platform
+from tempfile import TemporaryFile
+outfile = 'save.txt'
 # from Queue import Queue, Empty
 # from subprocess import call
 # import binascii
@@ -22,7 +24,7 @@ from sys import platform
 # from scipy import signal
 # import json
 from requests import *
-# import datetime
+import datetime
 # import math
 # import time
 # from pyaudio import PyAudio
@@ -76,7 +78,14 @@ restingStateImage = pg.transform.scale(restingImage, (w_display, h_display))
 
 '''MAIN LOOP'''
 gameOn = 1
-print 'You are running Zeta Game on ', platform
+now = datetime.datetime.now()
+os.mkdir('data-'+str(now.day)+'_'+str(now.hour)+'_'+str(now.minute)+'_'+str(now.second))
+path = str('data-'+str(now.month)+'_'+str(now.day)+'_'+str(now.hour)+'_'+str(now.minute)+'_'+str(now.second)+'/')
+print '\n \n \n You are running Zeta Game on ', platform
+print ' \n \n -----------------------------'
+print ' ------ Z E T A    A C S -----'
+print ' -----------------------------'
+print ' \n  Data will be saved here : ', path
 while gameOn:
 
     #LOAD screen Image
@@ -133,7 +142,8 @@ while gameOn:
                     questionnaire = 0
 
     if punchinBall :
-
+        sessionPB += 1
+        
         '''launch node process'''
         if platform == 'darwin': # mac
             processPB = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
@@ -168,7 +178,7 @@ while gameOn:
         threadF.start()
         # Chargement du fond
         bufferF = []
-
+        sessionF += 1
         '''Position everything on the screen'''
         screen.blit(sky, (0, 0))
         # screen.blit(cloud, (800*w_display/1024, 100*h_display/576))
@@ -180,7 +190,7 @@ while gameOn:
         pg.display.flip()
 
     if restingState:
-
+        sessionRS += 1
         if platform == 'darwin': # mac
             processRS = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
         elif platform == 'linux' or platform == 'linux2': #linux
@@ -243,11 +253,19 @@ while gameOn:
         pg.time.Clock().tick(60)
         for event in pg.event.get():
             if event.type == QUIT:
+                saveAllChannelsData(path, sessionPB, 'PB', saved_bufferPB_ch1, saved_bufferPB_ch2, saved_bufferPB_ch3, saved_bufferPB_ch4)
                 pg.quit()
                 sys.exit()
+
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
+                    saveAllChannelsData(path, sessionPB, 'PB', saved_bufferPB_ch1, saved_bufferPB_ch2, saved_bufferPB_ch3, saved_bufferPB_ch4)
                     punchinBall = 0
+                    saved_bufferPB_ch1 = []
+                    saved_bufferPB_ch2 = []
+                    saved_bufferPB_ch3 = []
+                    saved_bufferPB_ch4 = []
+
             elif event.type == MOUSEBUTTONUP:
                 mouseReturn = pg.mouse.get_pos()
                 if whichButtonReturn(mouseReturn, w_display, h_display):
@@ -257,13 +275,22 @@ while gameOn:
                     restingState = 0
                     questionnaire = 0
                     processPB.terminate() # terminates the node process to close connection with openBCI
+                    np.save(outfilePBCH2)
                     bufferPB = []
                     cpt = 0
                     queuePB.queue.clear()
+                    saveAllChannelsData(path, sessionPB, 'PB', saved_bufferPB_ch1, saved_bufferPB_ch2, saved_bufferPB_ch3, saved_bufferPB_ch4)
+
+                    saved_bufferPB_ch1 = []
+                    saved_bufferPB_ch2 = []
+                    saved_bufferPB_ch3 = []
+                    saved_bufferPB_ch4 = []
+
 
         try:
             while cpt < buffersize * nb_channels :
                 bufferPB.append(queuePB.get_nowait())
+                saved_bufferPB.append(queuePB.get_nowait())
                 cpt += 1
 
             bufferPB_array = np.asarray(bufferPB)
@@ -272,6 +299,11 @@ while gameOn:
             dataPB[1, :] = bufferPB_array[ind_channel_2]
             dataPB[2, :] = bufferPB_array[ind_channel_3]
             dataPB[3, :] = bufferPB_array[ind_channel_4]
+
+            saved_bufferPB_ch1.append(dataPB[0, :])
+            saved_bufferPB_ch2.append(dataPB[1, :])
+            saved_bufferPB_ch3.append(dataPB[2, :])
+            saved_bufferPB_ch4.append(dataPB[3, :])
 
             fdataPB[0, :] = filter_data(dataPB[0, :], fs_hz)
             fdataPB[1, :] = filter_data(dataPB[1, :], fs_hz)
@@ -344,10 +376,22 @@ while gameOn:
         pg.time.Clock().tick(60)
         for event in pg.event.get():
             if event.type == QUIT:
+                saveAllChannelsData(path, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                bufferF = []
+                saved_bufferF_ch1 = []
+                saved_bufferF_ch2 = []
+                saved_bufferF_ch3 = []
+                saved_bufferF_ch4 = []
                 pg.quit()
                 sys.exit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
+                    saveAllChannelsData(path, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                    bufferF = []
+                    saved_bufferF_ch1 = []
+                    saved_bufferF_ch2 = []
+                    saved_bufferF_ch3 = []
+                    saved_bufferF_ch4 = []
                     fly = 0
             elif event.type == MOUSEBUTTONUP:
                 mouseReturn = pg.mouse.get_pos()
@@ -359,7 +403,12 @@ while gameOn:
                     questionnaire = 0
                     processF.terminate()
                     queueF.queue.clear()
+                    saveAllChannelsData(path, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
                     bufferF = []
+                    saved_bufferF_ch1 = []
+                    saved_bufferF_ch2 = []
+                    saved_bufferF_ch3 = []
+                    saved_bufferF_ch4 = []
                     cpt = 0
         try:
             while cpt < buffersize * nb_channels:
@@ -372,6 +421,10 @@ while gameOn:
             dataF[1, :] = bufferF_array[ind_channel_2]
             dataF[2, :] = bufferF_array[ind_channel_3]
             dataF[3, :] = bufferF_array[ind_channel_4]
+            saved_bufferF_ch1.append(dataF[0, :])
+            saved_bufferF_ch2.append(dataF[1, :])
+            saved_bufferF_ch3.append(dataF[2, :])
+            saved_bufferF_ch4.append(dataF[3, :])
 
             fdataF[0, :] = filter_data(dataF[0, :], fs_hz)
             fdataF[1, :] = filter_data(dataF[1, :], fs_hz)
@@ -436,6 +489,7 @@ while gameOn:
         pg.display.update()
         oldPosy = newPosy
         cpt = 0
+        saved_bufferF.append(bufferF)
         bufferF = []
 
     while restingState:
@@ -443,6 +497,12 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
+                saveAllChannelsData(path, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
+                saved_bufferRS_ch1 = []
+                saved_bufferRS_ch2 = []
+                saved_bufferRS_ch3 = []
+                saved_bufferRS_ch4 = []
+
                 pg.quit()
                 sys.exit()
             if event.type == KEYDOWN:
@@ -451,6 +511,11 @@ while gameOn:
             elif event.type == MOUSEBUTTONUP:
                 mouseReturn = pg.mouse.get_pos()
                 if whichButtonReturn(mouseReturn, w_display, h_display):
+                    saveAllChannelsData(path, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
+                    saved_bufferRS_ch1 = []
+                    saved_bufferRS_ch2 = []
+                    saved_bufferRS_ch3 = []
+                    saved_bufferRS_ch4 = []
                     homeOn = 1
                     punchinBall = 0
                     fly = 0
@@ -475,6 +540,13 @@ while gameOn:
             freqMaxAlphaCh4 = getfreqmax(band_alphaRS_ch4, 'alpha', nb_freq_alpha)
             freqMaxAlpha = int(np.average([freqMaxAlphaCh1, freqMaxAlphaCh2, freqMaxAlphaCh3, freqMaxAlphaCh4]))
 
+            saveAllChannelsData(path, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
+            saved_bufferRS_ch1 = []
+            saved_bufferRS_ch2 = []
+            saved_bufferRS_ch3 = []
+            saved_bufferRS_ch4 = []
+
+
             print 'fin de la seance de reglage', freqMaxAlpha
             processRS.terminate()
             queueRS.queue.clear()
@@ -495,6 +567,10 @@ while gameOn:
                 dataRS[1, :] = bufferRS_array[ind_channel_2]
                 dataRS[2, :] = bufferRS_array[ind_channel_3]
                 dataRS[3, :] = bufferRS_array[ind_channel_4]
+                saved_bufferRS_ch1.append(dataRS[0, :])
+                saved_bufferRS_ch2.append(dataRS[1, :])
+                saved_bufferRS_ch3.append(dataRS[2, :])
+                saved_bufferRS_ch4.append(dataRS[3, :])
 
                 fdataRS[0, :] = filter_data(dataRS[0, :], fs_hz)
                 fdataRS[1, :] = filter_data(dataRS[1, :], fs_hz)

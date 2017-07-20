@@ -27,10 +27,11 @@ elif FreqRange == 'XXII_gamma':
 cpt = 0
 cpt2 = 0
 buffersize = 200 # a bit more than one second of data,
-buffer_1 = []
+
 bufferRS = []
 bufferPB = []
 bufferF = []
+
 nb_channels = 4
 ind_2_remove_in_buffer1 = []
 ind_channel_1 = []
@@ -52,8 +53,26 @@ dataRS = np.zeros((nb_channels, buffersize))
 fdataRS = np.zeros((nb_channels, buffersize))
 
 ''' Save buffer, to keep data records somewhere'''
-saved_buffer = []
 
+
+saved_bufferPB = []
+saved_bufferF = []
+saved_bufferRS = []
+saved_bufferRS_ch1 = []
+saved_bufferRS_ch2 = []
+saved_bufferRS_ch3 = []
+saved_bufferRS_ch4 = []
+saved_bufferF_ch1 = []
+saved_bufferF_ch2 = []
+saved_bufferF_ch3 = []
+saved_bufferF_ch4 = []
+saved_bufferPB_ch1 = []
+saved_bufferPB_ch2 = []
+saved_bufferPB_ch3 = []
+saved_bufferPB_ch4 = []
+sessionF = 0
+sessionPB = 0
+sessionRS = 0
 '''for the fft '''
 length = 200
 NFFT = 200
