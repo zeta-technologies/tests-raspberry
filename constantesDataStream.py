@@ -7,6 +7,7 @@ from subprocess import call
 
 '''FREQ'''
 FreqRange = 'alpha'
+freqMaxAlpha = 11
 if FreqRange == '':
     logging.warning('No frequency passed as argument')
 

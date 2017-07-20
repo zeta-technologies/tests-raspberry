@@ -9,25 +9,8 @@ from subprocess import Popen, PIPE
 from threading  import Thread
 from sys import platform
 from tempfile import TemporaryFile
-outfile = 'save.txt'
-# from Queue import Queue, Empty
-# from subprocess import call
-# import binascii
-# import time
-# import signal
-# import numpy as np
-# import pandas as pd
-# import scipy as sp
-# import heapq
-# from scipy.interpolate import UnivariateSpline
-# from scipy.interpolate import interp1d
-# from scipy import signal
-# import json
 from requests import *
 import datetime
-# import math
-# import time
-# from pyaudio import PyAudio
 from functions import *
 from gamePunchinBall import *
 
@@ -38,28 +21,28 @@ fond = pg.transform.scale( fond, (w_display, h_display))
 
 '''Punching ball'''
 punchBall = pg.image.load(punchBallImage)
-punchBall = pg.transform.scale(punchBall, (250*w_display/1024, 450*h_display/576))
+punchBall = pg.transform.scale(punchBall, (int(math.floor(0.244 * w_display)), int(math.floor(0.78*h_display))))
 
 '''Score Bar'''
 scoreBar = pg.image.load(levels_images[level]).convert_alpha()
-scoreBar = pg.transform.scale(scoreBar, (90/1024*w_display, 400*h_display/576))
+scoreBar = pg.transform.scale(scoreBar, (int(math.floor(0.088*w_display)), int(math.floor(0.69*h_display))))
 scoreBar = pg.transform.rotate(scoreBar, -90)
 # test =pg.transform.scale(scoreBar, (90, 400))
 
 '''Winner image'''
 winImg = pg.image.load(winImg).convert_alpha()
-winImg = pg.transform.scale(winImg, (700*w_display/1024, 440*h_display/576))
+winImg = pg.transform.scale(winImg, (int(math.floor(0.68*w_display)), int(math.floor(0.76*h_display))))
 # punchBall = punch.set_colorkey((255,255,255))
 
 '''Score digit '''
 scoreTxt = pg.image.load(image_score)
-scoreTxt = pg.transform.scale(scoreTxt, (150*w_display/1024, 50*h_display/576))
+scoreTxt = pg.transform.scale(scoreTxt, (int(math.floor(0.15*w_display)), int(math.floor(h_display*0.087))))
 scoreDigit = pg.image.load(scoreDigitImages[0])
-scoreDigit = pg.transform.scale(scoreDigit, (70*w_display/1024, 90*h_display/576))
+scoreDigit = pg.transform.scale(scoreDigit, (int(math.floor(0.068*w_display)), int(math.floor(0.156*h_display))))
 
 '''Fly game'''
 sky = pg.image.load(skyImage).convert()
-sky = pg.transform.scale(sky, (1024*w_display/1024, 576*h_display/576))
+sky = pg.transform.scale(sky, (w_display, h_display))
 # cloud = pg.image.load(cloudImage).convert()
 # cloud = pg.image.transform(cloud, ())
 plane = pg.image.load(planeImage).convert_alpha()
@@ -68,7 +51,7 @@ plane = pg.transform.scale(plane, (50, 50))
 
 '''Resting state'''
 timerImage = pg.image.load(timer[0])
-timerImage = pg.transform.scale(timerImage, (70*w_display/1024, 90*h_display/576))
+timerImage = pg.transform.scale(timerImage, (int(math.floor(0.068*w_display)), int(math.floor(0.156*h_display))))
 restingImage = pg.image.load('images/restingState.png').convert()
 restingStateImage = pg.transform.scale(restingImage, (w_display, h_display))
 
@@ -79,18 +62,27 @@ restingStateImage = pg.transform.scale(restingImage, (w_display, h_display))
 '''MAIN LOOP'''
 gameOn = 1
 now = datetime.datetime.now()
-os.mkdir('data-'+str(now.month)+'_'+str(now.day)+'_'+str(now.hour)+'_'+str(now.minute)+'_'+str(now.second))
-path = str('data-'+str(now.month)+'_'+str(now.day)+'_'+str(now.hour)+'_'+str(now.minute)+'_'+str(now.second)+'/')
+sessionName = str(str(now.month)+'_'+str(now.day)+'_'+str(now.hour)+'_'+str(now.minute)+'_'+str(now.second))
+os.mkdir('data')
+os.mkdir('data/session_'+sessionName)
+os.mkdir('data/session_'+sessionName+'/Fly-data')
+os.mkdir('data/session_'+sessionName+'/PB-data')
+os.mkdir('data/session_'+sessionName+'/RS-data')
+pathF = str('data/session_'+sessionName+'/Fly-data')
+pathPB = str('data/session_'+sessionName+'/PB-data')
+pathRS = str('data/session_'+sessionName+'/RS-data')
+
+
 
 print '\n \n \n You are running Zeta Game on ', platform
 print ' \n \n                     -----------------------------\n                     ------ Z E T A    A C S -----\n                     -----------------------------'
 print '\n\n                     -------------------------------------------------------------\n                     -----  ________    ________   _________        .         -----\n                     -----         /   |               |           / \        -----\n                     -----        /    |               |          /   \       -----\n                     -----       /     |               |         /     \      -----\n                     -----      /      |____           |        /       \     -----\n                     -----     /       |               |       /_________\    -----\n                     -----    /        |               |      /           \   -----\n                     -----   /         |               |     /             \  -----\n                     -----  /_______   |_______        |    /               \ -----\n                     --------------------------------------------------------------'
-print ' \n  Data will be saved here : ', path
+print ' \n  Data will be saved here : ', pathRS, pathPB, pathF
 while gameOn:
 
     #LOAD screen Image
     home = pg.image.load(image_home).convert() #TODO add image_home
-    home = pg.transform.scale(home, (1024*w_display/1024, 576*h_display/576))
+    home = pg.transform.scale(home, (w_display, h_display))
     screen.blit(home, (0,0))
 
     # load home menu buttons
@@ -253,13 +245,13 @@ while gameOn:
         pg.time.Clock().tick(60)
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(path, sessionPB, 'PB', saved_bufferPB_ch1, saved_bufferPB_ch2, saved_bufferPB_ch3, saved_bufferPB_ch4)
+                saveAllChannelsData(pathPB, sessionPB, 'PB', saved_bufferPB_ch1, saved_bufferPB_ch2, saved_bufferPB_ch3, saved_bufferPB_ch4)
                 pg.quit()
                 sys.exit()
 
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
-                    saveAllChannelsData(path, sessionPB, 'PB', saved_bufferPB_ch1, saved_bufferPB_ch2, saved_bufferPB_ch3, saved_bufferPB_ch4)
+                    saveAllChannelsData(pathPB, sessionPB, 'PB', saved_bufferPB_ch1, saved_bufferPB_ch2, saved_bufferPB_ch3, saved_bufferPB_ch4)
                     punchinBall = 0
                     saved_bufferPB_ch1 = []
                     saved_bufferPB_ch2 = []
@@ -279,7 +271,7 @@ while gameOn:
                     bufferPB = []
                     cpt = 0
                     queuePB.queue.clear()
-                    saveAllChannelsData(path, sessionPB, 'PB', saved_bufferPB_ch1, saved_bufferPB_ch2, saved_bufferPB_ch3, saved_bufferPB_ch4)
+                    saveAllChannelsData(pathPB, sessionPB, 'PB', saved_bufferPB_ch1, saved_bufferPB_ch2, saved_bufferPB_ch3, saved_bufferPB_ch4)
 
                     saved_bufferPB_ch1 = []
                     saved_bufferPB_ch2 = []
@@ -373,10 +365,10 @@ while gameOn:
 
     while fly:
 
-        pg.time.Clock().tick(60)
+        # pg.time.Clock().tick(60)
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(path, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
                 bufferF = []
                 saved_bufferF_ch1 = []
                 saved_bufferF_ch2 = []
@@ -386,7 +378,7 @@ while gameOn:
                 sys.exit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
-                    saveAllChannelsData(path, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                    saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
                     bufferF = []
                     saved_bufferF_ch1 = []
                     saved_bufferF_ch2 = []
@@ -403,7 +395,7 @@ while gameOn:
                     questionnaire = 0
                     processF.terminate()
                     queueF.queue.clear()
-                    saveAllChannelsData(path, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                    saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
                     bufferF = []
                     saved_bufferF_ch1 = []
                     saved_bufferF_ch2 = []
@@ -462,11 +454,17 @@ while gameOn:
 
             scoreF = scoreF + flyScore(newPosy)
 
-            deltaPosy = 1. * (newPosy - oldPosy) / steps
+            deltaPosy = 1. * (newPosy - oldPosy) / 10
             screen.blit(sky, (0, 0))
-            # print newPosy
-            # screen.blit(plane, (, oldPosy + deltaPosy * steps))
-            screen.blit(plane, (5. * w_display / 12, newPosy))
+            for step in range(10):
+                # print newPosy
+                # screen.blit(sky, (0,0))
+                screen.blit(plane, (5. * w_display / 12, oldPosy + deltaPosy))
+                oldPosy += deltaPosy
+                pg.display.flip()
+
+
+            # screen.blit(plane, (5. * w_display / 12, newPosy))
             displayNumber(math.floor(scoreF), screen, 'down')
             # screen.blit(scoreImg, ())
             # print oldPosy, newPosy
@@ -497,7 +495,7 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(path, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
+                saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
                 saved_bufferRS_ch1 = []
                 saved_bufferRS_ch2 = []
                 saved_bufferRS_ch3 = []
@@ -511,7 +509,7 @@ while gameOn:
             elif event.type == MOUSEBUTTONUP:
                 mouseReturn = pg.mouse.get_pos()
                 if whichButtonReturn(mouseReturn, w_display, h_display):
-                    saveAllChannelsData(path, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
+                    saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
                     saved_bufferRS_ch1 = []
                     saved_bufferRS_ch2 = []
                     saved_bufferRS_ch3 = []
@@ -540,7 +538,7 @@ while gameOn:
             freqMaxAlphaCh4 = getfreqmax(band_alphaRS_ch4, 'alpha', nb_freq_alpha)
             freqMaxAlpha = int(np.average([freqMaxAlphaCh1, freqMaxAlphaCh2, freqMaxAlphaCh3, freqMaxAlphaCh4]))
 
-            saveAllChannelsData(path, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
+            saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
             saved_bufferRS_ch1 = []
             saved_bufferRS_ch2 = []
             saved_bufferRS_ch3 = []
