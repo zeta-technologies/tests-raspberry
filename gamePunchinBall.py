@@ -81,10 +81,24 @@ gameOn = 1
 now = datetime.datetime.now()
 os.mkdir('data-'+str(now.day)+'_'+str(now.hour)+'_'+str(now.minute)+'_'+str(now.second))
 path = str('data-'+str(now.month)+'_'+str(now.day)+'_'+str(now.hour)+'_'+str(now.minute)+'_'+str(now.second)+'/')
+
 print '\n \n \n You are running Zeta Game on ', platform
-print ' \n \n -----------------------------'
-print ' ------ Z E T A    A C S -----'
-print ' -----------------------------'
+print ' \n \n                     -----------------------------'
+print '                     ------ Z E T A    A C S -----'
+print '                     -----------------------------'
+
+print '\n\n                     -------------------------------------------------------------'
+print '                     -----  ________    ________   _________        .         -----'
+print '                     -----         /   |               |           / \        -----'
+print '                     -----        /    |               |          /   \       -----'
+print '                     -----       /     |               |         /     \      -----'
+print '                     -----      /      |____           |        /       \     -----'
+print '                     -----     /       |               |       /_________\    -----'
+print '                     -----    /        |               |      /           \   -----'
+print '                     -----   /         |               |     /             \  -----'
+print '                     -----  /_______   |_______        |    /               \ -----'
+print '                     --------------------------------------------------------------'
+
 print ' \n  Data will be saved here : ', path
 while gameOn:
 
@@ -143,7 +157,7 @@ while gameOn:
 
     if punchinBall :
         sessionPB += 1
-        
+
         '''launch node process'''
         if platform == 'darwin': # mac
             processPB = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
