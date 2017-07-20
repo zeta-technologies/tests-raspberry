@@ -3,7 +3,7 @@ import numpy as np
 from subprocess import Popen, PIPE
 from threading  import Thread
 from subprocess import call
-
+from constantes_PunchinBall import *
 
 '''FREQ'''
 FreqRange = 'alpha'
@@ -40,6 +40,11 @@ ind_channel_2 = []
 ind_channel_3 = []
 ind_channel_4 = []
 
+ratios_ch1 = []
+ratios_ch2 = []
+ratios_ch3 = []
+ratios_ch4 = []
+
 mean_array_uvPB = []
 mean_array_uvF = []
 mean_array_uvRS = []
@@ -50,8 +55,8 @@ fdataPB = np.zeros((nb_channels, buffersize))
 dataF = np.zeros((nb_channels, buffersize))
 fdataF = np.zeros((nb_channels, buffersize))
 
-dataRS = np.zeros((nb_channels, buffersize))
-fdataRS = np.zeros((nb_channels, buffersize))
+dataRS = np.zeros((nb_channels, buffersize, restingStateDuration)) # need to store every chunk to reprocess the ratio
+fdataRS = np.zeros((nb_channels, buffersize, restingStateDuration))
 
 ''' Save buffer, to keep data records somewhere'''
 

@@ -63,7 +63,10 @@ restingStateImage = pg.transform.scale(restingImage, (w_display, h_display))
 gameOn = 1
 now = datetime.datetime.now()
 sessionName = str(str(now.month)+'_'+str(now.day)+'_'+str(now.hour)+'_'+str(now.minute)+'_'+str(now.second))
-os.mkdir('data')
+
+if not os.path.isdir('data'):
+    os.mkdir('data')
+
 os.mkdir('data/session_'+sessionName)
 os.mkdir('data/session_'+sessionName+'/Fly-data')
 os.mkdir('data/session_'+sessionName+'/PB-data')
@@ -278,7 +281,6 @@ while gameOn:
                     saved_bufferPB_ch3 = []
                     saved_bufferPB_ch4 = []
 
-
         try:
             while cpt < buffersize * nb_channels :
                 bufferPB.append(queuePB.get_nowait())
@@ -413,6 +415,7 @@ while gameOn:
             dataF[1, :] = bufferF_array[ind_channel_2]
             dataF[2, :] = bufferF_array[ind_channel_3]
             dataF[3, :] = bufferF_array[ind_channel_4]
+
             saved_bufferF_ch1.append(dataF[0, :])
             saved_bufferF_ch2.append(dataF[1, :])
             saved_bufferF_ch3.append(dataF[2, :])
@@ -430,27 +433,32 @@ while gameOn:
             bandmean_deltaF = np.zeros(nb_channels)
             bandmax_deltaF = np.zeros(nb_channels)
             bandmin_deltaF = np.zeros(nb_channels)
+            ratioF = np.zeros(nb_channels)
 
-            for channel in range(4):
+            for channel in range(nb_channels):
                 bandmean_alphaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
                 bandmean_deltaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], 3, 4)
+                ratioF[channel] = 1.* bandmean_alphaF[channel] / bandmean_deltaF[channel]
 
+            # maximiser alpha/delta
             ''' Get the mean, min and max of the last reslt of all channels'''
-            newMean_alphaF = np.average(bandmean_alphaF)  # mean of the 4 channels, not the best metric I guess
-            mean_array_uvF.append(newMean_alphaF)
+            newMean_alphaF = np.average(bandmean_alphaF)
             maxAlphaF = np.amax(mean_array_uvF)
             minAlphaF = np.min(mean_array_uvF)
 
-            if newMean_alphaF == maxAlphaF:
+            medRatioF = np.median(ratioF)
+            mean_array_uvF.append(medRatioF)
+
+            if medRatioF == maxRatioAlphaOverDelta:
                 newPosy = minDisplayY
 
-            elif newMean_alphaF == minAlphaF:
+            elif medRatioF == minRatioAlphaOverDelta:
                 newPosy = maxDisplayY
 
             else:
-                a = (maxDisplayY - minDisplayY) * 1. / (minAlphaF - maxAlphaF)
+                a = (maxDisplayY - minDisplayY) * 1. / (minRatioAlphaOverDelta - maxRatioAlphaOverDelta)
                 b = maxDisplayY - minAlphaF * a
-                newPosy = a * newMean_alphaF + b
+                newPosy = a * medRatioF + b
 
             scoreF = scoreF + flyScore(newPosy)
 
@@ -532,12 +540,37 @@ while gameOn:
             band_alphaRS_ch4 = np.asarray(band_alphaRS_ch4)
             # print 'band_alphaRS_ch1', band_alphaRS_ch1
             # print 'band_alphaRS_ch1[:, 0]', np.average(band_alphaRS_ch1[:,0])
-            freqMaxAlphaCh1 = getfreqmax(band_alphaRS_ch1, 'alpha', nb_freq_alpha)
-            freqMaxAlphaCh2 = getfreqmax(band_alphaRS_ch2, 'alpha', nb_freq_alpha)
-            freqMaxAlphaCh3 = getfreqmax(band_alphaRS_ch3, 'alpha', nb_freq_alpha)
-            freqMaxAlphaCh4 = getfreqmax(band_alphaRS_ch4, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh1 = getfreqmaxband(band_alphaRS_ch1, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh2 = getfreqmaxband(band_alphaRS_ch2, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh3 = getfreqmaxband(band_alphaRS_ch3, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh4 = getfreqmaxband(band_alphaRS_ch4, 'alpha', nb_freq_alpha)
+
             freqMaxAlpha = int(np.average([freqMaxAlphaCh1, freqMaxAlphaCh2, freqMaxAlphaCh3, freqMaxAlphaCh4]))
 
+            for chunk in range(restingStateDuration):
+                ratios_ch1.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[0,:, chunk], freqMaxAlphaCh1-2, freqMaxAlphaCh1+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[0,:, chunk], 3, 4)[0])))
+                ratios_ch2.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[1,:, chunk], freqMaxAlphaCh2-2, freqMaxAlphaCh2+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[1,:, chunk], 3, 4)[0])))
+                ratios_ch3.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[2,:, chunk], freqMaxAlphaCh3-2, freqMaxAlphaCh3+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[2,:, chunk], 3, 4)[0])))
+                ratios_ch4.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[3,:, chunk], freqMaxAlphaCh4-2, freqMaxAlphaCh4+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[3,:, chunk], 3, 4)[0])))
+            print ratios_ch1
+            median_ratio_ch1 = np.median(ratios_ch1)
+            median_ratio_ch2 = np.median(ratios_ch2)
+            median_ratio_ch3 = np.median(ratios_ch3)
+            median_ratio_ch4 = np.median(ratios_ch4)
+            print median_ratio_ch1
+            mad_ch1 = mad(ratios_ch1)
+            mad_ch2 = mad(ratios_ch2)
+            mad_ch3 = mad(ratios_ch3)
+            mad_ch4 = mad(ratios_ch4)
+
+            madRatioAlphaOverDelta = np.average([mad_ch4, mad_ch3, mad_ch2, mad_ch1])
+            print madRatioAlphaOverDelta
+            medianratioAlphaoverDelta = np.average([median_ratio_ch1, median_ratio_ch2, median_ratio_ch3, median_ratio_ch4])
+            print medianratioAlphaoverDelta
+            minRatioAlphaOverDelta = medianratioAlphaoverDelta - 3 * madRatioAlphaOverDelta
+            maxRatioAlphaOverDelta = medianratioAlphaoverDelta + 3 * madRatiolphaOverDelta
+
+            print minRatioAlphaOverDelta, maxRatioAlphaOverDelta
             saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
             saved_bufferRS_ch1 = []
             saved_bufferRS_ch2 = []
@@ -558,33 +591,36 @@ while gameOn:
                 while cpt < buffersize * nb_channels:
                     bufferRS.append(queueRS.get_nowait())
                     cpt += 1
-
+                print sec
                 bufferRS_array = np.asarray(bufferRS)
 
-                dataRS[0, :] = bufferRS_array[ind_channel_1]
-                dataRS[1, :] = bufferRS_array[ind_channel_2]
-                dataRS[2, :] = bufferRS_array[ind_channel_3]
-                dataRS[3, :] = bufferRS_array[ind_channel_4]
-                saved_bufferRS_ch1.append(dataRS[0, :])
-                saved_bufferRS_ch2.append(dataRS[1, :])
-                saved_bufferRS_ch3.append(dataRS[2, :])
-                saved_bufferRS_ch4.append(dataRS[3, :])
+                dataRS[0, :, sec] = bufferRS_array[ind_channel_1]
+                dataRS[1, :, sec] = bufferRS_array[ind_channel_2]
+                dataRS[2, :, sec] = bufferRS_array[ind_channel_3]
+                dataRS[3, :, sec] = bufferRS_array[ind_channel_4]
 
-                fdataRS[0, :] = filter_data(dataRS[0, :], fs_hz)
-                fdataRS[1, :] = filter_data(dataRS[1, :], fs_hz)
-                fdataRS[2, :] = filter_data(dataRS[2, :], fs_hz)
-                fdataRS[3, :] = filter_data(dataRS[3, :], fs_hz)
+                saved_bufferRS_ch1.append(dataRS[0, :, sec])
+                saved_bufferRS_ch2.append(dataRS[1, :, sec])
+                saved_bufferRS_ch3.append(dataRS[2, :, sec])
+                saved_bufferRS_ch4.append(dataRS[3, :, sec])
 
-                band_alphaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:], 6, 13)[0])
-                band_alphaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:], 6, 13)[0])
-                band_alphaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:], 6, 13)[0])
-                band_alphaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:], 6, 13)[0])
+                fdataRS[0, :, sec] = filter_data(dataRS[0, :, sec], fs_hz)
+                fdataRS[1, :, sec] = filter_data(dataRS[1, :, sec], fs_hz)
+                fdataRS[2, :, sec] = filter_data(dataRS[2, :, sec], fs_hz)
+                fdataRS[3, :, sec] = filter_data(dataRS[3, :, sec], fs_hz)
+
+                band_alphaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:, sec], 6, 13)[0])
+                band_alphaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:, sec], 6, 13)[0])
+                band_alphaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:, sec], 6, 13)[0])
+                band_alphaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:, sec], 6, 13)[0])
+
                 nb_freq_alpha = extract_freqband(200, fs_hz, fdataRS[0,:], 6, 13)[1]
 
-                band_deltaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:], 3, 4)[0])
-                band_deltaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:], 3, 4)[0])
-                band_deltaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:], 3, 4)[0])
-                band_deltaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:], 3, 4)[0])
+                band_deltaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:, sec], 3, 4)[0])
+                band_deltaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:, sec], 3, 4)[0])
+                band_deltaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:, sec], 3, 4)[0])
+                band_deltaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:, sec], 3, 4)[0])
+
                 nb_freq_delta = extract_freqband(200, fs_hz, fdataRS[3,:], 3, 4)[1]
 
                 # for channel in range(4):

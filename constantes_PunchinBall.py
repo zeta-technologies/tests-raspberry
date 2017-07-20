@@ -50,6 +50,9 @@ maxDisplayY = 100
 maxScore = 15 # score ruler is 15 max
 minScore = 1
 scoreF = 0
+maxRatioAlphaOverDelta = 1
+minRatioAlphaOverDelta = 0
+
 
 '''Resting state'''
 timer = ['images/0.png', 'images/1.png', 'images/2.png', 'images/3.png', 'images/4.png', 'images/5.png',

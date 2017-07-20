@@ -401,7 +401,7 @@ def cleanData(cdata, data):
     cdata[3, :] = data[ind_channel_4]
     return cdata
 
-def getfreqmax(data, rangefreq, nb_freq):
+def getfreqmaxband(data, rangefreq, nb_freq):
     # this function finds the peak of the alpha band and returns the freq associated to the peak
     maxBandAlpha = 0
     for ind in range(nb_freq): # for each channel, first we need to get the average of each freq during the period
@@ -409,7 +409,6 @@ def getfreqmax(data, rangefreq, nb_freq):
             ind_freqMax = ind
         else:
             pass
-
     # maxBandAlpha = np.average(band_alphaRS_ch1[ind_freqMax])
 
     if rangefreq == 'alpha':
@@ -430,3 +429,16 @@ def saveAllChannelsData(path, session, kind, data1, data2, data3, data4):
     saveData(path, session, kind, 'ch2', data2)
     saveData(path, session, kind, 'ch3', data3)
     saveData(path, session, kind, 'ch4', data4)
+
+
+def mad(a, axis=None):
+    """
+    Compute *Median Absolute Deviation* of an array along given axis.
+    """
+
+    # Median along given axis, but *keeping* the reduced axis so that
+    # result can still broadcast against a.
+    med = np.median(a, axis=axis, keepdims=True)
+    mad = np.median(np.absolute(a - med), axis=axis)  # MAD along given axis
+
+    return mad
