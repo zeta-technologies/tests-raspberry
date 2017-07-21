@@ -12,7 +12,7 @@ from subprocess import call
 titre_fenetre = "ZETA GAMES"
 image_icone = "images/zeta.png"
 w_display = 480
-h_display = 280
+h_display = 290
 pg.font.init()
 black = (0,0,0)
 white = (255,255,255)
