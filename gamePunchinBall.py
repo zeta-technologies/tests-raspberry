@@ -1,4 +1,4 @@
-#!/Users/jonathanschmutz/anaconda/bin/python
+#!/usr/bin/python
 import pygame as pg
 from pygame.locals import *
 from constantes_PunchinBall import *
