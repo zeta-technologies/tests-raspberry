@@ -2,7 +2,7 @@
 import pygame as pg
 from pygame.locals import *
 from constantes_PunchinBall import *
-from constantesDataStream import *
+# from constantesDataStream import *
 import os
 import sys
 from subprocess import Popen, PIPE
@@ -178,7 +178,7 @@ while gameOn:
         screen.blit(sky, (0, 0))
         # screen.blit(cloud, (800*w_display/1024, 100*h_display/576))
         # screen.blit(plane, (300*w_display/1024, 200*h_display/576))
-        screen.blit(plane, ( 5.* w_display / 12, 1. * h_display / 5))
+        screen.blit(plane, ( 5.* w_display / 12, maxDisplayY))
         # screen.blit(scoreBar, (317, 460))
         # screen.blit(scoreDigit, (800, 30))
         # screen.blit(test, (317, 460))
@@ -270,7 +270,6 @@ while gameOn:
                     restingState = 0
                     questionnaire = 0
                     processPB.terminate() # terminates the node process to close connection with openBCI
-                    np.save(outfilePBCH2)
                     bufferPB = []
                     cpt = 0
                     queuePB.queue.clear()
@@ -366,8 +365,8 @@ while gameOn:
             #sys.stdout.write(char)
 
     while fly:
+        pg.time.Clock().tick(60)
 
-        # pg.time.Clock().tick(60)
         for event in pg.event.get():
             if event.type == QUIT:
                 saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
@@ -406,6 +405,14 @@ while gameOn:
                     cpt = 0
         try:
             while cpt < buffersize * nb_channels:
+                if cpt % int(math.floor(1.*buffersize/5)) == 0:
+                    screen.blit(sky, (0,0))
+                    screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
+                    displayNumber(math.floor(scoreF), screen, 'down')
+                    displayNumber(durationSession, screen, 'down_left')
+                    veryoldPosy += 1.*(oldPosy - veryoldPosy)/steps
+                    pg.display.flip()
+
                 bufferF.append(queueF.get_nowait())
                 cpt += 1
 
@@ -443,8 +450,8 @@ while gameOn:
             # maximiser alpha/delta
             ''' Get the mean, min and max of the last reslt of all channels'''
             newMean_alphaF = np.average(bandmean_alphaF)
-            maxAlphaF = np.amax(mean_array_uvF)
-            minAlphaF = np.min(mean_array_uvF)
+            # maxAlphaF = np.amax(mean_array_uvF)
+            # minAlphaF = np.min(mean_array_uvF)
 
             medRatioF = np.median(ratioF)
             mean_array_uvF.append(medRatioF)
@@ -457,42 +464,46 @@ while gameOn:
 
             else:
                 a = (maxDisplayY - minDisplayY) * 1. / (minRatioAlphaOverDelta - maxRatioAlphaOverDelta)
-                b = maxDisplayY - minAlphaF * a
+                b = maxDisplayY - minRatioAlphaOverDelta * a
                 newPosy = a * medRatioF + b
 
             scoreF = scoreF + flyScore(newPosy)
+            # deltaPosy_1 = 1. * (newPosy - oldPosy) / steps
+            # deltaPosy_2 = 1. * (oldPosy - veryoldPosy) / steps
+            # screen.blit(sky, (0, 0))
+            # for step in range(steps):
+            #     # print newPosy
+            #     # screen.blit(sky, (0,0))
+            #
+            #     print step
+            #     screen.blit(plane, (5. * w_display / 12, oldPosy + deltaPosy))
+            #     pg.time.delay(100)
+            #     pg.display.update()
 
-            deltaPosy = 1. * (newPosy - oldPosy) / 10
-            screen.blit(sky, (0, 0))
-            for step in range(10):
-                # print newPosy
-                # screen.blit(sky, (0,0))
-                screen.blit(plane, (5. * w_display / 12, oldPosy + deltaPosy))
-                oldPosy += deltaPosy
-                pg.display.flip()
-
+                # oldPosy += deltaPosy
+            # displayNumber(math.floor(scoreF), screen, 'down')
 
             # screen.blit(plane, (5. * w_display / 12, newPosy))
-            displayNumber(math.floor(scoreF), screen, 'down')
+            # displayNumber(math.floor(scoreF), screen, 'down')
             # screen.blit(scoreImg, ())
             # print oldPosy, newPosy
             # pg.time.delay(400)
 
-            pg.display.flip()
+            # pg.display.flip()
 
             # print "new Mean of 4 channels", newMean_alpha, maxAlpha, minAlpha
 
             # scoreBar = pg.image.load(levels_images[level]).convert_alpha()
             # scoreBar = pg.transform.scale(scoreBar, (90, 400))
             # scoreBar = pg.transform.rotate(scoreBar, -90)
+            durationSession = durationSession -  1
 
         except Empty:
             continue  # do stuff
         else:
             str(bufferF)
             # sys.stdout.write(char)
-
-        pg.display.update()
+        veryoldPosy = oldPosy
         oldPosy = newPosy
         cpt = 0
         saved_bufferF.append(bufferF)
@@ -568,7 +579,7 @@ while gameOn:
             medianratioAlphaoverDelta = np.average([median_ratio_ch1, median_ratio_ch2, median_ratio_ch3, median_ratio_ch4])
             print medianratioAlphaoverDelta
             minRatioAlphaOverDelta = medianratioAlphaoverDelta - 3 * madRatioAlphaOverDelta
-            maxRatioAlphaOverDelta = medianratioAlphaoverDelta + 3 * madRatiolphaOverDelta
+            maxRatioAlphaOverDelta = medianratioAlphaoverDelta + 3 * madRatioAlphaOverDelta
 
             print minRatioAlphaOverDelta, maxRatioAlphaOverDelta
             saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)

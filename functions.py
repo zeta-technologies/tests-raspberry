@@ -269,8 +269,8 @@ def punchinballmain(screen, cpt2, fond, punchBall, buffer_1, OPB1_data ):
         if len(OPB1_mean_array_uv) == 0:
             delta = 0
 
-        print "new Mean of 4 channels", newMean_alpha
-        print "Max - Min ", delta
+        # print "new Mean of 4 channels", newMean_alpha
+        # print "Max - Min ", delta
 
         if delta == 0:
             level = 0
@@ -296,7 +296,7 @@ def punchinballmain(screen, cpt2, fond, punchBall, buffer_1, OPB1_data ):
             screen.blit(punchBall, (350 * w_display / 1024, -5 * h_display / 576))
             screen.blit(scoreBar, (317 * w_display / 1024, 460 * h_display / 576))
             screen.blit(scoreDigit, (800 * w_display / 1024, 30 * h_display / 576))
-        print "level", level
+        # print "level", level
         pg.display.update()
 
 
@@ -308,7 +308,7 @@ def flyScore(posY):
 
 
 def displayNumber(nb, screen, position):
-    print nb
+    # print nb
     nb = int(nb)
     if position == 'up':
         if nb >= 1000:
@@ -391,6 +391,48 @@ def displayNumber(nb, screen, position):
             timerSec = pg.image.load(timer[int(str(nb)[0])]).convert()
             timerSec = pg.transform.scale(timerSec, (int(1.* w_display / 15), int(1.*h_display / 10)))
             screen.blit(timerSec, (14.* w_display / 15, 9.* h_display / 10))
+
+    elif position == 'down_left':
+
+        if nb >= 1000:
+            timerSec = pg.image.load(timer[int(str(nb)[3])]).convert()
+            timerSec = pg.transform.scale(timerSec, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            timerDiz = pg.image.load(timer[int(str(nb)[2])]).convert()
+            timerDiz = pg.transform.scale(timerDiz, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            timerCen = pg.image.load(timer[int(str(nb)[1])]).convert()
+            timerCen = pg.transform.scale(timerCen, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            timerThou = pg.image.load(timer[int(str(nb)[0])]).convert()
+            timerThou = pg.transform.scale(timerThou, (int(1. * w_display / 15), int(1. * h_display / 10)))
+            screen.blit(timerSec, (3.* w_display / 15, 9.* h_display / 10))
+            screen.blit(timerDiz, (2.* w_display / 15, 9.* h_display / 10))
+            screen.blit(timerCen, (1.* w_display / 15, 9.* h_display / 10))
+            screen.blit(timerThou, (0, 9. * h_display / 10))
+
+
+        elif nb >= 100:
+            timerSec = pg.image.load(timer[int(str(nb)[2])]).convert()
+            timerSec = pg.transform.scale(timerSec, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            timerDiz = pg.image.load(timer[int(str(nb)[1])]).convert()
+            timerDiz = pg.transform.scale(timerDiz, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            timerCen = pg.image.load(timer[int(str(nb)[0])]).convert()
+            timerCen = pg.transform.scale(timerCen, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            screen.blit(timerSec, (2.* w_display / 15, 9.* h_display / 10))
+            screen.blit(timerDiz, (1.* w_display / 15, 9.* h_display / 10))
+            screen.blit(timerCen, (0, 9.* h_display / 10))
+
+        elif nb >= 10 :
+            timerSec = pg.image.load(timer[int(str(nb)[1])]).convert()
+            timerSec = pg.transform.scale(timerSec,(int(1.* w_display / 15), int(1.*h_display / 10)))
+            timerDiz = pg.image.load(timer[int(str(nb)[0])]).convert()
+            timerDiz = pg.transform.scale(timerDiz, (int(1.* w_display / 15), int(1.*h_display / 10)))
+
+            screen.blit(timerSec, (1, 9.* h_display / 10))
+            screen.blit(timerDiz, (0, 9.* h_display / 10))
+
+        elif nb < 10:
+            timerSec = pg.image.load(timer[int(str(nb)[0])]).convert()
+            timerSec = pg.transform.scale(timerSec, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            screen.blit(timerSec, (0, 9.* h_display / 10))
 
 
 def cleanData(cdata, data):
