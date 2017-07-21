@@ -590,11 +590,12 @@ while gameOn:
 
 
             print 'fin de la seance de reglage', freqMaxAlpha
+            bufferRS = []
+            homeOn = 1
+            restingState = 0
             processRS.terminate()
             queueRS.queue.clear()
-            bufferRS = []
-            restingState = 0
-            homeOn = 1
+
 
         elif sec < restingStateDuration:
 
