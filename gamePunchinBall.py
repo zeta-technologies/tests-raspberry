@@ -563,25 +563,25 @@ while gameOn:
                 ratios_ch2.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[1,:, chunk], freqMaxAlphaCh2-2, freqMaxAlphaCh2+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[1,:, chunk], 3, 4)[0])))
                 ratios_ch3.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[2,:, chunk], freqMaxAlphaCh3-2, freqMaxAlphaCh3+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[2,:, chunk], 3, 4)[0])))
                 ratios_ch4.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[3,:, chunk], freqMaxAlphaCh4-2, freqMaxAlphaCh4+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[3,:, chunk], 3, 4)[0])))
-            print ratios_ch1
+            # print ratios_ch1
             median_ratio_ch1 = np.median(ratios_ch1)
             median_ratio_ch2 = np.median(ratios_ch2)
             median_ratio_ch3 = np.median(ratios_ch3)
             median_ratio_ch4 = np.median(ratios_ch4)
-            print median_ratio_ch1
+            # print median_ratio_ch1
             mad_ch1 = mad(ratios_ch1)
             mad_ch2 = mad(ratios_ch2)
             mad_ch3 = mad(ratios_ch3)
             mad_ch4 = mad(ratios_ch4)
 
             madRatioAlphaOverDelta = np.average([mad_ch4, mad_ch3, mad_ch2, mad_ch1])
-            print madRatioAlphaOverDelta
+            # print madRatioAlphaOverDelta
             medianratioAlphaoverDelta = np.average([median_ratio_ch1, median_ratio_ch2, median_ratio_ch3, median_ratio_ch4])
-            print medianratioAlphaoverDelta
+            # print medianratioAlphaoverDelta
             minRatioAlphaOverDelta = medianratioAlphaoverDelta - 3 * madRatioAlphaOverDelta
             maxRatioAlphaOverDelta = medianratioAlphaoverDelta + 3 * madRatioAlphaOverDelta
 
-            print minRatioAlphaOverDelta, maxRatioAlphaOverDelta
+            # print minRatioAlphaOverDelta, maxRatioAlphaOverDelta
             saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
             saved_bufferRS_ch1 = []
             saved_bufferRS_ch2 = []
