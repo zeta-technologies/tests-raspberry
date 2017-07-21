@@ -480,7 +480,7 @@ def mad(a, axis=None):
 
     # Median along given axis, but *keeping* the reduced axis so that
     # result can still broadcast against a.
-    med = np.median(a, axis=axis, keepdims=True)
-    mad = np.median(np.absolute(a - med), axis=axis)  # MAD along given axis
+    med = np.median(a)
+    mad = np.median(np.absolute(a - med))  # MAD along given axis
 
     return mad
