@@ -510,7 +510,7 @@ while gameOn:
         bufferF = []
 
     while restingState:
-        # pg.time.Clock().tick(30)
+        pg.time.Clock().tick(30)
 
         for event in pg.event.get():
             if event.type == QUIT:
