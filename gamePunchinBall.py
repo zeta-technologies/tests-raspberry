@@ -189,7 +189,7 @@ while gameOn:
         if platform == 'darwin': # mac
             processRS = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
         elif platform == 'linux' or platform == 'linux2': #linux
-            processRS = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for LINUX
+            processRS = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE, preexec_fn=os.setsid) # for LINUX
 
         '''launch node process'''
         queueRS = Queue()
@@ -402,112 +402,129 @@ while gameOn:
                     saved_bufferF_ch3 = []
                     saved_bufferF_ch4 = []
                     cpt = 0
-        try:
-            while cpt < buffersize * nb_channels:
-                if cpt % int(math.floor(1.*buffersize/5)) == 0:
-                    screen.blit(sky, (0,0))
-                    screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
-                    displayNumber(math.floor(scoreF), screen, 'down')
-                    displayNumber(durationSession, screen, 'down_left')
-                    veryoldPosy += 1.*(oldPosy - veryoldPosy)/steps
-                    pg.display.flip()
 
-                bufferF.append(queueF.get_nowait())
-                cpt += 1
+        if durationSession >0:
 
-            bufferF_array = np.asarray(bufferF)
+            try:
+                while cpt < buffersize * nb_channels:
+                    if cpt % int(math.floor(1.*buffersize/5)) == 0:
+                        screen.blit(sky, (0,0))
+                        screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
+                        displayNumber(math.floor(scoreF), screen, 'down')
+                        displayNumber(durationSession, screen, 'down_left')
+                        veryoldPosy += 1.*(oldPosy - veryoldPosy)/steps
+                        pg.display.flip()
 
-            dataF[0, :] = bufferF_array[ind_channel_1]
-            dataF[1, :] = bufferF_array[ind_channel_2]
-            dataF[2, :] = bufferF_array[ind_channel_3]
-            dataF[3, :] = bufferF_array[ind_channel_4]
+                    bufferF.append(queueF.get_nowait())
+                    cpt += 1
 
-            saved_bufferF_ch1.append(dataF[0, :])
-            saved_bufferF_ch2.append(dataF[1, :])
-            saved_bufferF_ch3.append(dataF[2, :])
-            saved_bufferF_ch4.append(dataF[3, :])
+                bufferF_array = np.asarray(bufferF)
 
-            fdataF[0, :] = filter_data(dataF[0, :], fs_hz)
-            fdataF[1, :] = filter_data(dataF[1, :], fs_hz)
-            fdataF[2, :] = filter_data(dataF[2, :], fs_hz)
-            fdataF[3, :] = filter_data(dataF[3, :], fs_hz)
+                dataF[0, :] = bufferF_array[ind_channel_1]
+                dataF[1, :] = bufferF_array[ind_channel_2]
+                dataF[2, :] = bufferF_array[ind_channel_3]
+                dataF[3, :] = bufferF_array[ind_channel_4]
 
-            bandmean_alphaF = np.zeros(nb_channels)
-            bandmax_alphaF = np.zeros(nb_channels)
-            bandmin_alphaF = np.zeros(nb_channels)
+                saved_bufferF_ch1.append(dataF[0, :])
+                saved_bufferF_ch2.append(dataF[1, :])
+                saved_bufferF_ch3.append(dataF[2, :])
+                saved_bufferF_ch4.append(dataF[3, :])
 
-            bandmean_deltaF = np.zeros(nb_channels)
-            bandmax_deltaF = np.zeros(nb_channels)
-            bandmin_deltaF = np.zeros(nb_channels)
-            ratioF = np.zeros(nb_channels)
+                fdataF[0, :] = filter_data(dataF[0, :], fs_hz)
+                fdataF[1, :] = filter_data(dataF[1, :], fs_hz)
+                fdataF[2, :] = filter_data(dataF[2, :], fs_hz)
+                fdataF[3, :] = filter_data(dataF[3, :], fs_hz)
 
-            for channel in range(nb_channels):
-                bandmean_alphaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
-                bandmean_deltaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], 3, 4)
-                ratioF[channel] = 1.* bandmean_alphaF[channel] / bandmean_deltaF[channel]
+                bandmean_alphaF = np.zeros(nb_channels)
+                bandmax_alphaF = np.zeros(nb_channels)
+                bandmin_alphaF = np.zeros(nb_channels)
 
-            # maximiser alpha/delta
-            ''' Get the mean, min and max of the last reslt of all channels'''
-            newMean_alphaF = np.average(bandmean_alphaF)
-            # maxAlphaF = np.amax(mean_array_uvF)
-            # minAlphaF = np.min(mean_array_uvF)
+                bandmean_deltaF = np.zeros(nb_channels)
+                bandmax_deltaF = np.zeros(nb_channels)
+                bandmin_deltaF = np.zeros(nb_channels)
+                ratioF = np.zeros(nb_channels)
 
-            medRatioF = np.median(ratioF)
-            mean_array_uvF.append(medRatioF)
+                for channel in range(nb_channels):
+                    bandmean_alphaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
+                    bandmean_deltaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], 3, 4)
+                    ratioF[channel] = 1.* bandmean_alphaF[channel] / bandmean_deltaF[channel]
 
-            if medRatioF == maxRatioAlphaOverDelta:
-                newPosy = minDisplayY
+                # maximiser alpha/delta
+                ''' Get the mean, min and max of the last reslt of all channels'''
+                newMean_alphaF = np.average(bandmean_alphaF)
+                # maxAlphaF = np.amax(mean_array_uvF)
+                # minAlphaF = np.min(mean_array_uvF)
 
-            elif medRatioF == minRatioAlphaOverDelta:
-                newPosy = maxDisplayY
+                medRatioF = np.median(ratioF)
+                mean_array_uvF.append(medRatioF)
 
+                if medRatioF == maxRatioAlphaOverDelta:
+                    newPosy = minDisplayY
+
+                elif medRatioF == minRatioAlphaOverDelta:
+                    newPosy = maxDisplayY
+
+                else:
+                    a = (maxDisplayY - minDisplayY) * 1. / (minRatioAlphaOverDelta - maxRatioAlphaOverDelta)
+                    b = maxDisplayY - minRatioAlphaOverDelta * a
+                    newPosy = a * medRatioF + b
+
+                scoreF = scoreF + flyScore(newPosy)
+                # deltaPosy_1 = 1. * (newPosy - oldPosy) / steps
+                # deltaPosy_2 = 1. * (oldPosy - veryoldPosy) / steps
+                # screen.blit(sky, (0, 0))
+                # for step in range(steps):
+                #     # print newPosy
+                #     # screen.blit(sky, (0,0))
+                #
+                #     print step
+                #     screen.blit(plane, (5. * w_display / 12, oldPosy + deltaPosy))
+                #     pg.time.delay(100)
+                #     pg.display.update()
+
+                    # oldPosy += deltaPosy
+                # displayNumber(math.floor(scoreF), screen, 'down')
+
+                # screen.blit(plane, (5. * w_display / 12, newPosy))
+                # displayNumber(math.floor(scoreF), screen, 'down')
+                # screen.blit(scoreImg, ())
+                # print oldPosy, newPosy
+                # pg.time.delay(400)
+
+                # pg.display.flip()
+
+                # print "new Mean of 4 channels", newMean_alpha, maxAlpha, minAlpha
+
+                # scoreBar = pg.image.load(levels_images[level]).convert_alpha()
+                # scoreBar = pg.transform.scale(scoreBar, (90, 400))
+                # scoreBar = pg.transform.rotate(scoreBar, -90)
+                durationSession = durationSession -  1
+
+            except Empty:
+                continue  # do stuff
             else:
-                a = (maxDisplayY - minDisplayY) * 1. / (minRatioAlphaOverDelta - maxRatioAlphaOverDelta)
-                b = maxDisplayY - minRatioAlphaOverDelta * a
-                newPosy = a * medRatioF + b
-
-            scoreF = scoreF + flyScore(newPosy)
-            # deltaPosy_1 = 1. * (newPosy - oldPosy) / steps
-            # deltaPosy_2 = 1. * (oldPosy - veryoldPosy) / steps
-            # screen.blit(sky, (0, 0))
-            # for step in range(steps):
-            #     # print newPosy
-            #     # screen.blit(sky, (0,0))
-            #
-            #     print step
-            #     screen.blit(plane, (5. * w_display / 12, oldPosy + deltaPosy))
-            #     pg.time.delay(100)
-            #     pg.display.update()
-
-                # oldPosy += deltaPosy
-            # displayNumber(math.floor(scoreF), screen, 'down')
-
-            # screen.blit(plane, (5. * w_display / 12, newPosy))
-            # displayNumber(math.floor(scoreF), screen, 'down')
-            # screen.blit(scoreImg, ())
-            # print oldPosy, newPosy
-            # pg.time.delay(400)
-
-            # pg.display.flip()
-
-            # print "new Mean of 4 channels", newMean_alpha, maxAlpha, minAlpha
-
-            # scoreBar = pg.image.load(levels_images[level]).convert_alpha()
-            # scoreBar = pg.transform.scale(scoreBar, (90, 400))
-            # scoreBar = pg.transform.rotate(scoreBar, -90)
-            durationSession = durationSession -  1
-
-        except Empty:
-            continue  # do stuff
-        else:
-            str(bufferF)
-            # sys.stdout.write(char)
-        veryoldPosy = oldPosy
-        oldPosy = newPosy
-        cpt = 0
-        saved_bufferF.append(bufferF)
-        bufferF = []
-
+                str(bufferF)
+                # sys.stdout.write(char)
+            veryoldPosy = oldPosy
+            oldPosy = newPosy
+            cpt = 0
+            saved_bufferF.append(bufferF)
+            bufferF = []
+        else :
+            homeOn = 1
+            punchinBall = 0
+            fly = 0
+            restingState = 0
+            questionnaire = 0
+            processF.terminate()
+            queueF.queue.clear()
+            saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+            bufferF = []
+            saved_bufferF_ch1 = []
+            saved_bufferF_ch2 = []
+            saved_bufferF_ch3 = []
+            saved_bufferF_ch4 = []
+            cpt = 0
     while restingState:
         pg.time.Clock().tick(30)
 
@@ -531,7 +548,9 @@ while gameOn:
                     fly = 0
                     restingState = 0
                     questionnaire = 0
-                    processRS.terminate()
+                    # processRS.terminate()
+
+                    os.killpg(os.getpgid(processRS.pid), signal.SIGTERM)  # Send the signal to all the process groups
                     bufferRS = []
                     queueRS.queue.clear()
                     saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
