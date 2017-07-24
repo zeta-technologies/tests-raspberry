@@ -274,7 +274,6 @@ while gameOn:
                     cpt = 0
                     queuePB.queue.clear()
                     saveAllChannelsData(pathPB, sessionPB, 'PB', saved_bufferPB_ch1, saved_bufferPB_ch2, saved_bufferPB_ch3, saved_bufferPB_ch4)
-
                     saved_bufferPB_ch1 = []
                     saved_bufferPB_ch2 = []
                     saved_bufferPB_ch3 = []
@@ -519,7 +518,6 @@ while gameOn:
                 saved_bufferRS_ch2 = []
                 saved_bufferRS_ch3 = []
                 saved_bufferRS_ch4 = []
-
                 pg.quit()
                 sys.exit()
             if event.type == KEYDOWN:
@@ -528,20 +526,22 @@ while gameOn:
             elif event.type == MOUSEBUTTONUP:
                 mouseReturn = pg.mouse.get_pos()
                 if whichButtonReturn(mouseReturn, w_display, h_display):
-                    saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
-                    saved_bufferRS_ch1 = []
-                    saved_bufferRS_ch2 = []
-                    saved_bufferRS_ch3 = []
-                    saved_bufferRS_ch4 = []
                     homeOn = 1
                     punchinBall = 0
                     fly = 0
                     restingState = 0
                     questionnaire = 0
-                    # print band_alphaRS_ch1
                     processRS.terminate()
-                    queueRS.queue.clear()
                     bufferRS = []
+                    queueRS.queue.clear()
+                    saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
+                    saved_bufferRS_ch1 = []
+                    saved_bufferRS_ch2 = []
+                    saved_bufferRS_ch3 = []
+                    saved_bufferRS_ch4 = []
+
+                    # print band_alphaRS_ch1
+
 
         if sec == restingStateDuration :
             # np.zeros(nb_freq_alpha)
@@ -582,19 +582,20 @@ while gameOn:
             maxRatioAlphaOverDelta = medianratioAlphaoverDelta + 3 * madRatioAlphaOverDelta
 
             # print minRatioAlphaOverDelta, maxRatioAlphaOverDelta
+            print 'fin de la seance de reglage', freqMaxAlpha
+            homeOn = 1
+            punchinBall = 0
+            fly = 0
+            restingState = 0
+            questionnaire = 0
+            processRS.terminate()
+            bufferRS = []
+            queueRS.queue.clear()
             saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
             saved_bufferRS_ch1 = []
             saved_bufferRS_ch2 = []
             saved_bufferRS_ch3 = []
             saved_bufferRS_ch4 = []
-
-
-            print 'fin de la seance de reglage', freqMaxAlpha
-            bufferRS = []
-            homeOn = 1
-            restingState = 0
-            processRS.terminate()
-            queueRS.queue.clear()
 
 
         elif sec < restingStateDuration:

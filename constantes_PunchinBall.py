@@ -93,9 +93,9 @@ veryoldPosy = maxDisplayY
 timer = ['images/0.png', 'images/1.png', 'images/2.png', 'images/3.png', 'images/4.png', 'images/5.png',
                     'images/6.png', 'images/7.png', 'images/8.png', 'images/9.png']
 restingState = 'images/restingState.png'
-restingStateDuration = 10 # in seconds
+restingStateDuration = 60 # in seconds
 sec = 0
-durationSession = 600
+durationSession = 5
 
 '''Navigation among the pages'''
 # booleans for each window
