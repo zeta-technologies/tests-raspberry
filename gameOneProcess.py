@@ -127,29 +127,33 @@ while gameOn:
                     homeOn = 0
                     punchinBall = 0
                     fly = 0
-                    restingState = 1
+                    restingState1 = 1
                     questionnaire = 0
+
 
                 elif choice == 2: #  is for flying game
                     homeOn = 0
                     punchinBall = 0
                     fly = 1
                     questionnaire = 0
-                    restingState = 0
+                    restingState1 = 0
+                    restingState2 = 0
 
                 elif choice == 3: # 3 is for punchinBall
                     homeOn = 0
                     punchinBall = 1
                     fly = 0
-                    restingState = 0
+                    restingState1 = 0
                     questionnaire = 0
+                    restingState2 = 0
 
                 elif choice == 4: # 3 is for punchinBall
                     homeOn = 0
                     punchinBall = 0
                     fly = 0
-                    restingState = 1
+                    restingState1 = 0
                     questionnaire = 0
+                    restingState2 = 2
 
     if punchinBall :
         sessionPB += 1
@@ -164,7 +168,7 @@ while gameOn:
         queue.queue.clear()
         # punch_noise = pg.mixer.Sound("songs/punch.ogg") # TODO resolve the MemoryError due to pg.mixer.Sound
 
-    if restingState:
+    if restingState1:
 
         if platform == 'darwin' and sessionRS == 0: # mac
             process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
@@ -180,9 +184,6 @@ while gameOn:
             thread = Thread(target=enqueue_output, args=(process.stdout, queue))
             thread.daemon = True
             thread.start()
-
-        if sessionRS != 0:
-            restingState
 
         sessionRS += 1
         sec = 0
@@ -215,6 +216,24 @@ while gameOn:
         pg.display.flip()
         # queue.queue.clear()
 
+    if restingState2:
+
+        sessionRS += 1
+        sec = 0
+        bufferRS = []
+        band_alphaRS_ch1 = []
+        band_alphaRS_ch2 = []
+        band_alphaRS_ch3 = []
+        band_alphaRS_ch4 = []
+        band_deltaRS_ch1 = []
+        band_deltaRS_ch2 = []
+        band_deltaRS_ch3 = []
+        band_deltaRS_ch4 = []
+        screen.blit(restingStateImage, (0,0))
+        displayNumber(0, screen, 'down')
+        pg.display.flip()
+        queue.queue.clear()
+
     if questionnaire:
 
         screen.blit(questionsSerie1Image, (0,0))
@@ -246,7 +265,7 @@ while gameOn:
         # sec = sec + 1
         # print sec
 
-    while restingState:
+    while restingState1:
         pg.time.Clock().tick(30)
 
         for event in pg.event.get():
@@ -260,14 +279,14 @@ while gameOn:
                 sys.exit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
-                    restingState = 0
+                    restingState1 = 0
             elif event.type == MOUSEBUTTONUP:
                 mouseReturn = pg.mouse.get_pos()
                 if whichButtonReturn(mouseReturn, w_display, h_display):
                     homeOn = 1
                     punchinBall = 0
                     fly = 0
-                    restingState = 0
+                    restingState1 = 0
                     questionnaire = 0
                     # process.terminate()
                     # call(['sudo service bluetooth restart'])
@@ -292,7 +311,6 @@ while gameOn:
             band_alphaRS_ch4 = np.asarray(band_alphaRS_ch4)
             # print 'band_alphaRS_ch1', band_alphaRS_ch1
             # print 'band_alphaRS_ch1[:, 0]', np.average(band_alphaRS_ch1[:,0])
-            print len(band_alphaRS_ch1)
             freqMaxAlphaCh1 = getfreqmaxband(band_alphaRS_ch1, 'alpha', nb_freq_alpha)
             freqMaxAlphaCh2 = getfreqmaxband(band_alphaRS_ch2, 'alpha', nb_freq_alpha)
             freqMaxAlphaCh3 = getfreqmaxband(band_alphaRS_ch3, 'alpha', nb_freq_alpha)
@@ -305,21 +323,19 @@ while gameOn:
                 ratios_ch2.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[1,:, chunk], freqMaxAlphaCh2-2, freqMaxAlphaCh2+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[1,:, chunk], 3, 4)[0])))
                 ratios_ch3.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[2,:, chunk], freqMaxAlphaCh3-2, freqMaxAlphaCh3+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[2,:, chunk], 3, 4)[0])))
                 ratios_ch4.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[3,:, chunk], freqMaxAlphaCh4-2, freqMaxAlphaCh4+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[3,:, chunk], 3, 4)[0])))
-            # print ratios_ch1
+
             median_ratio_ch1 = np.median(ratios_ch1)
             median_ratio_ch2 = np.median(ratios_ch2)
             median_ratio_ch3 = np.median(ratios_ch3)
             median_ratio_ch4 = np.median(ratios_ch4)
-            # print median_ratio_ch1
+
             mad_ch1 = mad(ratios_ch1)
             mad_ch2 = mad(ratios_ch2)
             mad_ch3 = mad(ratios_ch3)
             mad_ch4 = mad(ratios_ch4)
 
             madRatioAlphaOverDelta = np.average([mad_ch4, mad_ch3, mad_ch2, mad_ch1])
-            # print madRatioAlphaOverDelta
             medianratioAlphaoverDelta = np.average([median_ratio_ch1, median_ratio_ch2, median_ratio_ch3, median_ratio_ch4])
-            # print medianratioAlphaoverDelta
             minRatioAlphaOverDelta = medianratioAlphaoverDelta - 3 * madRatioAlphaOverDelta
             maxRatioAlphaOverDelta = medianratioAlphaoverDelta + 3 * madRatioAlphaOverDelta
 
@@ -328,7 +344,162 @@ while gameOn:
             homeOn = 1
             punchinBall = 0
             fly = 0
-            restingState = 0
+            restingState1 = 0
+            questionnaire = 0
+            # process.terminate()
+            # call(['sudo service bluetooth restart'])
+            # os.system('sudo service bluetooth restart')
+            bufferRS = []
+            queue.queue.clear()
+            saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
+            saved_bufferRS_ch1 = []
+            saved_bufferRS_ch2 = []
+            saved_bufferRS_ch3 = []
+            saved_bufferRS_ch4 = []
+
+        elif sec < restingStateDuration:
+            try:
+                # queue.queue.clear()
+                while len(bufferRS) < buffersize * nb_channels:
+                    bufferRS.append(queue.get_nowait())
+
+                if len(bufferRS) == 800:
+                    print sec
+                    bufferRS_array = np.asarray(bufferRS)
+
+                    dataRS[0, :, sec] = bufferRS_array[ind_channel_1]
+                    dataRS[1, :, sec] = bufferRS_array[ind_channel_2]
+                    dataRS[2, :, sec] = bufferRS_array[ind_channel_3]
+                    dataRS[3, :, sec] = bufferRS_array[ind_channel_4]
+
+                    saved_bufferRS_ch1.append(dataRS[0, :, sec])
+                    saved_bufferRS_ch2.append(dataRS[1, :, sec])
+                    saved_bufferRS_ch3.append(dataRS[2, :, sec])
+                    saved_bufferRS_ch4.append(dataRS[3, :, sec])
+
+                    fdataRS[0, :, sec] = filter_data(dataRS[0, :, sec], fs_hz)
+                    fdataRS[1, :, sec] = filter_data(dataRS[1, :, sec], fs_hz)
+                    fdataRS[2, :, sec] = filter_data(dataRS[2, :, sec], fs_hz)
+                    fdataRS[3, :, sec] = filter_data(dataRS[3, :, sec], fs_hz)
+
+                    band_alphaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:, sec], 6, 13)[0])
+                    band_alphaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:, sec], 6, 13)[0])
+                    band_alphaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:, sec], 6, 13)[0])
+                    band_alphaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:, sec], 6, 13)[0])
+
+                    nb_freq_alpha = extract_freqband(200, fs_hz, fdataRS[0,:], 6, 13)[1]
+
+                    band_deltaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:, sec], 3, 4)[0])
+                    band_deltaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:, sec], 3, 4)[0])
+                    band_deltaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:, sec], 3, 4)[0])
+                    band_deltaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:, sec], 3, 4)[0])
+
+                    nb_freq_delta = extract_freqband(200, fs_hz, fdataRS[3,:], 3, 4)[1]
+
+                    # for channel in range(4):
+                    #     band_alphaRS[channel] = extract_freqband(200, fs_hz, fdataRS[channel,:], 6, 11)
+                    #     bandmean_deltaRS[channel] = extract_freqband(200, fs_hz, fdataRS[channel,:], 3, 4)
+                    # globalAlpha.append(bandmean_alphaRS)
+
+
+                    bufferRS = []
+                    displayNumber(sec, screen, 'down')
+                    # checkImp() # TODO  check impedances function
+                    pg.display.update()
+                    sec = sec + 1
+
+            except Empty:
+                continue  # do stuff
+            else:
+                str(bufferRS)
+                # sys.stdout.write(char)
+            # time.sleep(1)
+            # pg.time.delay(993) # wait to display the next second on screen
+            # print sec
+            # queue.queue.clear()
+
+    while restingState2:
+        pg.time.Clock().tick(30)
+
+        for event in pg.event.get():
+            if event.type == QUIT:
+                saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
+                saved_bufferRS_ch1 = []
+                saved_bufferRS_ch2 = []
+                saved_bufferRS_ch3 = []
+                saved_bufferRS_ch4 = []
+                pg.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    restingState2 = 0
+            elif event.type == MOUSEBUTTONUP:
+                mouseReturn = pg.mouse.get_pos()
+                if whichButtonReturn(mouseReturn, w_display, h_display):
+                    homeOn = 1
+                    punchinBall = 0
+                    fly = 0
+                    restingState2 = 0
+                    questionnaire = 0
+                    # process.terminate()
+                    # call(['sudo service bluetooth restart'])
+                    # os.system('sudo service bluetooth restart')
+                    # os.killpg(os.getpgid(process.pid), signal.SIGTERM)  # Send the signal to all the process groups
+                    bufferRS = []
+                    queue.queue.clear()
+                    saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
+                    saved_bufferRS_ch1 = []
+                    saved_bufferRS_ch2 = []
+                    saved_bufferRS_ch3 = []
+                    saved_bufferRS_ch4 = []
+                    print bufferRS
+
+                    # print band_alphaRS_ch1
+
+        if sec == restingStateDuration :
+            # np.zeros(nb_freq_alpha)
+            band_alphaRS_ch1 = np.asarray(band_alphaRS_ch1)
+            band_alphaRS_ch2 = np.asarray(band_alphaRS_ch2)
+            band_alphaRS_ch3 = np.asarray(band_alphaRS_ch3)
+            band_alphaRS_ch4 = np.asarray(band_alphaRS_ch4)
+            # print 'band_alphaRS_ch1', band_alphaRS_ch1
+            # print 'band_alphaRS_ch1[:, 0]', np.average(band_alphaRS_ch1[:,0])
+            freqMaxAlphaCh1 = getfreqmaxband(band_alphaRS_ch1, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh2 = getfreqmaxband(band_alphaRS_ch2, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh3 = getfreqmaxband(band_alphaRS_ch3, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh4 = getfreqmaxband(band_alphaRS_ch4, 'alpha', nb_freq_alpha)
+
+            freqMaxAlpha = int(np.average([freqMaxAlphaCh1, freqMaxAlphaCh2, freqMaxAlphaCh3, freqMaxAlphaCh4]))
+
+            for chunk in range(restingStateDuration):
+                ratios_ch1.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[0,:, chunk], freqMaxAlphaCh1-2, freqMaxAlphaCh1+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[0,:, chunk], 3, 4)[0])))
+                ratios_ch2.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[1,:, chunk], freqMaxAlphaCh2-2, freqMaxAlphaCh2+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[1,:, chunk], 3, 4)[0])))
+                ratios_ch3.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[2,:, chunk], freqMaxAlphaCh3-2, freqMaxAlphaCh3+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[2,:, chunk], 3, 4)[0])))
+                ratios_ch4.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[3,:, chunk], freqMaxAlphaCh4-2, freqMaxAlphaCh4+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[3,:, chunk], 3, 4)[0])))
+
+            median_ratio_ch1 = np.median(ratios_ch1)
+            median_ratio_ch2 = np.median(ratios_ch2)
+            median_ratio_ch3 = np.median(ratios_ch3)
+            median_ratio_ch4 = np.median(ratios_ch4)
+
+            mad_ch1 = mad(ratios_ch1)
+            mad_ch2 = mad(ratios_ch2)
+            mad_ch3 = mad(ratios_ch3)
+            mad_ch4 = mad(ratios_ch4)
+
+            madRatioAlphaOverDeltaEnd = np.average([mad_ch4, mad_ch3, mad_ch2, mad_ch1])
+            medianratioAlphaoverDeltaEnd = np.average([median_ratio_ch1, median_ratio_ch2, median_ratio_ch3, median_ratio_ch4])
+            minRatioAlphaOverDelta = medianratioAlphaoverDelta - 3 * madRatioAlphaOverDelta
+            maxRatioAlphaOverDelta = medianratioAlphaoverDelta + 3 * madRatioAlphaOverDelta
+
+            # print minRatioAlphaOverDelta, maxRatioAlphaOverDelta
+            print 'fin de la seance de reglage', freqMaxAlpha
+            print 'New Ration is : ', medianratioAlphaoverDeltaEnd
+            print  'Old ratio was : ', medianratioAlphaoverDelta
+            homeOn = 1
+            punchinBall = 0
+            fly = 0
+            restingState1 = 0
             questionnaire = 0
             # process.terminate()
             # call(['sudo service bluetooth restart'])
@@ -430,7 +601,7 @@ while gameOn:
                     homeOn = 1
                     punchinBall = 0
                     fly = 0
-                    restingState = 0
+                    restingState1 = 0
                     questionnaire = 0
                     # processF.terminate()
                     # call(['sudo service bluetooth restart'])
@@ -524,7 +695,7 @@ while gameOn:
             homeOn = 1
             punchinBall = 0
             fly = 0
-            restingState = 0
+            restingState1 = 0
             questionnaire = 0
             # processF.terminate()
             # call(['sudo service bluetooth restart'])
@@ -563,7 +734,7 @@ while gameOn:
                     homeOn = 1
                     punchinBall = 0
                     fly = 0
-                    restingState = 0
+                    restingState1 = 0
                     questionnaire = 0
                     # processPB.terminate() # terminates the node process to close connection with openBCI
                     # call(['sudo service bluetooth restart'])
@@ -668,7 +839,7 @@ while gameOn:
                 sys.exit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
-                    restingState = 0
+                    restingState1 = 0
             if event.type == MOUSEBUTTONUP:
                 # print int(mouse[1])
                 if (int(mouse[1]) >= 58) & (int(mouse[1]) <= 80 ) :

@@ -103,7 +103,8 @@ durationSession = durationSessionInit
 punchinBall = 0
 homeOn = 1
 fly = 0
-restingState = 0
+restingState1 = 0
+restingState2 = 0
 questionnaire = 0
 
 '''Tinnitus Questionnary '''
