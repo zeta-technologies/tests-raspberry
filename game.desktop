@@ -4,7 +4,7 @@
 Version=1.0
 Type=Application
 Terminal=false
-Exec='./gameOneProcess.py'
+Exec=cd ~/Desktop/tests-raspberry && ./gameOneProcess.py
 Name=ZETA TECH
 Comment=comment here
-Icon='images/icon.png'
+Icon=images/icon.png
