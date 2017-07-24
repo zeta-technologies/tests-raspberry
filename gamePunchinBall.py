@@ -5,6 +5,7 @@ from constantes_PunchinBall import *
 # from constantesDataStream import *
 import os
 import sys
+import signal
 from subprocess import Popen, PIPE
 from threading  import Thread
 from sys import platform
@@ -550,7 +551,7 @@ while gameOn:
                     questionnaire = 0
                     # processRS.terminate()
 
-                    os.killpg(os.getpgid(processRS.pid))  # Send the signal to all the process groups
+                    os.killpg(os.getpgid(processRS.pid), signal.SIGTERM)  # Send the signal to all the process groups
                     bufferRS = []
                     queueRS.queue.clear()
                     saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
