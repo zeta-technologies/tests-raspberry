@@ -382,7 +382,7 @@ while gameOn:
                     # processF.terminate()
                     # call(['sudo service bluetooth restart'])
                     # os.system('sudo service bluetooth restart')
-                    queue.queue.clear()
+                    # queue.queue.clear()
                     saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
                     bufferF = []
                     saved_bufferF_ch1 = []
