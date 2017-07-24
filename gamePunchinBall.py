@@ -165,7 +165,7 @@ while gameOn:
 
     if fly:
         '''launch node process'''
-        if platform == 'darwin' and sessionF == 0:: # mac
+        if platform == 'darwin' and sessionF == 0: # mac
             processF = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
         elif platform == 'linux' or platform == 'linux2' and sessionF = 0: #linux
             processF = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for LINUX
