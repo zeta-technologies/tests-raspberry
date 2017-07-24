@@ -151,6 +151,38 @@ while gameOn:
         queue.queue.clear()
         # punch_noise = pg.mixer.Sound("songs/punch.ogg") # TODO resolve the MemoryError due to pg.mixer.Sound
 
+    if restingState:
+
+        if platform == 'darwin' and sessionRS == 0: # mac
+            process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
+            '''launch node process'''
+            queue = Queue()
+            thread = Thread(target=enqueue_output, args=(process.stdout, queue))
+            thread.daemon = True
+            thread.start()
+        elif platform == 'linux' or platform == 'linux2' and sessionRS == 0: #linux
+            process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE, preexec_fn=os.setsid) # for LINUX
+            '''launch node process'''
+            queue = Queue()
+            thread = Thread(target=enqueue_output, args=(process.stdout, queue))
+            thread.daemon = True
+            thread.start()
+
+        sessionRS += 1
+        bufferRS = []
+        band_alphaRS_ch1 = []
+        band_alphaRS_ch2 = []
+        band_alphaRS_ch3 = []
+        band_alphaRS_ch4 = []
+        band_deltaRS_ch1 = []
+        band_deltaRS_ch2 = []
+        band_deltaRS_ch3 = []
+        band_deltaRS_ch4 = []
+        screen.blit(restingStateImage, (0,0))
+        displayNumber(0, screen, 'down')
+        pg.display.flip()
+        queue.queue.clear()
+
     if fly:
         sessionF += 1
         # Chargement du fond
@@ -165,39 +197,6 @@ while gameOn:
         # screen.blit(test, (317, 460))
         pg.display.flip()
         queue.queue.clear()
-
-    if restingState:
-
-        if platform == 'darwin' and sessionRS == 0: # mac
-            processRS = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
-            '''launch node process'''
-            queue = Queue()
-            threadRS = Thread(target=enqueue_output, args=(processRS.stdout, queue))
-            threadRS.daemon = True
-            threadRS.start()
-        elif platform == 'linux' or platform == 'linux2' and sessionRS == 0: #linux
-            processRS = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE, preexec_fn=os.setsid) # for LINUX
-            '''launch node process'''
-            queue = Queue()
-            threadRS = Thread(target=enqueue_output, args=(processRS.stdout, queue))
-            threadRS.daemon = True
-            threadRS.start()
-
-        sessionRS += 1
-        bufferRS = []
-        band_alphaRS_ch1 = []
-        band_alphaRS_ch2 = []
-        band_alphaRS_ch3 = []
-        band_alphaRS_ch4 = []
-
-        band_deltaRS_ch1 = []
-        band_deltaRS_ch2 = []
-        band_deltaRS_ch3 = []
-        band_deltaRS_ch4 = []
-
-        screen.blit(restingStateImage, (0,0))
-        displayNumber(0, screen, 'down')
-        pg.display.flip()
 
     if questionnaire:
 
@@ -260,7 +259,6 @@ while gameOn:
                     # call(['sudo service bluetooth restart'])
                     # os.system('sudo service bluetooth restart')
                     bufferPB = []
-                    cpt = 0
                     queue.queue.clear()
                     saveAllChannelsData(pathPB, sessionPB, 'PB', saved_bufferPB_ch1, saved_bufferPB_ch2, saved_bufferPB_ch3, saved_bufferPB_ch4)
                     saved_bufferPB_ch1 = []
@@ -343,7 +341,6 @@ while gameOn:
 
                 print "level", level
                 pg.display.update()
-                cpt = 0
                 bufferPB = []
 
         except Empty:
@@ -354,7 +351,7 @@ while gameOn:
 
     while fly:
         pg.time.Clock().tick(60)
-
+        print 'FlY'
         for event in pg.event.get():
             if event.type == QUIT:
                 saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
@@ -392,12 +389,12 @@ while gameOn:
                     saved_bufferF_ch2 = []
                     saved_bufferF_ch3 = []
                     saved_bufferF_ch4 = []
-                    cpt = 0
 
         if durationSession > 0:
-
+            print len(bufferF)
             try:
                 while len(bufferF) < buffersize * nb_channels:
+
                     if len(bufferF) % int(math.floor(1.*buffersize/5)) == 0:
                         screen.blit(sky, (0,0))
                         screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
@@ -407,7 +404,6 @@ while gameOn:
                         pg.display.flip()
 
                     bufferF.append(queue.get_nowait())
-                    cpt += 1
                 if len(bufferF) == 800 :
                     bufferF_array = np.asarray(bufferF)
 
@@ -461,34 +457,6 @@ while gameOn:
                         newPosy = a * medRatioF + b
 
                     scoreF = scoreF + flyScore(newPosy)
-                    # deltaPosy_1 = 1. * (newPosy - oldPosy) / steps
-                    # deltaPosy_2 = 1. * (oldPosy - veryoldPosy) / steps
-                    # screen.blit(sky, (0, 0))
-                    # for step in range(steps):
-                    #     # print newPosy
-                    #     # screen.blit(sky, (0,0))
-                    #
-                    #     print step
-                    #     screen.blit(plane, (5. * w_display / 12, oldPosy + deltaPosy))
-                    #     pg.time.delay(100)
-                    #     pg.display.update()
-
-                        # oldPosy += deltaPosy
-                    # displayNumber(math.floor(scoreF), screen, 'down')
-
-                    # screen.blit(plane, (5. * w_display / 12, newPosy))
-                    # displayNumber(math.floor(scoreF), screen, 'down')
-                    # screen.blit(scoreImg, ())
-                    # print oldPosy, newPosy
-                    # pg.time.delay(400)
-
-                    # pg.display.flip()
-
-                    # print "new Mean of 4 channels", newMean_alpha, maxAlpha, minAlpha
-
-                    # scoreBar = pg.image.load(levels_images[level]).convert_alpha()
-                    # scoreBar = pg.transform.scale(scoreBar, (90, 400))
-                    # scoreBar = pg.transform.rotate(scoreBar, -90)
                     durationSession = durationSession -  1
 
             except Empty:
@@ -498,7 +466,6 @@ while gameOn:
                 # sys.stdout.write(char)
             veryoldPosy = oldPosy
             oldPosy = newPosy
-            cpt = 0
             saved_bufferF.append(bufferF)
             bufferF = []
         else :
@@ -517,9 +484,8 @@ while gameOn:
             saved_bufferF_ch2 = []
             saved_bufferF_ch3 = []
             saved_bufferF_ch4 = []
-            cpt = 0
-            durationSession = 500
-
+            durationSession = durationSessionInit
+            print 'exited fly session '
     while restingState:
         pg.time.Clock().tick(30)
 
@@ -543,10 +509,10 @@ while gameOn:
                     fly = 0
                     restingState = 0
                     questionnaire = 0
-                    # processRS.terminate()
+                    # process.terminate()
                     # call(['sudo service bluetooth restart'])
                     # os.system('sudo service bluetooth restart')
-                    # os.killpg(os.getpgid(processRS.pid), signal.SIGTERM)  # Send the signal to all the process groups
+                    # os.killpg(os.getpgid(process.pid), signal.SIGTERM)  # Send the signal to all the process groups
                     bufferRS = []
                     queue.queue.clear()
                     saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
@@ -554,7 +520,6 @@ while gameOn:
                     saved_bufferRS_ch2 = []
                     saved_bufferRS_ch3 = []
                     saved_bufferRS_ch4 = []
-                    cpt = 0
                     print bufferRS
 
                     # print band_alphaRS_ch1
@@ -604,7 +569,7 @@ while gameOn:
             fly = 0
             restingState = 0
             questionnaire = 0
-            # processRS.terminate()
+            # process.terminate()
             # call(['sudo service bluetooth restart'])
             # os.system('sudo service bluetooth restart')
             bufferRS = []
@@ -624,7 +589,7 @@ while gameOn:
                     bufferRS.append(queueRS.get_nowait())
 
                 if len(bufferRS) == 800:
-                    # print sec
+                    print sec
                     bufferRS_array = np.asarray(bufferRS)
 
                     dataRS[0, :, sec] = bufferRS_array[ind_channel_1]
@@ -666,7 +631,6 @@ while gameOn:
                     displayNumber(sec, screen, 'down')
                     # checkImp() # TODO  check impedances function
                     pg.display.update()
-                    queue.queue.clear()
                     sec = sec + 1
 
             except Empty:
