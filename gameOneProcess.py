@@ -14,7 +14,6 @@ from tempfile import TemporaryFile
 from requests import *
 import datetime
 from functions import *
-from gamePunchinBall import *
 
 '''background'''
 screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
@@ -196,7 +195,7 @@ while gameOn:
         # screen.blit(scoreDigit, (800, 30))
         # screen.blit(test, (317, 460))
         pg.display.flip()
-        queue.queue.clear()
+        # queue.queue.clear()
 
     if questionnaire:
 
@@ -477,7 +476,7 @@ while gameOn:
             # processF.terminate()
             # call(['sudo service bluetooth restart'])
             # os.system('sudo service bluetooth restart')
-            queue.queue.clear()
+            # queue.queue.clear()
             saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
             bufferF = []
             saved_bufferF_ch1 = []
@@ -583,10 +582,10 @@ while gameOn:
         elif sec < restingStateDuration:
 
             try:
-                # queueRS.queue.clear()
+                # queue.queue.clear()
 
                 while len(bufferRS) < buffersize * nb_channels:
-                    bufferRS.append(queueRS.get_nowait())
+                    bufferRS.append(queue.get_nowait())
 
                 if len(bufferRS) == 800:
                     print sec
@@ -641,7 +640,7 @@ while gameOn:
             # time.sleep(1)
             # pg.time.delay(993) # wait to display the next second on screen
             # print sec
-            # queueRS.queue.clear()
+            # queue.queue.clear()
 
     while questionnaire:
         # pg.time.Clock().tick(30)
