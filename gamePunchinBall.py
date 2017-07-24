@@ -552,7 +552,6 @@ while gameOn:
                     questionnaire = 0
                     processRS.terminate()
                     call(['sudo service bluetooth restart'])
-'
                     # os.killpg(os.getpgid(processRS.pid), signal.SIGTERM)  # Send the signal to all the process groups
                     bufferRS = []
                     queueRS.queue.clear()
