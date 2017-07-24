@@ -405,7 +405,7 @@ while gameOn:
                     saved_bufferF_ch4 = []
                     cpt = 0
 
-        if durationSession >0:
+        if durationSession > 0:
 
             try:
                 while cpt < buffersize * nb_channels:
@@ -527,6 +527,7 @@ while gameOn:
             saved_bufferF_ch3 = []
             saved_bufferF_ch4 = []
             cpt = 0
+            durationSession = 500
     while restingState:
         pg.time.Clock().tick(30)
 
