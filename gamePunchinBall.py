@@ -7,6 +7,7 @@ import os
 import sys
 import signal
 from subprocess import Popen, PIPE
+from subprocess import call
 from threading  import Thread
 from sys import platform
 from tempfile import TemporaryFile
@@ -549,9 +550,10 @@ while gameOn:
                     fly = 0
                     restingState = 0
                     questionnaire = 0
-                    # processRS.terminate()
-
-                    os.killpg(os.getpgid(processRS.pid), signal.SIGTERM)  # Send the signal to all the process groups
+                    processRS.terminate()
+                    call(['sudo service bluetooth restart'])
+'
+                    # os.killpg(os.getpgid(processRS.pid), signal.SIGTERM)  # Send the signal to all the process groups
                     bufferRS = []
                     queueRS.queue.clear()
                     saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
