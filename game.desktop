@@ -4,7 +4,7 @@
 Version=1.0
 Type=Application
 Terminal=true
-Exec=/home/pi/Desktop/tests-raspberry/game.sh 
+Exec=/home/pi/Desktop/tests-raspberry/game
 Name=ZETA TECH
 Comment=comment here
 Icon=images/icon.png
