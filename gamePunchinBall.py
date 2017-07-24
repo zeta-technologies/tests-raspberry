@@ -142,9 +142,9 @@ while gameOn:
         sessionPB += 1
 
         '''launch node process'''
-        if platform == 'darwin': # mac
+        if platform == 'darwin' and sessionPB == 0: # mac
             processPB = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
-        elif platform == 'linux' or platform == 'linux2': #linux
+        elif platform == 'linux' or platform == 'linux2' and sessionPB == 0: #linux
             processPB = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for LINUX
 
         queuePB = Queue()
@@ -160,15 +160,16 @@ while gameOn:
         screen.blit(scoreBar, (317*w_display/1024, 460*h_display/576))
         screen.blit(scoreDigit, (800*w_display/1024, 30*h_display/576))
         pg.display.flip()
+        queuePB.queue.clear()
         # punch_noise = pg.mixer.Sound("songs/punch.ogg") # TODO resolve the MemoryError due to pg.mixer.Sound
 
     if fly:
         '''launch node process'''
-        if platform == 'darwin': # mac
+        if platform == 'darwin' and sessionF == 0:: # mac
             processF = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
-        elif platform == 'linux' or platform == 'linux2': #linux
+        elif platform == 'linux' or platform == 'linux2' and sessionF = 0: #linux
             processF = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for LINUX
-
+        sessionF += 1
         queueF = Queue()
         threadF = Thread(target=enqueue_output, args=(processF.stdout, queueF))
         threadF.daemon = True # kill all on exit
@@ -185,20 +186,26 @@ while gameOn:
         # screen.blit(scoreDigit, (800, 30))
         # screen.blit(test, (317, 460))
         pg.display.flip()
+        queueF.queue.clear()
 
     if restingState:
-        sessionRS += 1
-        if platform == 'darwin': # mac
+
+        if platform == 'darwin' and sessionRS == 0: # mac
             processRS = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
-        elif platform == 'linux' or platform == 'linux2': #linux
+            '''launch node process'''
+            queueRS = Queue()
+            threadRS = Thread(target=enqueue_output, args=(processRS.stdout, queueRS))
+            threadRS.daemon = True
+            threadRS.start()
+        elif platform == 'linux' or platform == 'linux2' and sessionRS == 0: #linux
             processRS = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE, preexec_fn=os.setsid) # for LINUX
+            '''launch node process'''
+            queueRS = Queue()
+            threadRS = Thread(target=enqueue_output, args=(processRS.stdout, queueRS))
+            threadRS.daemon = True
+            threadRS.start()
 
-        '''launch node process'''
-        queueRS = Queue()
-        threadRS = Thread(target=enqueue_output, args=(processRS.stdout, queueRS))
-        threadRS.daemon = True
-        threadRS.start()
-
+        sessionRS += 1
         bufferRS = []
         band_alphaRS_ch1 = []
         band_alphaRS_ch2 = []
@@ -273,7 +280,7 @@ while gameOn:
                     questionnaire = 0
                     processPB.terminate() # terminates the node process to close connection with openBCI
                     # call(['sudo service bluetooth restart'])
-                    os.system('sudo service bluetooth restart')
+                    # os.system('sudo service bluetooth restart')
                     bufferPB = []
                     cpt = 0
                     queuePB.queue.clear()
@@ -284,82 +291,82 @@ while gameOn:
                     saved_bufferPB_ch4 = []
 
         try:
-            while cpt < buffersize * nb_channels :
+            while len(bufferPB) < buffersize * nb_channels :
                 bufferPB.append(queuePB.get_nowait())
                 saved_bufferPB.append(queuePB.get_nowait())
-                cpt += 1
 
-            bufferPB_array = np.asarray(bufferPB)
+            if len(bufferPB) == 800:
+                bufferPB_array = np.asarray(bufferPB)
 
-            dataPB[0, :] = bufferPB_array[ind_channel_1]
-            dataPB[1, :] = bufferPB_array[ind_channel_2]
-            dataPB[2, :] = bufferPB_array[ind_channel_3]
-            dataPB[3, :] = bufferPB_array[ind_channel_4]
+                dataPB[0, :] = bufferPB_array[ind_channel_1]
+                dataPB[1, :] = bufferPB_array[ind_channel_2]
+                dataPB[2, :] = bufferPB_array[ind_channel_3]
+                dataPB[3, :] = bufferPB_array[ind_channel_4]
 
-            saved_bufferPB_ch1.append(dataPB[0, :])
-            saved_bufferPB_ch2.append(dataPB[1, :])
-            saved_bufferPB_ch3.append(dataPB[2, :])
-            saved_bufferPB_ch4.append(dataPB[3, :])
+                saved_bufferPB_ch1.append(dataPB[0, :])
+                saved_bufferPB_ch2.append(dataPB[1, :])
+                saved_bufferPB_ch3.append(dataPB[2, :])
+                saved_bufferPB_ch4.append(dataPB[3, :])
 
-            fdataPB[0, :] = filter_data(dataPB[0, :], fs_hz)
-            fdataPB[1, :] = filter_data(dataPB[1, :], fs_hz)
-            fdataPB[2, :] = filter_data(dataPB[2, :], fs_hz)
-            fdataPB[3, :] = filter_data(dataPB[3, :], fs_hz)
+                fdataPB[0, :] = filter_data(dataPB[0, :], fs_hz)
+                fdataPB[1, :] = filter_data(dataPB[1, :], fs_hz)
+                fdataPB[2, :] = filter_data(dataPB[2, :], fs_hz)
+                fdataPB[3, :] = filter_data(dataPB[3, :], fs_hz)
 
-            bandmean_alphaPB = np.zeros(nb_channels)
-            bandmax_alphaPB = np.zeros(nb_channels)
-            bandmin_alphaPB = np.zeros(nb_channels)
+                bandmean_alphaPB = np.zeros(nb_channels)
+                bandmax_alphaPB = np.zeros(nb_channels)
+                bandmin_alphaPB = np.zeros(nb_channels)
 
-            bandmean_deltaPB = np.zeros(nb_channels)
-            bandmax_deltaPB = np.zeros(nb_channels)
-            bandmin_deltaPB = np.zeros(nb_channels)
+                bandmean_deltaPB = np.zeros(nb_channels)
+                bandmax_deltaPB = np.zeros(nb_channels)
+                bandmin_deltaPB = np.zeros(nb_channels)
 
-            for channel in range(4):
-                bandmean_alphaPB[channel] = extract_freqbandmean(200, fs_hz, fdataPB[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
-                bandmean_deltaPB[channel] = extract_freqbandmean(200, fs_hz, fdataPB[channel,:], 3, 4)
+                for channel in range(4):
+                    bandmean_alphaPB[channel] = extract_freqbandmean(200, fs_hz, fdataPB[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
+                    bandmean_deltaPB[channel] = extract_freqbandmean(200, fs_hz, fdataPB[channel,:], 3, 4)
 
-            ''' Get the mean, min and max of the last result of all channels'''
-            newMean_alphaPB = np.average(bandmean_alphaPB) #mean of the 4 channels, not the best metric I guess
-            newMean_deltaPB = np.average(bandmean_deltaPB)
+                ''' Get the mean, min and max of the last result of all channels'''
+                newMean_alphaPB = np.average(bandmean_alphaPB) #mean of the 4 channels, not the best metric I guess
+                newMean_deltaPB = np.average(bandmean_deltaPB)
 
-            ''' increment the mean, min and max arrays of the freqRange studied'''
-            mean_array_uvPB.append(newMean_alphaPB)
+                ''' increment the mean, min and max arrays of the freqRange studied'''
+                mean_array_uvPB.append(newMean_alphaPB)
 
-            if len(mean_array_uvPB) != 0:
-                deltaPB = np.amax(mean_array_uvPB) - np.min(mean_array_uvPB)
-            if len(mean_array_uvPB) == 0:
-                deltaPB = 0
-            # print "new Mean of 4 channels", newMean_alphaPB
-            # print "Max - Min ", deltaPB
+                if len(mean_array_uvPB) != 0:
+                    deltaPB = np.amax(mean_array_uvPB) - np.min(mean_array_uvPB)
+                if len(mean_array_uvPB) == 0:
+                    deltaPB = 0
+                # print "new Mean of 4 channels", newMean_alphaPB
+                # print "Max - Min ", deltaPB
 
-            if deltaPB == 0:
-                level = 0
+                if deltaPB == 0:
+                    level = 0
 
-            if deltaPB !=0:
-                level = int(math.floor(7*(newMean_alphaPB-np.min(mean_array_uvPB))/deltaPB))
+                if deltaPB !=0:
+                    level = int(math.floor(7*(newMean_alphaPB-np.min(mean_array_uvPB))/deltaPB))
 
-            if level == 7:
-                scorePB = scorePB + 1
-                # punch_noise.play()
-                scoreDigit = pg.image.load(scoreDigitImages[scorePB]).convert()
-                scoreDigit = pg.transform.scale(scoreDigit, (70*w_display/1024, 90*h_display/576))
-                screen.blit(fond, (0, 0))
-                screen.blit(scoreDigit, (800*w_display/1024, 30*h_display/576))
-                screen.blit(winImg, (100*w_display/1024, 100*h_display/576))
+                if level == 7:
+                    scorePB = scorePB + 1
+                    # punch_noise.play()
+                    scoreDigit = pg.image.load(scoreDigitImages[scorePB]).convert()
+                    scoreDigit = pg.transform.scale(scoreDigit, (70*w_display/1024, 90*h_display/576))
+                    screen.blit(fond, (0, 0))
+                    screen.blit(scoreDigit, (800*w_display/1024, 30*h_display/576))
+                    screen.blit(winImg, (100*w_display/1024, 100*h_display/576))
 
-            if level != 7:
-                scoreBar = pg.image.load(levels_images[level]).convert_alpha()
-                scoreBar = pg.transform.scale(scoreBar, (90*w_display/1024, 400*h_display/576))
-                scoreBar = pg.transform.rotate(scoreBar, -90)
-                screen.blit(fond, (0, 0))
-                screen.blit(punchBall, (350*w_display/1024,-5*h_display/576))
-                screen.blit(scoreBar, (317*w_display/1024, 460*h_display/576))
-                screen.blit(scoreDigit, (800*w_display/1024, 30*h_display/576))
+                if level != 7:
+                    scoreBar = pg.image.load(levels_images[level]).convert_alpha()
+                    scoreBar = pg.transform.scale(scoreBar, (90*w_display/1024, 400*h_display/576))
+                    scoreBar = pg.transform.rotate(scoreBar, -90)
+                    screen.blit(fond, (0, 0))
+                    screen.blit(punchBall, (350*w_display/1024,-5*h_display/576))
+                    screen.blit(scoreBar, (317*w_display/1024, 460*h_display/576))
+                    screen.blit(scoreDigit, (800*w_display/1024, 30*h_display/576))
 
-            print "level", level
-            pg.display.update()
-            cpt = 0
-            bufferPB = []
+                print "level", level
+                pg.display.update()
+                cpt = 0
+                bufferPB = []
 
         except Empty:
             continue # do stuff
@@ -399,7 +406,7 @@ while gameOn:
                     questionnaire = 0
                     processF.terminate()
                     # call(['sudo service bluetooth restart'])
-                    os.system('sudo service bluetooth restart')
+                    # os.system('sudo service bluetooth restart')
                     queueF.queue.clear()
                     saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
                     bufferF = []
@@ -412,8 +419,8 @@ while gameOn:
         if durationSession > 0:
 
             try:
-                while cpt < buffersize * nb_channels:
-                    if cpt % int(math.floor(1.*buffersize/5)) == 0:
+                while len(bufferF) < buffersize * nb_channels:
+                    if len(bufferF) % int(math.floor(1.*buffersize/5)) == 0:
                         screen.blit(sky, (0,0))
                         screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
                         displayNumber(math.floor(scoreF), screen, 'down')
@@ -423,88 +430,88 @@ while gameOn:
 
                     bufferF.append(queueF.get_nowait())
                     cpt += 1
+                if len(bufferF) == 800 :
+                    bufferF_array = np.asarray(bufferF)
 
-                bufferF_array = np.asarray(bufferF)
+                    dataF[0, :] = bufferF_array[ind_channel_1]
+                    dataF[1, :] = bufferF_array[ind_channel_2]
+                    dataF[2, :] = bufferF_array[ind_channel_3]
+                    dataF[3, :] = bufferF_array[ind_channel_4]
 
-                dataF[0, :] = bufferF_array[ind_channel_1]
-                dataF[1, :] = bufferF_array[ind_channel_2]
-                dataF[2, :] = bufferF_array[ind_channel_3]
-                dataF[3, :] = bufferF_array[ind_channel_4]
+                    saved_bufferF_ch1.append(dataF[0, :])
+                    saved_bufferF_ch2.append(dataF[1, :])
+                    saved_bufferF_ch3.append(dataF[2, :])
+                    saved_bufferF_ch4.append(dataF[3, :])
 
-                saved_bufferF_ch1.append(dataF[0, :])
-                saved_bufferF_ch2.append(dataF[1, :])
-                saved_bufferF_ch3.append(dataF[2, :])
-                saved_bufferF_ch4.append(dataF[3, :])
+                    fdataF[0, :] = filter_data(dataF[0, :], fs_hz)
+                    fdataF[1, :] = filter_data(dataF[1, :], fs_hz)
+                    fdataF[2, :] = filter_data(dataF[2, :], fs_hz)
+                    fdataF[3, :] = filter_data(dataF[3, :], fs_hz)
 
-                fdataF[0, :] = filter_data(dataF[0, :], fs_hz)
-                fdataF[1, :] = filter_data(dataF[1, :], fs_hz)
-                fdataF[2, :] = filter_data(dataF[2, :], fs_hz)
-                fdataF[3, :] = filter_data(dataF[3, :], fs_hz)
+                    bandmean_alphaF = np.zeros(nb_channels)
+                    bandmax_alphaF = np.zeros(nb_channels)
+                    bandmin_alphaF = np.zeros(nb_channels)
 
-                bandmean_alphaF = np.zeros(nb_channels)
-                bandmax_alphaF = np.zeros(nb_channels)
-                bandmin_alphaF = np.zeros(nb_channels)
+                    bandmean_deltaF = np.zeros(nb_channels)
+                    bandmax_deltaF = np.zeros(nb_channels)
+                    bandmin_deltaF = np.zeros(nb_channels)
+                    ratioF = np.zeros(nb_channels)
 
-                bandmean_deltaF = np.zeros(nb_channels)
-                bandmax_deltaF = np.zeros(nb_channels)
-                bandmin_deltaF = np.zeros(nb_channels)
-                ratioF = np.zeros(nb_channels)
+                    for channel in range(nb_channels):
+                        bandmean_alphaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
+                        bandmean_deltaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], 3, 4)
+                        ratioF[channel] = 1.* bandmean_alphaF[channel] / bandmean_deltaF[channel]
 
-                for channel in range(nb_channels):
-                    bandmean_alphaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
-                    bandmean_deltaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], 3, 4)
-                    ratioF[channel] = 1.* bandmean_alphaF[channel] / bandmean_deltaF[channel]
+                    # maximiser alpha/delta
+                    ''' Get the mean, min and max of the last reslt of all channels'''
+                    newMean_alphaF = np.average(bandmean_alphaF)
+                    # maxAlphaF = np.amax(mean_array_uvF)
+                    # minAlphaF = np.min(mean_array_uvF)
 
-                # maximiser alpha/delta
-                ''' Get the mean, min and max of the last reslt of all channels'''
-                newMean_alphaF = np.average(bandmean_alphaF)
-                # maxAlphaF = np.amax(mean_array_uvF)
-                # minAlphaF = np.min(mean_array_uvF)
+                    medRatioF = np.median(ratioF)
+                    mean_array_uvF.append(medRatioF)
 
-                medRatioF = np.median(ratioF)
-                mean_array_uvF.append(medRatioF)
+                    if medRatioF == maxRatioAlphaOverDelta:
+                        newPosy = minDisplayY
 
-                if medRatioF == maxRatioAlphaOverDelta:
-                    newPosy = minDisplayY
+                    elif medRatioF == minRatioAlphaOverDelta:
+                        newPosy = maxDisplayY
 
-                elif medRatioF == minRatioAlphaOverDelta:
-                    newPosy = maxDisplayY
+                    else:
+                        a = (maxDisplayY - minDisplayY) * 1. / (minRatioAlphaOverDelta - maxRatioAlphaOverDelta)
+                        b = maxDisplayY - minRatioAlphaOverDelta * a
+                        newPosy = a * medRatioF + b
 
-                else:
-                    a = (maxDisplayY - minDisplayY) * 1. / (minRatioAlphaOverDelta - maxRatioAlphaOverDelta)
-                    b = maxDisplayY - minRatioAlphaOverDelta * a
-                    newPosy = a * medRatioF + b
+                    scoreF = scoreF + flyScore(newPosy)
+                    # deltaPosy_1 = 1. * (newPosy - oldPosy) / steps
+                    # deltaPosy_2 = 1. * (oldPosy - veryoldPosy) / steps
+                    # screen.blit(sky, (0, 0))
+                    # for step in range(steps):
+                    #     # print newPosy
+                    #     # screen.blit(sky, (0,0))
+                    #
+                    #     print step
+                    #     screen.blit(plane, (5. * w_display / 12, oldPosy + deltaPosy))
+                    #     pg.time.delay(100)
+                    #     pg.display.update()
 
-                scoreF = scoreF + flyScore(newPosy)
-                # deltaPosy_1 = 1. * (newPosy - oldPosy) / steps
-                # deltaPosy_2 = 1. * (oldPosy - veryoldPosy) / steps
-                # screen.blit(sky, (0, 0))
-                # for step in range(steps):
-                #     # print newPosy
-                #     # screen.blit(sky, (0,0))
-                #
-                #     print step
-                #     screen.blit(plane, (5. * w_display / 12, oldPosy + deltaPosy))
-                #     pg.time.delay(100)
-                #     pg.display.update()
+                        # oldPosy += deltaPosy
+                    # displayNumber(math.floor(scoreF), screen, 'down')
 
-                    # oldPosy += deltaPosy
-                # displayNumber(math.floor(scoreF), screen, 'down')
+                    # screen.blit(plane, (5. * w_display / 12, newPosy))
+                    # displayNumber(math.floor(scoreF), screen, 'down')
+                    # screen.blit(scoreImg, ())
+                    # print oldPosy, newPosy
+                    # pg.time.delay(400)
 
-                # screen.blit(plane, (5. * w_display / 12, newPosy))
-                # displayNumber(math.floor(scoreF), screen, 'down')
-                # screen.blit(scoreImg, ())
-                # print oldPosy, newPosy
-                # pg.time.delay(400)
+                    # pg.display.flip()
 
-                # pg.display.flip()
+                    # print "new Mean of 4 channels", newMean_alpha, maxAlpha, minAlpha
 
-                # print "new Mean of 4 channels", newMean_alpha, maxAlpha, minAlpha
-
-                # scoreBar = pg.image.load(levels_images[level]).convert_alpha()
-                # scoreBar = pg.transform.scale(scoreBar, (90, 400))
-                # scoreBar = pg.transform.rotate(scoreBar, -90)
-                durationSession = durationSession -  1
+                    # scoreBar = pg.image.load(levels_images[level]).convert_alpha()
+                    # scoreBar = pg.transform.scale(scoreBar, (90, 400))
+                    # scoreBar = pg.transform.rotate(scoreBar, -90)
+                    durationSession = durationSession -  1
 
             except Empty:
                 continue  # do stuff
@@ -524,7 +531,7 @@ while gameOn:
             questionnaire = 0
             processF.terminate()
             # call(['sudo service bluetooth restart'])
-            os.system('sudo service bluetooth restart')
+            # os.system('sudo service bluetooth restart')
             queueF.queue.clear()
             saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
             bufferF = []
@@ -534,6 +541,7 @@ while gameOn:
             saved_bufferF_ch4 = []
             cpt = 0
             durationSession = 500
+
     while restingState:
         pg.time.Clock().tick(30)
 
@@ -557,9 +565,9 @@ while gameOn:
                     fly = 0
                     restingState = 0
                     questionnaire = 0
-                    processRS.terminate()
+                    # processRS.terminate()
                     # call(['sudo service bluetooth restart'])
-                    os.system('sudo service bluetooth restart')
+                    # os.system('sudo service bluetooth restart')
                     # os.killpg(os.getpgid(processRS.pid), signal.SIGTERM)  # Send the signal to all the process groups
                     bufferRS = []
                     queueRS.queue.clear()
@@ -568,9 +576,10 @@ while gameOn:
                     saved_bufferRS_ch2 = []
                     saved_bufferRS_ch3 = []
                     saved_bufferRS_ch4 = []
+                    cpt = 0
+                    print bufferRS
 
                     # print band_alphaRS_ch1
-
 
         if sec == restingStateDuration :
             # np.zeros(nb_freq_alpha)
@@ -617,9 +626,9 @@ while gameOn:
             fly = 0
             restingState = 0
             questionnaire = 0
-            processRS.terminate()
+            # processRS.terminate()
             # call(['sudo service bluetooth restart'])
-            os.system('sudo service bluetooth restart')
+            # os.system('sudo service bluetooth restart')
             bufferRS = []
             queueRS.queue.clear()
             saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
@@ -628,56 +637,59 @@ while gameOn:
             saved_bufferRS_ch3 = []
             saved_bufferRS_ch4 = []
 
-
         elif sec < restingStateDuration:
 
             try:
-                while cpt < buffersize * nb_channels:
+                # queueRS.queue.clear()
+
+                while len(bufferRS) < buffersize * nb_channels:
                     bufferRS.append(queueRS.get_nowait())
-                    cpt += 1
-                print sec
-                bufferRS_array = np.asarray(bufferRS)
+                    print len(bufferRS)
+                if len(bufferRS) == 800:
+                    # print sec
+                    bufferRS_array = np.asarray(bufferRS)
 
-                dataRS[0, :, sec] = bufferRS_array[ind_channel_1]
-                dataRS[1, :, sec] = bufferRS_array[ind_channel_2]
-                dataRS[2, :, sec] = bufferRS_array[ind_channel_3]
-                dataRS[3, :, sec] = bufferRS_array[ind_channel_4]
+                    dataRS[0, :, sec] = bufferRS_array[ind_channel_1]
+                    dataRS[1, :, sec] = bufferRS_array[ind_channel_2]
+                    dataRS[2, :, sec] = bufferRS_array[ind_channel_3]
+                    dataRS[3, :, sec] = bufferRS_array[ind_channel_4]
 
-                saved_bufferRS_ch1.append(dataRS[0, :, sec])
-                saved_bufferRS_ch2.append(dataRS[1, :, sec])
-                saved_bufferRS_ch3.append(dataRS[2, :, sec])
-                saved_bufferRS_ch4.append(dataRS[3, :, sec])
+                    saved_bufferRS_ch1.append(dataRS[0, :, sec])
+                    saved_bufferRS_ch2.append(dataRS[1, :, sec])
+                    saved_bufferRS_ch3.append(dataRS[2, :, sec])
+                    saved_bufferRS_ch4.append(dataRS[3, :, sec])
 
-                fdataRS[0, :, sec] = filter_data(dataRS[0, :, sec], fs_hz)
-                fdataRS[1, :, sec] = filter_data(dataRS[1, :, sec], fs_hz)
-                fdataRS[2, :, sec] = filter_data(dataRS[2, :, sec], fs_hz)
-                fdataRS[3, :, sec] = filter_data(dataRS[3, :, sec], fs_hz)
+                    fdataRS[0, :, sec] = filter_data(dataRS[0, :, sec], fs_hz)
+                    fdataRS[1, :, sec] = filter_data(dataRS[1, :, sec], fs_hz)
+                    fdataRS[2, :, sec] = filter_data(dataRS[2, :, sec], fs_hz)
+                    fdataRS[3, :, sec] = filter_data(dataRS[3, :, sec], fs_hz)
 
-                band_alphaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:, sec], 6, 13)[0])
-                band_alphaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:, sec], 6, 13)[0])
-                band_alphaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:, sec], 6, 13)[0])
-                band_alphaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:, sec], 6, 13)[0])
+                    band_alphaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:, sec], 6, 13)[0])
+                    band_alphaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:, sec], 6, 13)[0])
+                    band_alphaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:, sec], 6, 13)[0])
+                    band_alphaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:, sec], 6, 13)[0])
 
-                nb_freq_alpha = extract_freqband(200, fs_hz, fdataRS[0,:], 6, 13)[1]
+                    nb_freq_alpha = extract_freqband(200, fs_hz, fdataRS[0,:], 6, 13)[1]
 
-                band_deltaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:, sec], 3, 4)[0])
-                band_deltaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:, sec], 3, 4)[0])
-                band_deltaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:, sec], 3, 4)[0])
-                band_deltaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:, sec], 3, 4)[0])
+                    band_deltaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:, sec], 3, 4)[0])
+                    band_deltaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:, sec], 3, 4)[0])
+                    band_deltaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:, sec], 3, 4)[0])
+                    band_deltaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:, sec], 3, 4)[0])
 
-                nb_freq_delta = extract_freqband(200, fs_hz, fdataRS[3,:], 3, 4)[1]
+                    nb_freq_delta = extract_freqband(200, fs_hz, fdataRS[3,:], 3, 4)[1]
 
-                # for channel in range(4):
-                #     band_alphaRS[channel] = extract_freqband(200, fs_hz, fdataRS[channel,:], 6, 11)
-                #     bandmean_deltaRS[channel] = extract_freqband(200, fs_hz, fdataRS[channel,:], 3, 4)
-                # globalAlpha.append(bandmean_alphaRS)
+                    # for channel in range(4):
+                    #     band_alphaRS[channel] = extract_freqband(200, fs_hz, fdataRS[channel,:], 6, 11)
+                    #     bandmean_deltaRS[channel] = extract_freqband(200, fs_hz, fdataRS[channel,:], 3, 4)
+                    # globalAlpha.append(bandmean_alphaRS)
 
-                cpt = 0
-                bufferRS = []
-                displayNumber(sec, screen, 'down')
-                # checkImp() # TODO  check impedances function
-                pg.display.update()
-                sec = sec + 1
+
+                    bufferRS = []
+                    displayNumber(sec, screen, 'down')
+                    # checkImp() # TODO  check impedances function
+                    pg.display.update()
+                    queueRS.queue.clear()
+                    sec = sec + 1
 
             except Empty:
                 continue  # do stuff
@@ -687,6 +699,7 @@ while gameOn:
             # time.sleep(1)
             # pg.time.delay(993) # wait to display the next second on screen
             # print sec
+            # queueRS.queue.clear()
 
     while questionnaire:
         # pg.time.Clock().tick(30)
