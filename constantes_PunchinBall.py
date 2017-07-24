@@ -95,7 +95,7 @@ timer = ['images/0.png', 'images/1.png', 'images/2.png', 'images/3.png', 'images
 restingState = 'images/restingState.png'
 restingStateDuration = 30 # in seconds
 sec = 0
-durationSessionInit =  430
+durationSessionInit =  530
 durationSession = durationSessionInit
 
 '''Navigation among the pages'''
