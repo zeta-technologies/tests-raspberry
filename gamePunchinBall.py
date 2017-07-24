@@ -272,7 +272,8 @@ while gameOn:
                     restingState = 0
                     questionnaire = 0
                     processPB.terminate() # terminates the node process to close connection with openBCI
-                    call(['sudo service bluetooth restart'])
+                    # call(['sudo service bluetooth restart'])
+                    os.system('sudo service bluetooth restart')
                     bufferPB = []
                     cpt = 0
                     queuePB.queue.clear()
@@ -397,7 +398,8 @@ while gameOn:
                     restingState = 0
                     questionnaire = 0
                     processF.terminate()
-                    call(['sudo service bluetooth restart'])
+                    # call(['sudo service bluetooth restart'])
+                    os.system('sudo service bluetooth restart')
                     queueF.queue.clear()
                     saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
                     bufferF = []
@@ -521,7 +523,8 @@ while gameOn:
             restingState = 0
             questionnaire = 0
             processF.terminate()
-            call(['sudo service bluetooth restart'])
+            # call(['sudo service bluetooth restart'])
+            os.system('sudo service bluetooth restart')
             queueF.queue.clear()
             saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
             bufferF = []
@@ -555,7 +558,8 @@ while gameOn:
                     restingState = 0
                     questionnaire = 0
                     processRS.terminate()
-                    call(['sudo service bluetooth restart'])
+                    # call(['sudo service bluetooth restart'])
+                    os.system('sudo service bluetooth restart')
                     # os.killpg(os.getpgid(processRS.pid), signal.SIGTERM)  # Send the signal to all the process groups
                     bufferRS = []
                     queueRS.queue.clear()
@@ -614,7 +618,8 @@ while gameOn:
             restingState = 0
             questionnaire = 0
             processRS.terminate()
-            call(['sudo service bluetooth restart'])
+            # call(['sudo service bluetooth restart'])
+            os.system('sudo service bluetooth restart')
             bufferRS = []
             queueRS.queue.clear()
             saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
