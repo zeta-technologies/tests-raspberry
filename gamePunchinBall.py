@@ -14,7 +14,6 @@ from tempfile import TemporaryFile
 from requests import *
 import datetime
 from functions import *
-from gamePunchinBall import *
 
 '''background'''
 screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
@@ -540,7 +539,7 @@ while gameOn:
             saved_bufferF_ch3 = []
             saved_bufferF_ch4 = []
             cpt = 0
-            durationSession = 500
+            durationSession = durationSessionInit
 
     while restingState:
         pg.time.Clock().tick(30)

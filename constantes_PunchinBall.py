@@ -2,7 +2,7 @@
 """Constantes of ZETA Games first App"""
 
 import pygame as pg
-from pyaudio import PyAudio
+# from pyaudio import PyAudio
 import numpy as np
 from subprocess import Popen, PIPE
 from threading  import Thread

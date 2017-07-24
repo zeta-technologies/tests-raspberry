@@ -4,7 +4,7 @@
 Version=1.0
 Type=Application
 Terminal=false
-Exec=cd ~/Desktop/tests-raspberry && ./gameOneProcess.py
+Exec=lxterminal --command="cd ~/Desktop/tests-raspberry && python gameOneProcess.py"
 Name=ZETA TECH
 Comment=comment here
 Icon=images/icon.png
