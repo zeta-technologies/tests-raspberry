@@ -59,7 +59,9 @@ restingStateImage = pg.transform.scale(restingImage, (w_display, h_display))
 # '''Tinnitus questionnaire '''
 # questionsSerie1Image = pg.image.load(questionsSerie1)
 # questionsSerie1Image = pg.transform.scale(questionsSerie1Image, (w_display, h_display))
-'''Progression metrics'''
+'''End Session IMG'''
+endSessionImg = pg.image.load(endSessionImg)
+endSessionImg = pg.transform.scale(endSessionImg, (w_display, h_display))
 
 '''MAIN LOOP'''
 gameOn = 1
@@ -120,7 +122,7 @@ while gameOn:
             if event.type == QUIT:
                 pg.quit()
                 sys.exit()
-            elif event.type == MOUSEBUTTONUP:
+            elif event.type == MOUSEBUTTONUP and not(sessionEnded):
                 mouseHome = pg.mouse.get_pos()
                 choice = whichButtonHome(mouseHome, w_display, h_display)
                 if choice == 1: # 1 is for resting state
@@ -128,8 +130,8 @@ while gameOn:
                     punchinBall = 0
                     fly = 0
                     restingState1 = 1
+                    restingState2 = 0
                     questionnaire = 0
-
 
                 elif choice == 2: #  is for flying game
                     homeOn = 0
@@ -154,6 +156,16 @@ while gameOn:
                     restingState1 = 0
                     questionnaire = 0
                     restingState2 = 2
+            elif event.type == MOUSEBUTTONUP and sessionEnded:
+                pg.quit()
+                sys.exit()
+
+        if sessionEnded :
+            progressionMetricSurf, progressionMetricRect = text_objects(progressionMetric, buttonText)
+            progressionMetricRect.center = (1.*w_display/2, 1.*h_display/2)
+            screen.blit(endSessionImg, (0,0))
+            screen.blit(progressionMetricSurf, progressionMetricRect)
+            pg.display.flip()
 
     if punchinBall :
         sessionPB += 1
@@ -214,10 +226,9 @@ while gameOn:
         # screen.blit(scoreDigit, (800, 30))
         # screen.blit(test, (317, 460))
         pg.display.flip()
-        # queue.queue.clear()
+        queue.queue.clear()
 
     if restingState2:
-
         sessionRS += 1
         sec = 0
         bufferRS = []
@@ -493,14 +504,21 @@ while gameOn:
             maxRatioAlphaOverDelta = medianratioAlphaoverDelta + 3 * madRatioAlphaOverDelta
 
             # print minRatioAlphaOverDelta, maxRatioAlphaOverDelta
-            print 'fin de la seance de reglage', freqMaxAlpha
-            print 'New Ration is : ', medianratioAlphaoverDeltaEnd
-            print  'Old ratio was : ', medianratioAlphaoverDelta
+            # print 'fin de la seance de reglage', freqMaxAlpha
+            # print 'New Ration is : ', medianratioAlphaoverDeltaEnd
+            # print  'Old ratio was : ', medianratioAlphaoverDelta
+            metric = medianratioAlphaoverDeltaEnd - medianratioAlphaoverDelta
+            if  metric >= 0 :
+                progressionMetric = 'Progression ' + str( metric )[0] + '.' + str(metric)[2:5]
+            elif metric < 0 :
+                progressionMetric = 'Progression : -' + str( metric )[1] + '.' + str(metric)[3:6]
+            sessionEnded = 1
             homeOn = 1
             punchinBall = 0
             fly = 0
-            restingState1 = 0
+            restingState2 = 0
             questionnaire = 0
+
             # process.terminate()
             # call(['sudo service bluetooth restart'])
             # os.system('sudo service bluetooth restart')

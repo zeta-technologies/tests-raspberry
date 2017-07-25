@@ -98,6 +98,8 @@ sec = 0
 durationSessionInit =  3
 durationSession = durationSessionInit
 
+endSessionImg = 'images/endSession.png'
+
 '''Navigation among the pages'''
 # booleans for each window
 punchinBall = 0
@@ -166,6 +168,7 @@ saved_bufferPB_ch4 = []
 sessionF = 0
 sessionPB = 0
 sessionRS = 0
+sessionEnded = 0
 '''for the fft '''
 length = 200
 NFFT = 200
