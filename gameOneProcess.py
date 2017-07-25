@@ -141,10 +141,10 @@ while gameOn:
                     restingState1 = 0
                     restingState2 = 0
 
-                elif choice == 3: # 3 is for punchinBall
+                elif choice == 3: # 3 is for fly
                     homeOn = 0
-                    punchinBall = 1
-                    fly = 0
+                    punchinBall = 0
+                    fly = 1
                     restingState1 = 0
                     questionnaire = 0
                     restingState2 = 0
