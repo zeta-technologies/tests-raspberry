@@ -81,19 +81,20 @@ scoreF = 0
 steps = 1.*buffersize/40
 newPosy = maxDisplayY
 veryoldPosy = maxDisplayY
-oldPosy = maxDisplayY
+oldPosy = 1. * maxDisplayY / 2
 deltaPosy_1 = 1. * (newPosy - oldPosy) / steps
 deltaPosy_2 = 1. * (oldPosy - veryoldPosy) / steps
 scorF = 1
 maxRatioAlphaOverDelta = 1
 minRatioAlphaOverDelta = 0
-veryoldPosy = maxDisplayY
+
 
 '''Resting state'''
 timer = ['images/0.png', 'images/1.png', 'images/2.png', 'images/3.png', 'images/4.png', 'images/5.png',
                     'images/6.png', 'images/7.png', 'images/8.png', 'images/9.png']
 restingState = 'images/restingState.png'
 restingStateDuration = 30 # in seconds
+restingStateDurationTest = 1 # in seconds
 sec = 0
 durationSessionInit =  350
 durationSession = durationSessionInit
