@@ -617,7 +617,7 @@ while gameOn:
                         color = (colors[indColor].rgb[0]*255,colors[indColor].rgb[1]*255,colors[indColor].rgb[2]*255)
                         # screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
                         if (veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps) <= minDisplayY :
-                            positionY = minDisplayY
+                            positionY = minDisplayY + 10
                         elif (veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps) >= maxDisplayY :
                             positionY = maxDisplayY
                         else :
