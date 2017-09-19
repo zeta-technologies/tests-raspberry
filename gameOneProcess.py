@@ -211,7 +211,7 @@ while gameOn:
         band_deltaRS_ch3 = []
         band_deltaRS_ch4 = []
         screen.blit(restingStateImage, (0,0))
-        displayNumber(0, screen, 'up-right')
+        # displayNumber(0, screen, 'timeV011')
         pg.display.flip()
         queue.queue.clear()
 
@@ -243,7 +243,7 @@ while gameOn:
         band_deltaRS_ch3 = []
         band_deltaRS_ch4 = []
         screen.blit(restingStateImage, (0,0))
-        displayNumber(0, screen, 'up-right')
+        # displayNumber(0, screen, 'timeV011')
         pg.display.flip()
         queue.queue.clear()
 
@@ -416,7 +416,7 @@ while gameOn:
 
 
                     bufferRS = []
-                    displayNumber(sec, screen, 'middle-right')
+                    displayNumber(sec, screen, 'timeV011')
                     # checkImp() # TODO  check impedances function
                     pg.display.update()
                     sec = sec + 1
@@ -578,7 +578,7 @@ while gameOn:
 
 
                     bufferRS = []
-                    displayNumber(sec, screen, 'middle-right')
+                    displayNumber(sec, screen, 'timeV011')
                     # checkImp() # TODO  check impedances function
                     pg.display.update()
                     sec = sec + 1
@@ -642,8 +642,8 @@ while gameOn:
                         screen.blit(sky, (0,0))
                         screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
                         # displayNumber(math.floor(scoreF), screen, 'down')
-                        displayNumber(math.floor(scoreF), screen, 'up-right')
-                        displayNumber(durationSession, screen, 'middle-right')
+                        displayNumber(math.floor(scoreF), screen, 'scoreV011')
+                        displayNumber(durationSession, screen, 'timeV011')
                         veryoldPosy += 1.*(oldPosy - veryoldPosy)/steps
                         pg.display.flip()
 
