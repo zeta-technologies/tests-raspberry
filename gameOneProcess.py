@@ -644,7 +644,7 @@ while gameOn:
                     if len(bufferF) % int(math.floor(1.*buffersize/5)) == 0:
                         screen.blit(sky, (0,0))
                         indColor = get_ind_color(scoreF, 10,0, len(colors))
-                        print scoreF
+                        print colors[indColor].rgb
                         # screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
                         pg.draw.rect(screen, colors[indColor].rgb, (2. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps, 100, 40 ))
                         # displayNumber(math.floor(scoreF), screen, 'down')
