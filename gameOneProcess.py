@@ -15,7 +15,7 @@ from requests import *
 import datetime
 from functions import *
 import os, binascii
-for colour import Color
+from colour import Color
 
 '''background'''
 screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
