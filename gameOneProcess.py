@@ -642,9 +642,9 @@ while gameOn:
                 while len(bufferF) < buffersize * nb_channels:
 
                     if len(bufferF) % int(math.floor(1.*buffersize/5)) == 0:
-                        color = ( 0, 255, 0)
                         screen.blit(sky, (0,0))
                         indColor = get_ind_color(scoreF, 10,0, len(colors))
+                        print scoreF
                         # screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
                         pg.draw.rect(screen, colors[indColor].rgb, (2. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps, 100, 40 ))
                         # displayNumber(math.floor(scoreF), screen, 'down')
@@ -654,6 +654,7 @@ while gameOn:
                         pg.display.flip()
 
                     bufferF.append(queue.get_nowait())
+
                 if len(bufferF) == 800 :
                     bufferF_array = np.asarray(bufferF)
 
