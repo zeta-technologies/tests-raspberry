@@ -641,8 +641,8 @@ while gameOn:
                     if len(bufferF) % int(math.floor(1.*buffersize/5)) == 0:
                         color = ( 0, 255, 0)
                         screen.blit(sky, (0,0))
-                        screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
-                        pg.draw.rect(screen, color, (3. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps, 10, 10 ))
+                        # screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
+                        pg.draw.rect(screen, color, (3. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps, 100, 40 ))
                         # displayNumber(math.floor(scoreF), screen, 'down')
                         displayNumber(math.floor(scoreF), screen, 'scoreV011')
                         displayNumber(durationSession, screen, 'timeV011')
