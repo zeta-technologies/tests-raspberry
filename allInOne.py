@@ -250,37 +250,6 @@ while gameOn:
         pg.display.flip()
         queue.queue.clear()
 
-    if questionnaire:
-
-        screen.blit(questionsSerie1Image, (0,0))
-        pg.display.flip()
-        # questionText = pg.font.Font('freesansbold.ttf',15)
-        smallText = pg.font.Font("freesansbold.ttf",15)
-        question = questions[0]
-        textQSurf, textQRect = text_objects(question, smallText)
-        textQRect.center = (1.*w_display/2, 29)
-        screen.blit(textQSurf, textQRect)
-
-
-        for nb in range(11):
-
-
-            # TextSurf, TextRect = text_objects("question serie 1", questionText)
-            # TextRect.center = ((display_width/2),(display_height/2))
-            # gameDisplay.blit(TextSurf, TextRect)
-
-            # pg.draw.rect(screen, (218, 227, 243), (1.*w_display/12*(nb+1),58,1.*w_display/12*(nb+2),75))
-            pg.draw.rect(screen, (255, 255, 255), (1.*w_display/13*(nb+1),58,1.*w_display/13,20))
-            text =  "{}%".format(nb)
-            textSurf, textRect = text_objects(text, smallText)
-            textRect.center = ( 1. * w_display/13*(nb+1) + 1.*w_display/13/2, 58 + 10 )
-            screen.blit(textSurf, textRect)
-
-        pg.display.update()
-
-        # sec = sec + 1
-        # print sec
-
     while restingState1:
         pg.time.Clock().tick(30)
 
@@ -357,9 +326,9 @@ while gameOn:
 
             # print minRatioAlphaOverDelta, maxRatioAlphaOverDelta
             print 'fin de la seance de reglage', freqMaxAlpha
-            homeOn = 1
+            homeOn = 0
             punchinBall = 0
-            fly = 0
+            fly = 1
             restingState1 = 0
             questionnaire = 0
             # process.terminate()
@@ -372,6 +341,7 @@ while gameOn:
             saved_bufferRS_ch2 = []
             saved_bufferRS_ch3 = []
             saved_bufferRS_ch4 = []
+
 
         elif sec < restingStateDuration:
             try:
@@ -729,10 +699,10 @@ while gameOn:
             saved_bufferF.append(bufferF)
             bufferF = []
         else :
-            homeOn = 1
+            homeOn = 0
             punchinBall = 0
             fly = 0
-            restingState1 = 0
+            restingState2 = 1
             questionnaire = 0
             # processF.terminate()
             # call(['sudo service bluetooth restart'])
