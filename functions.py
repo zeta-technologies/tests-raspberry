@@ -493,6 +493,18 @@ def displayNumber(nb, screen, position):
             timerSec = pg.transform.scale(timerSec, (int(1.* w_display / 15), int(1.*h_display / 10)))
             screen.blit(timerSec, (4.* w_display / 30, 1.* h_display / 20))
 
+def get_ind_color(score, scoreMax, scoreMin, nbOfColors):
+
+    ind = 1.*nbOfColors/scoreMax*score
+    if ind < nbOfColors:
+        ind = ind
+
+    elif ind >= nbOfColors:
+        ind = nbOfColors
+
+    return int(ind)
+
+
 def cleanData(cdata, data):
 
     cdata[0, :] = data[ind_channel_1]

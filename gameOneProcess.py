@@ -15,6 +15,7 @@ from requests import *
 import datetime
 from functions import *
 import os, binascii
+for colour import Color
 
 '''background'''
 screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
@@ -49,6 +50,8 @@ sky = pg.transform.scale(sky, (w_display, h_display))
 # cloud = pg.image.transform(cloud, ())
 plane = pg.image.load(planeImage).convert_alpha()
 plane = pg.transform.scale(plane, (50, 50))
+red = Color("red")
+colors = list(red.range_to(Color("green"), 100))
 # plane = plane.set_colorkey((255, 255, 255))
 
 '''Resting state'''
@@ -641,8 +644,9 @@ while gameOn:
                     if len(bufferF) % int(math.floor(1.*buffersize/5)) == 0:
                         color = ( 0, 255, 0)
                         screen.blit(sky, (0,0))
+                        indColor = get_ind_color(scoreF, 10,0, len(colors))
                         # screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
-                        pg.draw.rect(screen, color, (3. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps, 100, 40 ))
+                        pg.draw.rect(screen, color[indColor], (2. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps, 100, 40 ))
                         # displayNumber(math.floor(scoreF), screen, 'down')
                         displayNumber(math.floor(scoreF), screen, 'scoreV011')
                         displayNumber(durationSession, screen, 'timeV011')
