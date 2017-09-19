@@ -226,7 +226,7 @@ while gameOn:
         screen.blit(sky, (0, 0))
         # screen.blit(cloud, (800*w_display/1024, 100*h_display/576))
         # screen.blit(plane, (300*w_display/1024, 200*h_display/576))
-        screen.blit(plane, ( 5.* w_display / 12, maxDisplayY))
+        # screen.blit(plane, ( 5.* w_display / 12, maxDisplayY))
         # screen.blit(scoreBar, (317, 460))
         # screen.blit(scoreDigit, (800, 30))
         # screen.blit(test, (317, 460))
