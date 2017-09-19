@@ -643,13 +643,13 @@ while gameOn:
 
                     if len(bufferF) % int(math.floor(1.*buffersize/5)) == 0:
                         screen.blit(sky, (0,0))
-                        indColor = get_ind_color(scoreF, 10,0, len(colors))
+                        indColor = get_ind_color(flyScore(newPosy), 10,0, len(colors))
                         color = (colors[indColor].rgb[0]*255,colors[indColor].rgb[1]*255,colors[indColor].rgb[2]*255)
                         # screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
                         pg.draw.rect(screen, color , (2. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps, 100, 40 ))
                         # displayNumber(math.floor(scoreF), screen, 'down')
                         print color
-                        print scoreF
+                        print flyScore(newPosy)
                         displayNumber(math.floor(scoreF), screen, 'scoreV011')
                         displayNumber(durationSession, screen, 'timeV011')
                         veryoldPosy += 1.*(oldPosy - veryoldPosy)/steps
