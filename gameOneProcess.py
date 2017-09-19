@@ -211,7 +211,7 @@ while gameOn:
         band_deltaRS_ch3 = []
         band_deltaRS_ch4 = []
         screen.blit(restingStateImage, (0,0))
-        displayNumber(0, screen, 'down')
+        displayNumber(0, screen, 'up-right')
         pg.display.flip()
         queue.queue.clear()
 
@@ -243,7 +243,7 @@ while gameOn:
         band_deltaRS_ch3 = []
         band_deltaRS_ch4 = []
         screen.blit(restingStateImage, (0,0))
-        displayNumber(0, screen, 'down')
+        displayNumber(0, screen, 'up-right')
         pg.display.flip()
         queue.queue.clear()
 
@@ -416,7 +416,7 @@ while gameOn:
 
 
                     bufferRS = []
-                    displayNumber(sec, screen, 'down')
+                    displayNumber(sec, screen, 'middle-right')
                     # checkImp() # TODO  check impedances function
                     pg.display.update()
                     sec = sec + 1
@@ -578,7 +578,7 @@ while gameOn:
 
 
                     bufferRS = []
-                    displayNumber(sec, screen, 'down')
+                    displayNumber(sec, screen, 'middle-right')
                     # checkImp() # TODO  check impedances function
                     pg.display.update()
                     sec = sec + 1
