@@ -485,13 +485,13 @@ def displayNumber(nb, screen, position):
             timerDiz = pg.image.load(timer[int(str(nb)[0])]).convert()
             timerDiz = pg.transform.scale(timerDiz, (int(1.* w_display / 15), int(1.*h_display / 10)))
 
-            screen.blit(timerSec, (6.* w_display / 30, 1.* h_display / 10))
-            screen.blit(timerDiz, (4.* w_display / 30, 1.* h_display / 10))
+            screen.blit(timerSec, (6.* w_display / 30, 1.* h_display / 20))
+            screen.blit(timerDiz, (4.* w_display / 30, 1.* h_display / 20))
 
         elif nb >= 0  and nb <= 9:
             timerSec = pg.image.load(timer[int(str(nb)[0])]).convert()
             timerSec = pg.transform.scale(timerSec, (int(1.* w_display / 15), int(1.*h_display / 10)))
-            screen.blit(timerSec, (4.* w_display / 30, 7.* h_display / 10))
+            screen.blit(timerSec, (4.* w_display / 30, 1.* h_display / 20))
 
 def cleanData(cdata, data):
 
