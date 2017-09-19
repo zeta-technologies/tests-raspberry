@@ -646,7 +646,7 @@ while gameOn:
                         screen.blit(sky, (0,0))
                         indColor = get_ind_color(scoreF, 10,0, len(colors))
                         # screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
-                        pg.draw.rect(screen, color[indColor], (2. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps, 100, 40 ))
+                        pg.draw.rect(screen, colors[indColor], (2. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps, 100, 40 ))
                         # displayNumber(math.floor(scoreF), screen, 'down')
                         displayNumber(math.floor(scoreF), screen, 'scoreV011')
                         displayNumber(durationSession, screen, 'timeV011')
