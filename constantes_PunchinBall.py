@@ -87,6 +87,7 @@ deltaPosy_2 = 1. * (oldPosy - veryoldPosy) / steps
 scorF = 1
 maxRatioAlphaOverDelta = 1
 minRatioAlphaOverDelta = 0
+coef_mad = 3
 veryoldPosy = maxDisplayY
 
 '''Resting state'''

@@ -243,7 +243,7 @@ while gameOn:
         band_deltaRS_ch3 = []
         band_deltaRS_ch4 = []
         screen.blit(restingStateImage, (0,0))
-        # displayNumber(0, screen, 'timeV011')
+        displayNumber(0, screen, 'timeV011')
         pg.display.flip()
         queue.queue.clear()
 
@@ -639,8 +639,10 @@ while gameOn:
                 while len(bufferF) < buffersize * nb_channels:
 
                     if len(bufferF) % int(math.floor(1.*buffersize/5)) == 0:
+                        color = ( 0, 255, 0)
                         screen.blit(sky, (0,0))
                         screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
+                        pg.draw.rect(screen, green, (3. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps, 10, 10 ))
                         # displayNumber(math.floor(scoreF), screen, 'down')
                         displayNumber(math.floor(scoreF), screen, 'scoreV011')
                         displayNumber(durationSession, screen, 'timeV011')
@@ -730,152 +732,3 @@ while gameOn:
             saved_bufferF_ch4 = []
             durationSession = durationSessionInit
             print 'exited fly session '
-
-    while punchinBall:
-
-        pg.time.Clock().tick(60)
-        for event in pg.event.get():
-            if event.type == QUIT:
-                saveAllChannelsData(pathPB, sessionPB, 'PB', saved_bufferPB_ch1, saved_bufferPB_ch2, saved_bufferPB_ch3, saved_bufferPB_ch4)
-                pg.quit()
-                sys.exit()
-
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    saveAllChannelsData(pathPB, sessionPB, 'PB', saved_bufferPB_ch1, saved_bufferPB_ch2, saved_bufferPB_ch3, saved_bufferPB_ch4)
-                    punchinBall = 0
-                    saved_bufferPB_ch1 = []
-                    saved_bufferPB_ch2 = []
-                    saved_bufferPB_ch3 = []
-                    saved_bufferPB_ch4 = []
-
-            elif event.type == MOUSEBUTTONUP:
-                mouseReturn = pg.mouse.get_pos()
-                if whichButtonReturn(mouseReturn, w_display, h_display):
-                    homeOn = 1
-                    punchinBall = 0
-                    fly = 0
-                    restingState1 = 0
-                    questionnaire = 0
-                    # processPB.terminate() # terminates the node process to close connection with openBCI
-                    # call(['sudo service bluetooth restart'])
-                    # os.system('sudo service bluetooth restart')
-                    bufferPB = []
-                    queue.queue.clear()
-                    saveAllChannelsData(pathPB, sessionPB, 'PB', saved_bufferPB_ch1, saved_bufferPB_ch2, saved_bufferPB_ch3, saved_bufferPB_ch4)
-                    saved_bufferPB_ch1 = []
-                    saved_bufferPB_ch2 = []
-                    saved_bufferPB_ch3 = []
-                    saved_bufferPB_ch4 = []
-
-        try:
-            while len(bufferPB) < buffersize * nb_channels :
-                bufferPB.append(queue.get_nowait())
-                saved_bufferPB.append(queue.get_nowait())
-
-            if len(bufferPB) == 800:
-                bufferPB_array = np.asarray(bufferPB)
-
-                dataPB[0, :] = bufferPB_array[ind_channel_1]
-                dataPB[1, :] = bufferPB_array[ind_channel_2]
-                dataPB[2, :] = bufferPB_array[ind_channel_3]
-                dataPB[3, :] = bufferPB_array[ind_channel_4]
-
-                saved_bufferPB_ch1.append(dataPB[0, :])
-                saved_bufferPB_ch2.append(dataPB[1, :])
-                saved_bufferPB_ch3.append(dataPB[2, :])
-                saved_bufferPB_ch4.append(dataPB[3, :])
-
-                fdataPB[0, :] = filter_data(dataPB[0, :], fs_hz)
-                fdataPB[1, :] = filter_data(dataPB[1, :], fs_hz)
-                fdataPB[2, :] = filter_data(dataPB[2, :], fs_hz)
-                fdataPB[3, :] = filter_data(dataPB[3, :], fs_hz)
-
-                bandmean_alphaPB = np.zeros(nb_channels)
-                bandmax_alphaPB = np.zeros(nb_channels)
-                bandmin_alphaPB = np.zeros(nb_channels)
-
-                bandmean_deltaPB = np.zeros(nb_channels)
-                bandmax_deltaPB = np.zeros(nb_channels)
-                bandmin_deltaPB = np.zeros(nb_channels)
-
-                for channel in range(4):
-                    bandmean_alphaPB[channel] = extract_freqbandmean(200, fs_hz, fdataPB[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
-                    bandmean_deltaPB[channel] = extract_freqbandmean(200, fs_hz, fdataPB[channel,:], 3, 4)
-
-                ''' Get the mean, min and max of the last result of all channels'''
-                newMean_alphaPB = np.average(bandmean_alphaPB) #mean of the 4 channels, not the best metric I guess
-                newMean_deltaPB = np.average(bandmean_deltaPB)
-
-                ''' increment the mean, min and max arrays of the freqRange studied'''
-                mean_array_uvPB.append(newMean_alphaPB)
-
-                if len(mean_array_uvPB) != 0:
-                    deltaPB = np.amax(mean_array_uvPB) - np.min(mean_array_uvPB)
-                if len(mean_array_uvPB) == 0:
-                    deltaPB = 0
-                # print "new Mean of 4 channels", newMean_alphaPB
-                # print "Max - Min ", deltaPB
-
-                if deltaPB == 0:
-                    level = 0
-
-                if deltaPB !=0:
-                    level = int(math.floor(7*(newMean_alphaPB-np.min(mean_array_uvPB))/deltaPB))
-
-                if level == 7:
-                    scorePB = scorePB + 1
-                    # punch_noise.play()
-                    scoreDigit = pg.image.load(scoreDigitImages[scorePB]).convert()
-                    scoreDigit = pg.transform.scale(scoreDigit, (70*w_display/1024, 90*h_display/576))
-                    screen.blit(fond, (0, 0))
-                    screen.blit(scoreDigit, (800*w_display/1024, 30*h_display/576))
-                    screen.blit(winImg, (100*w_display/1024, 100*h_display/576))
-
-                if level != 7:
-                    scoreBar = pg.image.load(levels_images[level]).convert_alpha()
-                    scoreBar = pg.transform.scale(scoreBar, (90*w_display/1024, 400*h_display/576))
-                    scoreBar = pg.transform.rotate(scoreBar, -90)
-                    screen.blit(fond, (0, 0))
-                    screen.blit(punchBall, (350*w_display/1024,-5*h_display/576))
-                    screen.blit(scoreBar, (317*w_display/1024, 460*h_display/576))
-                    screen.blit(scoreDigit, (800*w_display/1024, 30*h_display/576))
-
-                print "level", level
-                pg.display.update()
-                bufferPB = []
-
-        except Empty:
-            continue # do stuff
-        else:
-            str(bufferPB)
-            #sys.stdout.write(char)
-
-    while questionnaire:
-        # pg.time.Clock().tick(30)
-        mouse = pg.mouse.get_pos()
-        for event in pg.event.get():
-            if event.type == QUIT:
-                pg.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    restingState1 = 0
-            if event.type == MOUSEBUTTONUP:
-                # print int(mouse[1])
-                if (int(mouse[1]) >= 58) & (int(mouse[1]) <= 80 ) :
-                    answers.append('question 1 in %')
-                    answers.append(math.floor(1.*mouse[0]/(w_display/13)))
-                    print answers
-
-                if (int(mouse[1]) >= 58) & (int(mouse[1]) <= 80 ) :
-                    answers.append('question 2 in %')
-                    answers.append(math.floor(1.*mouse[0]/(w_display/13)))
-                    print answers
-
-                if (int(mouse[1]) >= 58) & (int(mouse[1]) <= 80 ) :
-                    answers.append('question 3 in %')
-                    answers.append(math.floor(1.*mouse[0]/(w_display/13)))
-                    print answers
-
-        pg.display.update()
