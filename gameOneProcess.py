@@ -14,6 +14,7 @@ from tempfile import TemporaryFile
 from requests import *
 import datetime
 from functions import *
+import os, binascii
 
 '''background'''
 screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
@@ -66,7 +67,8 @@ endSessionImg = pg.transform.scale(endSessionImg, (w_display, h_display))
 '''MAIN LOOP'''
 gameOn = 1
 now = datetime.datetime.now()
-sessionName = str(str(now.month)+'_'+str(now.day)+'_'+str(now.hour)+'_'+str(now.minute)+'_'+str(now.second))
+randomId = binascii.b2a_hex(os.urandom(15))
+sessionName = str(str(now.month)+'_'+str(now.day)+'_'+str(randomId))
 
 if not os.path.isdir('data'):
     os.mkdir('data')
@@ -75,9 +77,9 @@ os.mkdir('data/session_'+sessionName)
 os.mkdir('data/session_'+sessionName+'/Fly-data')
 os.mkdir('data/session_'+sessionName+'/PB-data')
 os.mkdir('data/session_'+sessionName+'/RS-data')
-pathF = str('data/session_'+sessionName+'/Fly-data')
-pathPB = str('data/session_'+sessionName+'/PB-data')
-pathRS = str('data/session_'+sessionName+'/RS-data')
+pathF = str('data/session_'+sessionName+'/Fly-data/')
+pathPB = str('data/session_'+sessionName+'/PB-data/')
+pathRS = str('data/session_'+sessionName+'/RS-data/')
 
 
 
@@ -639,8 +641,9 @@ while gameOn:
                     if len(bufferF) % int(math.floor(1.*buffersize/5)) == 0:
                         screen.blit(sky, (0,0))
                         screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
-                        displayNumber(math.floor(scoreF), screen, 'down')
-                        displayNumber(durationSession, screen, 'down_left')
+                        # displayNumber(math.floor(scoreF), screen, 'down')
+                        displayNumber(math.floor(scoreF), screen, 'up-right')
+                        displayNumber(durationSession, screen, 'middle-right')
                         veryoldPosy += 1.*(oldPosy - veryoldPosy)/steps
                         pg.display.flip()
 
