@@ -653,7 +653,7 @@ while gameOn:
                         else :
                             positionY = veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps
 
-                        pg.draw.rect(screen, color , (2. * w_display / 12, positionY, 100, 40 ))
+                        pg.draw.rect(screen, color , (2. * w_display / 12, positionY, 100, 10 ))
                         # displayNumber(math.floor(scoreF), screen, 'down')
                         print color
                         print flyScore(newPosy)
