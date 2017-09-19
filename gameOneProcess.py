@@ -416,7 +416,7 @@ while gameOn:
 
 
                     bufferRS = []
-                    displayNumber(sec, screen, 'timeV011')
+                    displayNumber(sec, screen, 'timeRSV011')
                     # checkImp() # TODO  check impedances function
                     pg.display.update()
                     sec = sec + 1
