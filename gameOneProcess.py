@@ -646,7 +646,14 @@ while gameOn:
                         indColor = get_ind_color(flyScore(newPosy), 10,0, len(colors))
                         color = (colors[indColor].rgb[0]*255,colors[indColor].rgb[1]*255,colors[indColor].rgb[2]*255)
                         # screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
-                        pg.draw.rect(screen, color , (2. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps, 100, 40 ))
+                        if (veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps) <= minDisplayY :
+                            positionY = minDisplayY
+                        elif (veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps) >= maxDisplayY :
+                            positionY = maxDisplayY
+                        else :
+                            positionY = veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps
+
+                        pg.draw.rect(screen, color , (2. * w_display / 12, positionY, 100, 40 ))
                         # displayNumber(math.floor(scoreF), screen, 'down')
                         print color
                         print flyScore(newPosy)
