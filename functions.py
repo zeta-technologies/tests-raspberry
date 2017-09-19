@@ -313,7 +313,7 @@ def flyScore(posY):
 def displayNumber(nb, screen, position):
     # print nb
     nb = int(nb)
-    if position == 'up-right':
+    if position == 'scoreV011':
         if nb >= 1000 :
             timerSec = pg.image.load(timer[int(str(nb)[3])]).convert()
             timerSec = pg.transform.scale(timerSec, (int(1.* w_display / 15), int(1.*h_display / 10)))
@@ -323,10 +323,10 @@ def displayNumber(nb, screen, position):
             timerCen = pg.transform.scale(timerCen, (int(1.* w_display / 15), int(1.*h_display / 10)))
             timerThou = pg.image.load(timer[int(str(nb)[0])]).convert()
             timerThou = pg.transform.scale(timerThou, (int(1. * w_display / 15), int(1. * h_display / 10)))
-            screen.blit(timerSec, (17. * w_display / 30, 4. * h_display / 10))
-            screen.blit(timerDiz, (15.* w_display / 30, 4. * h_display / 10))
-            screen.blit(timerCen, (13.* w_display / 30, 4. * h_display / 10))
-            screen.blit(timerThou, (11. * w_display / 30, 4. * h_display / 10))
+            screen.blit(timerSec, (25. * w_display / 30, 4. * h_display / 10))
+            screen.blit(timerDiz, (23.* w_display / 30, 4. * h_display / 10))
+            screen.blit(timerCen, (21.* w_display / 30, 4. * h_display / 10))
+            screen.blit(timerThou, (19. * w_display / 30, 4. * h_display / 10))
 
 
         elif nb >= 100 and nb <= 999 :
@@ -336,22 +336,22 @@ def displayNumber(nb, screen, position):
             timerDiz = pg.transform.scale(timerDiz, (int(1.* w_display / 15), int(1.*h_display / 10)))
             timerCen = pg.image.load(timer[int(str(nb)[0])]).convert()
             timerCen = pg.transform.scale(timerCen, (int(1.* w_display / 15), int(1.*h_display / 10)))
-            screen.blit(timerSec, (17.* w_display / 30, 4.* h_display / 10))
-            screen.blit(timerDiz, (15.* w_display / 30, 4.* h_display / 10))
-            screen.blit(timerCen, (13. * w_display / 30, 4.* h_display / 10))
+            screen.blit(timerSec, (25.* w_display / 30, 4.* h_display / 10))
+            screen.blit(timerDiz, (23.* w_display / 30, 4.* h_display / 10))
+            screen.blit(timerCen, (21. * w_display / 30, 4.* h_display / 10))
 
         elif nb >= 10 and nb <= 99:
             timerSec = pg.image.load(timer[int(str(nb)[1])]).convert()
             timerSec = pg.transform.scale(timerSec,(int(1.* w_display / 15), int(1.*h_display / 10)))
             timerDiz = pg.image.load(timer[int(str(nb)[0])]).convert()
             timerDiz = pg.transform.scale(timerDiz, (int(1.* w_display / 15), int(1.*h_display / 10)))
-            screen.blit(timerSec, (17.*w_display/30, 4.* h_display / 10))
-            screen.blit(timerDiz, (15.*w_display / 30, 4.* h_display / 10))
+            screen.blit(timerSec, (25.*w_display/30, 4.* h_display / 10))
+            screen.blit(timerDiz, (23.*w_display / 30, 4.* h_display / 10))
 
         elif nb >= 0  and nb <= 9:
             timerSec = pg.image.load(timer[int(str(nb)[0])]).convert()
             timerSec = pg.transform.scale(timerSec, (int(1.* w_display / 15), int(1.*h_display / 10)))
-            screen.blit(timerSec, (17.* w_display / 30, 4.* h_display / 10))
+            screen.blit(timerSec, (25.* w_display / 30, 4.* h_display / 10))
 
     elif position == 'down':
 
@@ -437,7 +437,7 @@ def displayNumber(nb, screen, position):
             timerSec = pg.transform.scale(timerSec, (int(1.* w_display / 15), int(1.*h_display / 10)))
             screen.blit(timerSec, (0, 9.* h_display / 10))
 
-    elif position == 'middle-right':
+    elif position == 'timeV011':
 
         if nb >= 1000 :
             timerSec = pg.image.load(timer[int(str(nb)[3])]).convert()
