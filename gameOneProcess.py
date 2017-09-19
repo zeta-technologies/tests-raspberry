@@ -211,7 +211,7 @@ while gameOn:
         band_deltaRS_ch3 = []
         band_deltaRS_ch4 = []
         screen.blit(restingStateImage, (0,0))
-        # displayNumber(0, screen, 'timeV011')
+        displayNumber(0, screen, 'timeRSV011')
         pg.display.flip()
         queue.queue.clear()
 
