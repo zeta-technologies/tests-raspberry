@@ -105,7 +105,7 @@ while gameOn:
     gameA = 'Jeu A'
     gameASurf, gameARect = text_objects(gameA, buttonText)
     gameARect.center = (2.*w_display/5, 3.3*h_display/4)
-    gameB = "Etes vous prêt à passer à l'entrainement ?"
+    gameB = "Etape suivante"
     gameBSurf, gameBRect = text_objects(gameB, buttonText)
     gameBRect.center = (3.*w_display/5, 3.3*h_display/4)
 
