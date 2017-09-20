@@ -98,14 +98,14 @@ while gameOn:
     screen.blit(home, (0,0))
 
     # load home menu buttons
-    settings = 'Etalonnage'
+    settings = 'Lancer la session'
     settingsSurf, settingsRect = text_objects(settings, buttonText)
-    settingsRect.center = (1.*w_display/5, 3.3*h_display/4)
+    settingsRect.center = (4.*w_display/10, 3.3*h_display/4)
 
     gameA = 'Jeu A'
     gameASurf, gameARect = text_objects(gameA, buttonText)
     gameARect.center = (2.*w_display/5, 3.3*h_display/4)
-    gameB = 'Jeu B'
+    gameB = 'Etes vous prêt à passer à l\'entrainement ?'
     gameBSurf, gameBRect = text_objects(gameB, buttonText)
     gameBRect.center = (3.*w_display/5, 3.3*h_display/4)
 
@@ -114,8 +114,8 @@ while gameOn:
     progressionRect.center = (4.*w_display/5, 3.3*h_display/4)
 
     screen.blit(gameASurf, gameARect)
-    screen.blit(gameBSurf, gameBRect)
-    screen.blit(progressionSurf, progressionRect)
+    # screen.blit(gameBSurf, gameBRect)
+    # screen.blit(progressionSurf, progressionRect)
     screen.blit(settingsSurf, settingsRect)
     pg.display.flip()
 
@@ -326,22 +326,25 @@ while gameOn:
 
             # print minRatioAlphaOverDelta, maxRatioAlphaOverDelta
             print 'fin de la seance de reglage', freqMaxAlpha
-            homeOn = 0
-            punchinBall = 0
-            fly = 1
-            restingState1 = 0
-            questionnaire = 0
-            # process.terminate()
-            # call(['sudo service bluetooth restart'])
-            # os.system('sudo service bluetooth restart')
-            bufferRS = []
-            queue.queue.clear()
-            saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
-            saved_bufferRS_ch1 = []
-            saved_bufferRS_ch2 = []
-            saved_bufferRS_ch3 = []
-            saved_bufferRS_ch4 = []
+            screen.blit(gameBSurf, gameBRect)
+            mouseChoice = pg.mouse.get_pos()
 
+            if whichButtonReturn(mouseChoice, w_display, h_display) == 2:
+                homeOn = 0
+                punchinBall = 0
+                fly = 1
+                restingState1 = 0
+                questionnaire = 0
+                # process.terminate()
+                # call(['sudo service bluetooth restart'])
+                # os.system('sudo service bluetooth restart')
+                bufferRS = []
+                queue.queue.clear()
+                saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
+                saved_bufferRS_ch1 = []
+                saved_bufferRS_ch2 = []
+                saved_bufferRS_ch3 = []
+                saved_bufferRS_ch4 = []
 
         elif sec < restingStateDuration:
             try:
@@ -403,6 +406,157 @@ while gameOn:
             # pg.time.delay(993) # wait to display the next second on screen
             # print sec
             # queue.queue.clear()
+
+    while fly:
+        pg.time.Clock().tick(60)
+
+        for event in pg.event.get():
+            if event.type == QUIT:
+                saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                bufferF = []
+                saved_bufferF_ch1 = []
+                saved_bufferF_ch2 = []
+                saved_bufferF_ch3 = []
+                saved_bufferF_ch4 = []
+                pg.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                    bufferF = []
+                    saved_bufferF_ch1 = []
+                    saved_bufferF_ch2 = []
+                    saved_bufferF_ch3 = []
+                    saved_bufferF_ch4 = []
+                    fly = 0
+            elif event.type == MOUSEBUTTONUP:
+                mouseReturn = pg.mouse.get_pos()
+                if whichButtonReturn(mouseReturn, w_display, h_display):
+                    homeOn = 1
+                    punchinBall = 0
+                    fly = 0
+                    restingState1 = 0
+                    questionnaire = 0
+                    # processF.terminate()
+                    # call(['sudo service bluetooth restart'])
+                    # os.system('sudo service bluetooth restart')
+                    # queue.queue.clear()
+                    saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                    bufferF = []
+                    saved_bufferF_ch1 = []
+                    saved_bufferF_ch2 = []
+                    saved_bufferF_ch3 = []
+                    saved_bufferF_ch4 = []
+
+        if durationSession > 0:
+            try:
+                while len(bufferF) < buffersize * nb_channels:
+
+                    if len(bufferF) % int(math.floor(1.*buffersize/5)) == 0:
+                        screen.blit(sky, (0,0))
+                        indColor = get_ind_color(flyScore(newPosy), 10,0, len(colors))
+                        color = (colors[indColor].rgb[0]*255,colors[indColor].rgb[1]*255,colors[indColor].rgb[2]*255)
+                        # screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
+                        if (veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps) <= minDisplayY + 10 :
+                            positionY = minDisplayY + 10
+                        elif (veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps) >= maxDisplayY :
+                            positionY = maxDisplayY
+                        else :
+                            positionY = veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps
+
+                        pg.draw.rect(screen, color , (2. * w_display / 12, positionY, 100, 10 ))
+                        # displayNumber(math.floor(scoreF), screen, 'down')
+                        print color
+                        print flyScore(newPosy)
+                        displayNumber(math.floor(scoreF), screen, 'scoreV011')
+                        displayNumber(durationSession, screen, 'timeV011')
+                        veryoldPosy += 1.*(oldPosy - veryoldPosy)/steps
+                        pg.display.flip()
+
+                    bufferF.append(queue.get_nowait())
+
+                if len(bufferF) == 800 :
+                    bufferF_array = np.asarray(bufferF)
+
+                    dataF[0, :] = bufferF_array[ind_channel_1]
+                    dataF[1, :] = bufferF_array[ind_channel_2]
+                    dataF[2, :] = bufferF_array[ind_channel_3]
+                    dataF[3, :] = bufferF_array[ind_channel_4]
+
+                    saved_bufferF_ch1.append(dataF[0, :])
+                    saved_bufferF_ch2.append(dataF[1, :])
+                    saved_bufferF_ch3.append(dataF[2, :])
+                    saved_bufferF_ch4.append(dataF[3, :])
+
+                    fdataF[0, :] = filter_data(dataF[0, :], fs_hz)
+                    fdataF[1, :] = filter_data(dataF[1, :], fs_hz)
+                    fdataF[2, :] = filter_data(dataF[2, :], fs_hz)
+                    fdataF[3, :] = filter_data(dataF[3, :], fs_hz)
+
+                    bandmean_alphaF = np.zeros(nb_channels)
+                    bandmax_alphaF = np.zeros(nb_channels)
+                    bandmin_alphaF = np.zeros(nb_channels)
+
+                    bandmean_deltaF = np.zeros(nb_channels)
+                    bandmax_deltaF = np.zeros(nb_channels)
+                    bandmin_deltaF = np.zeros(nb_channels)
+                    ratioF = np.zeros(nb_channels)
+
+                    for channel in range(nb_channels):
+                        bandmean_alphaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
+                        bandmean_deltaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], 3, 4)
+                        ratioF[channel] = 1.* bandmean_alphaF[channel] / bandmean_deltaF[channel]
+
+                    # maximiser alpha/delta
+                    ''' Get the mean, min and max of the last reslt of all channels'''
+                    newMean_alphaF = np.average(bandmean_alphaF)
+                    # maxAlphaF = np.amax(mean_array_uvF)
+                    # minAlphaF = np.min(mean_array_uvF)
+
+                    medRatioF = np.median(ratioF)
+                    mean_array_uvF.append(medRatioF)
+
+                    if medRatioF == maxRatioAlphaOverDelta:
+                        newPosy = minDisplayY
+
+                    elif medRatioF == minRatioAlphaOverDelta:
+                        newPosy = maxDisplayY
+
+                    else:
+                        a = (maxDisplayY - minDisplayY) * 1. / (minRatioAlphaOverDelta - maxRatioAlphaOverDelta)
+                        b = maxDisplayY - minRatioAlphaOverDelta * a
+                        newPosy = a * medRatioF + b
+
+                    scoreF = scoreF + flyScore(newPosy)
+                    durationSession = durationSession -  1
+
+            except Empty:
+                continue  # do stuff
+            else:
+                str(bufferF)
+                # sys.stdout.write(char)
+            veryoldPosy = oldPosy
+            oldPosy = newPosy
+            saved_bufferF.append(bufferF)
+            bufferF = []
+        else :
+            homeOn = 0
+            punchinBall = 0
+            fly = 0
+            restingState2 = 1
+            questionnaire = 0
+            # processF.terminate()
+            # call(['sudo service bluetooth restart'])
+            # os.system('sudo service bluetooth restart')
+            # queue.queue.clear()
+            saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+            bufferF = []
+            saved_bufferF_ch1 = []
+            saved_bufferF_ch2 = []
+            saved_bufferF_ch3 = []
+            saved_bufferF_ch4 = []
+            durationSession = durationSessionInit
+            print 'exited fly session '
 
     while restingState2:
         pg.time.Clock().tick(30)
@@ -565,154 +719,3 @@ while gameOn:
             # pg.time.delay(993) # wait to display the next second on screen
             # print sec
             # queue.queue.clear()
-
-    while fly:
-        pg.time.Clock().tick(60)
-
-        for event in pg.event.get():
-            if event.type == QUIT:
-                saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
-                bufferF = []
-                saved_bufferF_ch1 = []
-                saved_bufferF_ch2 = []
-                saved_bufferF_ch3 = []
-                saved_bufferF_ch4 = []
-                pg.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
-                    bufferF = []
-                    saved_bufferF_ch1 = []
-                    saved_bufferF_ch2 = []
-                    saved_bufferF_ch3 = []
-                    saved_bufferF_ch4 = []
-                    fly = 0
-            elif event.type == MOUSEBUTTONUP:
-                mouseReturn = pg.mouse.get_pos()
-                if whichButtonReturn(mouseReturn, w_display, h_display):
-                    homeOn = 1
-                    punchinBall = 0
-                    fly = 0
-                    restingState1 = 0
-                    questionnaire = 0
-                    # processF.terminate()
-                    # call(['sudo service bluetooth restart'])
-                    # os.system('sudo service bluetooth restart')
-                    # queue.queue.clear()
-                    saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
-                    bufferF = []
-                    saved_bufferF_ch1 = []
-                    saved_bufferF_ch2 = []
-                    saved_bufferF_ch3 = []
-                    saved_bufferF_ch4 = []
-
-        if durationSession > 0:
-            try:
-                while len(bufferF) < buffersize * nb_channels:
-
-                    if len(bufferF) % int(math.floor(1.*buffersize/5)) == 0:
-                        screen.blit(sky, (0,0))
-                        indColor = get_ind_color(flyScore(newPosy), 10,0, len(colors))
-                        color = (colors[indColor].rgb[0]*255,colors[indColor].rgb[1]*255,colors[indColor].rgb[2]*255)
-                        # screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
-                        if (veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps) <= minDisplayY :
-                            positionY = minDisplayY + 10
-                        elif (veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps) >= maxDisplayY :
-                            positionY = maxDisplayY
-                        else :
-                            positionY = veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps
-
-                        pg.draw.rect(screen, color , (2. * w_display / 12, positionY, 100, 10 ))
-                        # displayNumber(math.floor(scoreF), screen, 'down')
-                        print color
-                        print flyScore(newPosy)
-                        displayNumber(math.floor(scoreF), screen, 'scoreV011')
-                        displayNumber(durationSession, screen, 'timeV011')
-                        veryoldPosy += 1.*(oldPosy - veryoldPosy)/steps
-                        pg.display.flip()
-
-                    bufferF.append(queue.get_nowait())
-
-                if len(bufferF) == 800 :
-                    bufferF_array = np.asarray(bufferF)
-
-                    dataF[0, :] = bufferF_array[ind_channel_1]
-                    dataF[1, :] = bufferF_array[ind_channel_2]
-                    dataF[2, :] = bufferF_array[ind_channel_3]
-                    dataF[3, :] = bufferF_array[ind_channel_4]
-
-                    saved_bufferF_ch1.append(dataF[0, :])
-                    saved_bufferF_ch2.append(dataF[1, :])
-                    saved_bufferF_ch3.append(dataF[2, :])
-                    saved_bufferF_ch4.append(dataF[3, :])
-
-                    fdataF[0, :] = filter_data(dataF[0, :], fs_hz)
-                    fdataF[1, :] = filter_data(dataF[1, :], fs_hz)
-                    fdataF[2, :] = filter_data(dataF[2, :], fs_hz)
-                    fdataF[3, :] = filter_data(dataF[3, :], fs_hz)
-
-                    bandmean_alphaF = np.zeros(nb_channels)
-                    bandmax_alphaF = np.zeros(nb_channels)
-                    bandmin_alphaF = np.zeros(nb_channels)
-
-                    bandmean_deltaF = np.zeros(nb_channels)
-                    bandmax_deltaF = np.zeros(nb_channels)
-                    bandmin_deltaF = np.zeros(nb_channels)
-                    ratioF = np.zeros(nb_channels)
-
-                    for channel in range(nb_channels):
-                        bandmean_alphaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
-                        bandmean_deltaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], 3, 4)
-                        ratioF[channel] = 1.* bandmean_alphaF[channel] / bandmean_deltaF[channel]
-
-                    # maximiser alpha/delta
-                    ''' Get the mean, min and max of the last reslt of all channels'''
-                    newMean_alphaF = np.average(bandmean_alphaF)
-                    # maxAlphaF = np.amax(mean_array_uvF)
-                    # minAlphaF = np.min(mean_array_uvF)
-
-                    medRatioF = np.median(ratioF)
-                    mean_array_uvF.append(medRatioF)
-
-                    if medRatioF == maxRatioAlphaOverDelta:
-                        newPosy = minDisplayY
-
-                    elif medRatioF == minRatioAlphaOverDelta:
-                        newPosy = maxDisplayY
-
-                    else:
-                        a = (maxDisplayY - minDisplayY) * 1. / (minRatioAlphaOverDelta - maxRatioAlphaOverDelta)
-                        b = maxDisplayY - minRatioAlphaOverDelta * a
-                        newPosy = a * medRatioF + b
-
-                    scoreF = scoreF + flyScore(newPosy)
-                    durationSession = durationSession -  1
-
-            except Empty:
-                continue  # do stuff
-            else:
-                str(bufferF)
-                # sys.stdout.write(char)
-            veryoldPosy = oldPosy
-            oldPosy = newPosy
-            saved_bufferF.append(bufferF)
-            bufferF = []
-        else :
-            homeOn = 0
-            punchinBall = 0
-            fly = 0
-            restingState2 = 1
-            questionnaire = 0
-            # processF.terminate()
-            # call(['sudo service bluetooth restart'])
-            # os.system('sudo service bluetooth restart')
-            # queue.queue.clear()
-            saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
-            bufferF = []
-            saved_bufferF_ch1 = []
-            saved_bufferF_ch2 = []
-            saved_bufferF_ch3 = []
-            saved_bufferF_ch4 = []
-            durationSession = durationSessionInit
-            print 'exited fly session '
