@@ -187,7 +187,7 @@ def text_objects(text, font):
     textSurface = font.render(text, True, (0,0,0))
     return textSurface, textSurface.get_rect()
 
-def whichButtonHomeV2(mouseHome, w_display, h_display):
+def whichButtonHomeV2(mouse, w_display, h_display):
     button = 0
 
     # if (int(mouse[0]) <= 1.*w_display / 5 + 30) & (int(mouse[0]) >= 1.* w_display / 5 - 30) & (int(mouse[1]) <= h_display - 50) & (int(mouse[1]) >= h_display - 100):
