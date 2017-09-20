@@ -100,15 +100,15 @@ while gameOn:
     # load home menu buttons
     settings = 'Lancer la session'
     settingsSurf, settingsRect = text_objects(settings, buttonText)
-    settingsRect.center = (4.*w_display/10, 3.3*h_display/4)
+    settingsRect.center = (3.*w_display/10, 3.3*h_display/4)
 
     gameA = 'Lancer la session'
     gameASurf, gameARect = text_objects(gameA, buttonText)
     gameARect.center = (2.*w_display/5, 3.3*h_display/4)
 
-    gameB = 'Etape suivante'
-    gameBSurf, gameBRect = text_objects(gameB, buttonText)
-    gameBRect.center = (3.*w_display/5, 3.3*h_display/4)
+    gameB = 'Etape suivante ICI'
+    gameBSurf, gameBRect = text_objects(gameB, buttonTextHuge)
+    gameBRect.center = (3.*w_display/10, 1*h_display/4)
 
     progression = 'Progression'
     progressionSurf, progressionRect = text_objects(progression, buttonText)

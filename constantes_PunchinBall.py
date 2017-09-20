@@ -47,6 +47,7 @@ mean_array_uvRS = []
 
 '''Load images, sonds libraries'''
 buttonText = pg.font.Font('fonts/couture-bld.otf', 15) # font for Menu button
+buttonTextHuge = pg.font.Font('fonts/couture-bld.otf', 20) # font for Menu button
 image_home = 'images/home.jpg'
 
 '''Punchin Ball Game '''
