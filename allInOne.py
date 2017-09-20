@@ -313,7 +313,7 @@ while gameOn:
             maxRatioAlphaOverDelta = medianratioAlphaoverDelta + 3 * madRatioAlphaOverDelta
 
             # print minRatioAlphaOverDelta, maxRatioAlphaOverDelta
-            print 'fin de la seance de reglage', freqMaxAlpha
+            # print 'fin de la seance de reglage', freqMaxAlpha
             screen.blit(gameBSurf, gameBRect)
             pg.display.flip()
 
@@ -334,7 +334,7 @@ while gameOn:
                         questionnaire = 0
                         bufferRS = []
                         queue.queue.clear()
-                        
+
                     elif RSchoice == 3 and sessionRS == 2:
                         homeOn = 0
                         punchinBall = 0
@@ -538,13 +538,14 @@ while gameOn:
             oldPosy = newPosy
             saved_bufferF.append(bufferF)
             bufferF = []
+
         elif durationSession == 0 :
             saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
             saved_bufferF_ch1 = []
             saved_bufferF_ch2 = []
             saved_bufferF_ch3 = []
             saved_bufferF_ch4 = []
-            print 'exited fly session '
+            # print 'exited fly session '
             screen.blit(gameBSurf, gameBRect)
             pg.display.flip()
             for event in pg.event.get():
@@ -556,11 +557,25 @@ while gameOn:
                         durationSession = durationSessionInit
                         punchinBall = 0
                         fly = 0
-                        restingState1 = 1
-                        restingState2 = 0
+                        restingState1 = 0
+                        restingState2 = 1
                         bufferRS = []
                         queue.queue.clear()
-
+                        sessionRS += 1
+                        sec = 0
+                        bufferRS = []
+                        band_alphaRS_ch1 = []
+                        band_alphaRS_ch2 = []
+                        band_alphaRS_ch3 = []
+                        band_alphaRS_ch4 = []
+                        band_deltaRS_ch1 = []
+                        band_deltaRS_ch2 = []
+                        band_deltaRS_ch3 = []
+                        band_deltaRS_ch4 = []
+                        screen.blit(restingStateImage, (0,0))
+                        displayNumber(0, screen, 'timeV011')
+                        pg.display.flip()
+                        queue.queue.clear()
 
     while restingState2:
         pg.time.Clock().tick(60)
@@ -646,7 +661,7 @@ while gameOn:
             elif metric < 0 :
                 progressionMetric = 'Progression : -' + str( metric )[1] + '.' + str(metric)[3:6]
             sessionEnded = 1
-            homeOn = 1
+            homeOn = 0
             punchinBall = 0
             fly = 0
             restingState2 = 0
