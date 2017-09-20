@@ -108,7 +108,7 @@ while gameOn:
 
     gameB = 'Etape suivante ICI'
     gameBSurf, gameBRect = text_objects(gameB, buttonTextHuge)
-    gameBRect.center = (3.*w_display/10, 1.*h_display/4)
+    gameBRect.center = (4.*w_display/10, 1.*h_display/4)
 
     progression = 'Progression'
     progressionSurf, progressionRect = text_objects(progression, buttonText)
@@ -540,8 +540,8 @@ while gameOn:
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
                     mouseRS2 = pg.mouse.get_pos()
-                    choiceRS2 = whichButtonHomeV2(mouseChoice, w_display, h_display)
-                    if choiceRS2 == 2:
+                    choiceRS2 = whichButtonHomeV2(mouseRS2, w_display, h_display)
+                    if choiceRS2 == 3:
                         bufferF = []
                         durationSession = durationSessionInit
                         punchinBall = 0
