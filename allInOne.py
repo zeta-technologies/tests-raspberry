@@ -316,22 +316,24 @@ while gameOn:
             print 'fin de la seance de reglage', freqMaxAlpha
             screen.blit(gameBSurf, gameBRect)
             pg.display.flip()
-            mouseRS = pg.mouse.get_pos()
 
-            saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
-            saved_bufferRS_ch1 = []
-            saved_bufferRS_ch2 = []
-            saved_bufferRS_ch3 = []
-            saved_bufferRS_ch4 = []
-            RSchoice = whichButtonHomeV2(mouseRS, w_display, h_display)
-            if RSchoice == 2:
-                homeOn = 0
-                punchinBall = 0
-                fly = 1
-                restingState1 = 0
-                questionnaire = 0
-                bufferRS = []
-                queue.queue.clear()
+            for event in pg.event.get():
+                if event.type == MOUSEBUTTONUP:
+                    mouseRS = pg.mouse.get_pos()
+                    saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
+                    saved_bufferRS_ch1 = []
+                    saved_bufferRS_ch2 = []
+                    saved_bufferRS_ch3 = []
+                    saved_bufferRS_ch4 = []
+                    RSchoice = whichButtonHomeV2(mouseRS, w_display, h_display)
+                    if RSchoice == 2:
+                        homeOn = 0
+                        punchinBall = 0
+                        fly = 1
+                        restingState1 = 0
+                        questionnaire = 0
+                        bufferRS = []
+                        queue.queue.clear()
 
         elif sec < restingStateDuration:
             try:
@@ -527,19 +529,6 @@ while gameOn:
             saved_bufferF.append(bufferF)
             bufferF = []
         else :
-
-            screen.blit(gameBSurf, gameBRect)
-            pg.display.flip()
-            mouseRS2 = pg.mouse.get_pos()
-            choiceRS2 = whichButtonHomeV2(mouseChoice, w_display, h_display)
-            if choiceRS2 == 2:
-                punchinBall = 0
-                fly = 0
-                restingState1 = 0
-                restingState2 = 1
-                bufferRS = []
-                queue.queue.clear()
-
             saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
             bufferF = []
             saved_bufferF_ch1 = []
@@ -548,6 +537,20 @@ while gameOn:
             saved_bufferF_ch4 = []
             durationSession = durationSessionInit
             print 'exited fly session '
+            screen.blit(gameBSurf, gameBRect)
+            pg.display.flip()
+            for event in pg.event.get():
+                if event.type == MOUSEBUTTONUP:
+                mouseRS2 = pg.mouse.get_pos()
+                choiceRS2 = whichButtonHomeV2(mouseChoice, w_display, h_display)
+                if choiceRS2 == 2:
+                    punchinBall = 0
+                    fly = 0
+                    restingState1 = 0
+                    restingState2 = 1
+                    bufferRS = []
+                    queue.queue.clear()
+
 
     while restingState2:
         pg.time.Clock().tick(60)
