@@ -326,7 +326,7 @@ while gameOn:
                     saved_bufferRS_ch3 = []
                     saved_bufferRS_ch4 = []
                     RSchoice = whichButtonHomeV2(mouseRS, w_display, h_display)
-                    if RSchoice == 3 and sessionRS == 0:
+                    if RSchoice == 3 and sessionRS == 1:
                         homeOn = 0
                         punchinBall = 0
                         fly = 1
@@ -334,7 +334,8 @@ while gameOn:
                         questionnaire = 0
                         bufferRS = []
                         queue.queue.clear()
-                    elif RSchoice == 3 and sessionRS == 1:
+                        
+                    elif RSchoice == 3 and sessionRS == 2:
                         homeOn = 0
                         punchinBall = 0
                         fly = 0
