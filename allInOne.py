@@ -162,9 +162,9 @@ while gameOn:
                 #     restingState1 = 0
                 #     questionnaire = 0
                 #     restingState2 = 1
-            elif event.type == MOUSEBUTTONUP and sessionEnded:
-                pg.quit()
-                sys.exit()
+            # elif event.type == MOUSEBUTTONUP and sessionEnded:
+                # pg.quit()
+                # sys.exit()
 
         if sessionEnded :
             progressionMetricSurf, progressionMetricRect = text_objects(progressionMetric, buttonText)
@@ -560,10 +560,6 @@ while gameOn:
                         restingState1 = 0
                         restingState2 = 1
                         bufferRS = []
-                        queue.queue.clear()
-                        sessionRS += 1
-                        sec = 0
-                        bufferRS = []
                         band_alphaRS_ch1 = []
                         band_alphaRS_ch2 = []
                         band_alphaRS_ch3 = []
@@ -573,7 +569,7 @@ while gameOn:
                         band_deltaRS_ch3 = []
                         band_deltaRS_ch4 = []
                         screen.blit(restingStateImage, (0,0))
-                        displayNumber(0, screen, 'timeV011')
+                        displayNumber(0, screen, 'timeRSV011')
                         pg.display.flip()
                         queue.queue.clear()
 
@@ -667,6 +663,11 @@ while gameOn:
             fly = 0
             restingState2 = 0
             questionnaire = 0
+            progressionMetricSurf, progressionMetricRect = text_objects(progressionMetric, buttonText)
+            progressionMetricRect.center = (1.*w_display/2, 1.*h_display/2)
+            screen.blit(endSessionImg, (0,0))
+            screen.blit(progressionMetricSurf, progressionMetricRect)
+            pg.display.flip()
 
             # process.terminate()
             # call(['sudo service bluetooth restart'])
