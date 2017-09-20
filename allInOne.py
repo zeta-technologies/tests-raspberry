@@ -541,15 +541,15 @@ while gameOn:
             pg.display.flip()
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
-                mouseRS2 = pg.mouse.get_pos()
-                choiceRS2 = whichButtonHomeV2(mouseChoice, w_display, h_display)
-                if choiceRS2 == 2:
-                    punchinBall = 0
-                    fly = 0
-                    restingState1 = 0
-                    restingState2 = 1
-                    bufferRS = []
-                    queue.queue.clear()
+                    mouseRS2 = pg.mouse.get_pos()
+                    choiceRS2 = whichButtonHomeV2(mouseChoice, w_display, h_display)
+                    if choiceRS2 == 2:
+                        punchinBall = 0
+                        fly = 0
+                        restingState1 = 0
+                        restingState2 = 1
+                        bufferRS = []
+                        queue.queue.clear()
 
 
     while restingState2:
