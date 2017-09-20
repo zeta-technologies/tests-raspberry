@@ -687,7 +687,7 @@ while gameOn:
                     bufferRS.append(queue.get_nowait())
 
                 if len(bufferRS) == 800:
-                    print sec
+                    # print sec
                     bufferRS_array = np.asarray(bufferRS)
 
                     dataRS[0, :, sec] = bufferRS_array[ind_channel_1]

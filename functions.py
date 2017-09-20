@@ -517,7 +517,7 @@ def get_ind_color(score, scoreMax, scoreMin, nbOfColors):
 
     if ind >= nbOfColors:
         ind = nbOfColors - 1
-    print ind
+    # print ind
     return int(ind)
 
 
