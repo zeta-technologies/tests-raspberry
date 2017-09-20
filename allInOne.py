@@ -660,6 +660,7 @@ while gameOn:
                 progressionMetric = 'Progression ' + str( metric )[0] + '.' + str(metric)[2:5]
             elif metric < 0 :
                 progressionMetric = 'Progression : -' + str( metric )[1] + '.' + str(metric)[3:6]
+
             sessionEnded = 1
             homeOn = 0
             punchinBall = 0
@@ -724,7 +725,7 @@ while gameOn:
 
 
                     bufferRS = []
-                    displayNumber(sec, screen, 'timeV011')
+                    displayNumber(sec, screen, 'timeRSV011')
                     # checkImp() # TODO  check impedances function
                     pg.display.update()
                     sec = sec + 1
