@@ -557,8 +557,9 @@ while gameOn:
                         durationSession = durationSessionInit
                         punchinBall = 0
                         fly = 0
+                        homeOn = 1
                         restingState1 = 0
-                        restingState2 = 1
+                        restingState2 = 0
                         bufferRS = []
                         band_alphaRS_ch1 = []
                         band_alphaRS_ch2 = []
