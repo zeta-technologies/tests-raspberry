@@ -108,7 +108,7 @@ while gameOn:
 
     gameB = 'Etape suivante ICI'
     gameBSurf, gameBRect = text_objects(gameB, buttonTextHuge)
-    gameBRect.center = (3.*w_display/10, 1*h_display/4)
+    gameBRect.center = (3.*w_display/10, 1.*h_display/4)
 
     progression = 'Progression'
     progressionSurf, progressionRect = text_objects(progression, buttonText)
@@ -326,7 +326,7 @@ while gameOn:
                     saved_bufferRS_ch3 = []
                     saved_bufferRS_ch4 = []
                     RSchoice = whichButtonHomeV2(mouseRS, w_display, h_display)
-                    if RSchoice == 2:
+                    if RSchoice == 3:
                         homeOn = 0
                         punchinBall = 0
                         fly = 1
@@ -528,14 +528,12 @@ while gameOn:
             oldPosy = newPosy
             saved_bufferF.append(bufferF)
             bufferF = []
-        else :
+        elif durationSession == 0 :
             saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
-            bufferF = []
             saved_bufferF_ch1 = []
             saved_bufferF_ch2 = []
             saved_bufferF_ch3 = []
             saved_bufferF_ch4 = []
-            durationSession = durationSessionInit
             print 'exited fly session '
             screen.blit(gameBSurf, gameBRect)
             pg.display.flip()
@@ -544,6 +542,8 @@ while gameOn:
                     mouseRS2 = pg.mouse.get_pos()
                     choiceRS2 = whichButtonHomeV2(mouseChoice, w_display, h_display)
                     if choiceRS2 == 2:
+                        bufferF = []
+                        durationSession = durationSessionInit
                         punchinBall = 0
                         fly = 0
                         restingState1 = 0
