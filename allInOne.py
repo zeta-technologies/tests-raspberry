@@ -272,7 +272,7 @@ while gameOn:
                     saved_bufferRS_ch2 = []
                     saved_bufferRS_ch3 = []
                     saved_bufferRS_ch4 = []
-                    print bufferRS
+                    # print bufferRS
 
                     # print band_alphaRS_ch1
 
@@ -342,7 +342,7 @@ while gameOn:
                     bufferRS.append(queue.get_nowait())
 
                 if len(bufferRS) == 800:
-                    print sec
+                    # print sec
                     bufferRS_array = np.asarray(bufferRS)
 
                     dataRS[0, :, sec] = bufferRS_array[ind_channel_1]
@@ -455,8 +455,8 @@ while gameOn:
 
                         pg.draw.rect(screen, color , (2. * w_display / 12, positionY, 100, 10 ))
                         # displayNumber(math.floor(scoreF), screen, 'down')
-                        print color
-                        print flyScore(newPosy)
+                        # print color
+                        # print flyScore(newPosy)
                         displayNumber(math.floor(scoreF), screen, 'scoreV011')
                         displayNumber(durationSession, screen, 'timeV011')
                         veryoldPosy += 1.*(oldPosy - veryoldPosy)/steps
@@ -586,7 +586,7 @@ while gameOn:
                     saved_bufferRS_ch2 = []
                     saved_bufferRS_ch3 = []
                     saved_bufferRS_ch4 = []
-                    print bufferRS
+                    # print bufferRS
 
                     # print band_alphaRS_ch1
 
