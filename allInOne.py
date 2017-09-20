@@ -529,10 +529,10 @@ while gameOn:
         else :
 
             screen.blit(gameBSurf, gameBRect)
-
-            mouseChoice = pg.mouse.get_pos()
-
-            if whichButtonHomeV2(mouseChoice, w_display, h_display) == 2:
+            pg.display.flip()
+            mouseRS2 = pg.mouse.get_pos()
+            choiceRS2 = whichButtonHomeV2(mouseChoice, w_display, h_display)
+            if choiceRS2 == 2:
                 punchinBall = 0
                 fly = 0
                 restingState1 = 0
