@@ -316,14 +316,15 @@ while gameOn:
             print 'fin de la seance de reglage', freqMaxAlpha
             screen.blit(gameBSurf, gameBRect)
             pg.display.flip()
-            mouseChoice = pg.mouse.get_pos()
+            mouseRS = pg.mouse.get_pos()
 
             saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
             saved_bufferRS_ch1 = []
             saved_bufferRS_ch2 = []
             saved_bufferRS_ch3 = []
             saved_bufferRS_ch4 = []
-            if whichButtonHomeV2(mouseChoice, w_display, h_display) == 2:
+            RSchoice = whichButtonHomeV2(mouseRS, w_display, h_display)
+            if RSchoice == 2:
                 homeOn = 0
                 punchinBall = 0
                 fly = 1
