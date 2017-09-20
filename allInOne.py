@@ -105,7 +105,7 @@ while gameOn:
     gameA = 'Jeu A'
     gameASurf, gameARect = text_objects(gameA, buttonText)
     gameARect.center = (2.*w_display/5, 3.3*h_display/4)
-    gameB = 'Etes vous prêt à passer à l\'entrainement ?'
+    gameB = "Etes vous prêt à passer à l'entrainement ?"
     gameBSurf, gameBRect = text_objects(gameB, buttonText)
     gameBRect.center = (3.*w_display/5, 3.3*h_display/4)
 
@@ -251,7 +251,7 @@ while gameOn:
         queue.queue.clear()
 
     while restingState1:
-        pg.time.Clock().tick(30)
+        pg.time.Clock().tick(60)
 
         for event in pg.event.get():
             if event.type == QUIT:
@@ -559,7 +559,7 @@ while gameOn:
             print 'exited fly session '
 
     while restingState2:
-        pg.time.Clock().tick(30)
+        pg.time.Clock().tick(60)
 
         for event in pg.event.get():
             if event.type == QUIT:
