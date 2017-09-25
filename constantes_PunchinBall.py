@@ -24,7 +24,8 @@ cpt = 0
 cpt2 = 0
 buffersize = 200 # a bit more than one second of data,
 
-bufferRS = []
+bufferRS1 = []
+bufferRS2 = []
 bufferPB = []
 bufferF = []
 
@@ -42,7 +43,8 @@ ratios_ch4 = []
 
 mean_array_uvPB = []
 mean_array_uvF = []
-mean_array_uvRS = []
+mean_array_uvRS2 = []
+mean_array_uvRS1 = []
 
 
 '''Load images, sonds libraries'''
@@ -81,15 +83,15 @@ minScore = 1
 scoreF = 0
 steps = 1.*buffersize/40
 newPosy = maxDisplayY
-veryoldPosy = maxDisplayY
+veryOldPosy = maxDisplayY
 oldPosy = maxDisplayY
 deltaPosy_1 = 1. * (newPosy - oldPosy) / steps
-deltaPosy_2 = 1. * (oldPosy - veryoldPosy) / steps
+deltaPosy_2 = 1. * (oldPosy - veryOldPosy) / steps
 scorF = 1
 maxRatioAlphaOverDelta = 1
 minRatioAlphaOverDelta = 0
 coef_mad = 3
-veryoldPosy = maxDisplayY
+veryOldPosy = maxDisplayY
 
 '''Resting state'''
 timer = ['images/0.png', 'images/1.png', 'images/2.png', 'images/3.png', 'images/4.png', 'images/5.png',
@@ -146,29 +148,33 @@ fdataPB = np.zeros((nb_channels, buffersize))
 dataF = np.zeros((nb_channels, buffersize))
 fdataF = np.zeros((nb_channels, buffersize))
 
-dataRS = np.zeros((nb_channels, buffersize, restingStateDuration)) # need to store every chunk to reprocess the ratio
-fdataRS = np.zeros((nb_channels, buffersize, restingStateDuration))
+dataRS1 = np.zeros((nb_channels, buffersize, restingStateDuration)) # need to store every chunk to reprocess the ratio
+fdataRS1 = np.zeros((nb_channels, buffersize, restingStateDuration))
+
+dataRS2 = np.zeros((nb_channels, buffersize, restingStateDuration)) # need to store every chunk to reprocess the ratio
+fdataRS2 = np.zeros((nb_channels, buffersize, restingStateDuration))
 
 ''' Save buffer, to keep data records somewhere'''
 
 
 saved_bufferPB = []
 saved_bufferF = []
-saved_bufferRS = []
-saved_bufferRS_ch1 = []
-saved_bufferRS_ch2 = []
-saved_bufferRS_ch3 = []
-saved_bufferRS_ch4 = []
+saved_bufferRS1 = []
+saved_bufferRS2 = []
+saved_bufferRS1_ch1 = []
+saved_bufferRS1_ch2 = []
+saved_bufferRS1_ch3 = []
+saved_bufferRS1_ch4 = []
+saved_bufferRS2_ch1 = []
+saved_bufferRS2_ch2 = []
+saved_bufferRS2_ch3 = []
+saved_bufferRS2_ch4 = []
+
 saved_bufferF_ch1 = []
 saved_bufferF_ch2 = []
 saved_bufferF_ch3 = []
 saved_bufferF_ch4 = []
-saved_bufferPB_ch1 = []
-saved_bufferPB_ch2 = []
-saved_bufferPB_ch3 = []
-saved_bufferPB_ch4 = []
 sessionF = 0
-sessionPB = 0
 sessionRS = 0
 sessionEnded = 0
 '''for the fft '''
@@ -188,10 +194,13 @@ mean_array_alphaF = []
 mean_array_deltaF = []
 ratio_arrayF = []
 
-mean_array_alphaRS = []
-mean_array_deltaRS = []
-ratio_arrayRS = []
+mean_array_alphaRS1 = []
+mean_array_deltaRS1 = []
+ratio_arrayRS1 = []
 
+mean_array_alphaRS2 = []
+mean_array_deltaRS2 = []
+ratio_arrayRS2 = []
 '''reorder channels index'''
 # the following loop saves the index of the buffer that are interesting, without the channel id every 0 [nb_channels]
 for ind in range(0, buffersize):
