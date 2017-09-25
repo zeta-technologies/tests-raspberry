@@ -659,12 +659,6 @@ while gameOn:
 
                     nb_freq_delta = extract_freqband(200, fs_hz, fdataRS2[3,:], 3, 4)[1]
 
-                    # for channel in range(4):
-                    #     band_alphaRS[channel] = extract_freqband(200, fs_hz, fdataRS[channel,:], 6, 11)
-                    #     bandmean_deltaRS[channel] = extract_freqband(200, fs_hz, fdataRS[channel,:], 3, 4)
-                    # globalAlpha.append(bandmean_alphaRS)
-
-
                     bufferRS2 = []
                     displayNumber(secRS2, screen, 'timeRSV011')
                     # checkImp() # TODO  check impedances function
@@ -676,4 +670,3 @@ while gameOn:
             else:
                 str(bufferRS2)
                 # sys.stdout.write(char)
-            
