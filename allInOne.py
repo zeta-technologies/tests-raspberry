@@ -70,20 +70,38 @@ endSessionImg = pg.transform.scale(endSessionImg, (w_display, h_display))
 '''MAIN LOOP'''
 gameOn = 1
 now = datetime.datetime.now()
-randomId = binascii.b2a_hex(os.urandom(15))
-sessionName = str(str(now.month)+'_'+str(now.day)+'_'+str(randomId))
+randomId = binascii.b2a_hex(os.urandom(15)) #id is 30 characters long
+sessionName = str(str(now.month)+'_'+str(now.day)+'_'+str(now.minute)+'_'+str(randomId))
+
+if os.path.isfile('sessionsNames.txt'):
+    sessionsNames = open('sessionsNames.txt', 'r')
+    sessionsNamesLines = sessionsNames.readlines()
+    for i in range(len(sessionsNamesLines)):
+        if randomId == sessionsNamesLines[i][8:38] :
+            RandomId = binascii.b2a_hex(os.urandom(15))
+            Name = str(str(now.month)+'_'+str(now.day)+'_'+str(now.minute)+'_'+str(RandomId))
+    sessionsNames.close()
+    sessionsNames = open('sessionsNames.txt', 'w')
+
+else :
+    sessionsNames = open('sessionsNames.txt', 'w')
+
+sessionsNames.write(sessionName)
+sessionsNames.close()
+
 
 if not os.path.isdir('data'):
     os.mkdir('data')
-
-os.mkdir('data/session_'+sessionName)
-os.mkdir('data/session_'+sessionName+'/training-data')
-os.mkdir('data/session_'+sessionName+'/PB-data')
-os.mkdir('data/session_'+sessionName+'/RS-data')
-pathF = str('data/session_'+sessionName+'/training-data/')
-pathPB = str('data/session_'+sessionName+'/PB-data/')
-pathRS1 = str('data/session_'+sessionName+'/RS1-data/')
-pathRS2 = str('data/session_'+sessionName+'/RS2-data/')
+if not os.path.isdir('data/'+sessionName):
+    os.mkdir('data/'+sessionName)
+    os.mkdir('data/'+sessionName+'/training-data')
+    os.mkdir('data/'+sessionName+'/PB-data')
+    os.mkdir('data/'+sessionName+'/RS1-data')
+    os.mkdir('data/'+sessionName+'/RS2-data')
+    pathF = str('data/'+sessionName+'/training-data/')
+    pathPB = str('data/'+sessionName+'/PB-data/')
+    pathRS1 = str('data/'+sessionName+'/RS1-data/')
+    pathRS2 = str('data/'+sessionName+'/RS2-data/')
 
 
 
