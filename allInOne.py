@@ -245,14 +245,8 @@ while gameOn:
                 mouseReturn = pg.mouse.get_pos()
                 if whichButtonReturn(mouseReturn, w_display, h_display):
                     homeOn = 1
-                    punchinBall = 0
                     training = 0
                     restingState1 = 0
-                    questionnaire = 0
-                    # process.terminate()
-                    # call(['sudo service bluetooth restart'])
-                    # os.system('sudo service bluetooth restart')
-                    # os.killpg(os.getpgid(process.pid), signal.SIGTERM)  # Send the signal to all the process groups
                     bufferRS1 = []
                     queue.queue.clear()
                     saveAllChannelsData(pathRS1, sessionRS, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
@@ -260,9 +254,7 @@ while gameOn:
                     saved_bufferRS1_ch2 = []
                     saved_bufferRS1_ch3 = []
                     saved_bufferRS1_ch4 = []
-                    # print bufferRS
 
-                    # print band_alphaRS_ch1
 
         if secRS1 == restingStateDuration :
             # np.zeros(nb_freq_alpha)
@@ -305,6 +297,8 @@ while gameOn:
             screen.blit(gameBSurf, gameBRect)
             pg.display.flip()
 
+
+            ''' END OF THE SESSION, WAITING FOR THE USER TO CLICK ON THE TEXT BUTTON '''
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
                     mouseRS1 = pg.mouse.get_pos()
@@ -314,21 +308,10 @@ while gameOn:
                     saved_bufferRS1_ch3 = []
                     saved_bufferRS1_ch4 = []
                     RS1choice = whichButtonHomeV2(mouseRS1, w_display, h_display)
-                    if RS1choice == 3 and sessionRS == 1:
+                    if RS1choice == 3:
                         homeOn = 0
-                        punchinBall = 0
                         training = 1
                         restingState1 = 0
-                        questionnaire = 0
-                        bufferRS1 = []
-                        queue.queue.clear()
-
-                    elif RS1choice == 3 and sessionRS1 == 2:
-                        homeOn = 0
-                        punchinBall = 0
-                        training = 0
-                        restingState2 = 0
-                        questionnaire = 0
                         bufferRS1 = []
                         queue.queue.clear()
 
@@ -372,12 +355,6 @@ while gameOn:
 
                     nb_freq_delta = extract_freqband(200, fs_hz, fdataRS1[3,:], 3, 4)[1]
 
-                    # for channel in range(4):
-                    #     band_alphaRS[channel] = extract_freqband(200, fs_hz, fdataRS[channel,:], 6, 11)
-                    #     bandmean_deltaRS[channel] = extract_freqband(200, fs_hz, fdataRS[channel,:], 3, 4)
-                    # globalAlpha.append(bandmean_alphaRS)
-
-
                     bufferRS1 = []
                     displayNumber(secRS1, screen, 'timeRSV011')
                     # checkImp() # TODO  check impedances function
@@ -389,17 +366,13 @@ while gameOn:
             else:
                 str(bufferRS1)
                 # sys.stdout.write(char)
-            # time.sleep(1)
-            # pg.time.delay(993) # wait to display the next second on screen
-            # print sec
-            # queue.queue.clear()
 
     while training:
         pg.time.Clock().tick(60)
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathT, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
                 bufferF = []
                 saved_bufferF_ch1 = []
                 saved_bufferF_ch2 = []
@@ -409,7 +382,7 @@ while gameOn:
                 sys.exit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
-                    saveAllChannelsData(pathT, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                    saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
                     bufferF = []
                     saved_bufferF_ch1 = []
                     saved_bufferF_ch2 = []
@@ -420,15 +393,9 @@ while gameOn:
                 mouseReturn = pg.mouse.get_pos()
                 if whichButtonReturn(mouseReturn, w_display, h_display):
                     homeOn = 1
-                    punchinBall = 0
                     training = 0
                     restingState1 = 0
-                    questionnaire = 0
-                    # processF.terminate()
-                    # call(['sudo service bluetooth restart'])
-                    # os.system('sudo service bluetooth restart')
-                    # queue.queue.clear()
-                    saveAllChannelsData(pathT, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                    saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
                     bufferF = []
                     saved_bufferF_ch1 = []
                     saved_bufferF_ch2 = []
@@ -443,21 +410,17 @@ while gameOn:
                         screen.blit(sky, (0,0))
                         indColor = get_ind_color(trainingScore(newPosy), 10,0, len(colors))
                         color = (colors[indColor].rgb[0]*255,colors[indColor].rgb[1]*255,colors[indColor].rgb[2]*255)
-                        # screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
-                        if (veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps) <= minDisplayY + 10 :
+                        if (veryOldPosy + 1.*(oldPosy - veryOldPosy)/steps) <= minDisplayY + 10 :
                             positionY = minDisplayY + 10
-                        elif (veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps) >= maxDisplayY :
+                        elif (veryOldPosy + 1.*(oldPosy - veryOldPosy)/steps) >= maxDisplayY :
                             positionY = maxDisplayY
                         else :
-                            positionY = veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps
+                            positionY = veryOldPosy + 1.*(oldPosy - veryOldPosy)/steps
 
                         pg.draw.rect(screen, color , (2. * w_display / 12, positionY, 100, 10 ))
-                        # displayNumber(math.floor(scoreF), screen, 'down')
-                        # print color
-                        # print trainingScore(newPosy)
                         displayNumber(math.floor(scoreF), screen, 'scoreV011')
                         displayNumber(durationSession, screen, 'timeV011')
-                        veryoldPosy += 1.*(oldPosy - veryoldPosy)/steps
+                        veryOldPosy += 1.*(oldPosy - veryOldPosy)/steps
                         pg.display.flip()
 
                     bufferF.append(queue.get_nowait())
@@ -522,7 +485,7 @@ while gameOn:
             else:
                 str(bufferF)
                 # sys.stdout.write(char)
-            veryoldPosy = oldPosy
+            veryOldPosy = oldPosy
             oldPosy = newPosy
             saved_bufferF.append(bufferF)
             bufferF = []
@@ -533,25 +496,33 @@ while gameOn:
             saved_bufferF_ch2 = []
             saved_bufferF_ch3 = []
             saved_bufferF_ch4 = []
-            # print 'exited training session '
             screen.blit(gameBSurf, gameBRect)
             pg.display.flip()
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
-                    mouseHome = pg.mouse.get_pos()
-                    choiceHome = whichButtonHomeV2(mouseHome, w_display, h_display)
-                    if choiceHome == 3:
+                    mouseRS2 = pg.mouse.get_pos()
+                    choiceRS2 = whichButtonHomeV2(mouseRS2, w_display, h_display)
+                    if choiceRS2 == 3:
                         bufferF = []
                         durationSession = durationSessionInit
-                        punchinBall = 0
                         training = 0
                         homeOn = 1
                         restingState1 = 0
                         restingState2 = 0
+                        bufferRS1 = []
+                        band_alphaRS1_ch1 = []
+                        band_alphaRS1_ch2 = []
+                        band_alphaRS1_ch3 = []
+                        band_alphaRS1_ch4 = []
+                        band_deltaRS1_ch1 = []
+                        band_deltaRS1_ch2 = []
+                        band_deltaRS1_ch3 = []
+                        band_deltaRS1_ch4 = []
                         screen.blit(restingStateImage, (0,0))
                         displayNumber(0, screen, 'timeRSV011')
                         pg.display.flip()
                         queue.queue.clear()
+
 
     while restingState2:
         pg.time.Clock().tick(60)
@@ -572,14 +543,9 @@ while gameOn:
                 mouseReturn = pg.mouse.get_pos()
                 if whichButtonReturn(mouseReturn, w_display, h_display):
                     homeOn = 1
-                    punchinBall = 0
                     training = 0
                     restingState2 = 0
                     questionnaire = 0
-                    # process.terminate()
-                    # call(['sudo service bluetooth restart'])
-                    # os.system('sudo service bluetooth restart')
-                    # os.killpg(os.getpgid(process.pid), signal.SIGTERM)  # Send the signal to all the process groups
                     bufferRS2 = []
                     queue.queue.clear()
                     saveAllChannelsData(pathRS2, sessionRS, 'RS', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
@@ -627,10 +593,6 @@ while gameOn:
             minRatioAlphaOverDelta = medianratioAlphaoverDelta - 3 * madRatioAlphaOverDelta
             maxRatioAlphaOverDelta = medianratioAlphaoverDelta + 3 * madRatioAlphaOverDelta
 
-            # print minRatioAlphaOverDelta, maxRatioAlphaOverDelta
-            # print 'fin de la seance de reglage', freqMaxAlpha
-            # print 'New Ration is : ', medianratioAlphaoverDeltaEnd
-            # print  'Old ratio was : ', medianratioAlphaoverDelta
             metric = medianratioAlphaoverDeltaEnd - medianratioAlphaoverDelta
             if  metric >= 0 :
                 progressionMetric = 'Progression ' + str( metric )[0] + '.' + str(metric)[2:5]
@@ -639,10 +601,8 @@ while gameOn:
 
             sessionEnded = 1
             homeOn = 0
-            punchinBall = 0
             training = 0
             restingState2 = 0
-            questionnaire = 0
             progressionMetricSurf, progressionMetricRect = text_objects(progressionMetric, buttonText)
             progressionMetricRect.center = (1.*w_display/2, 1.*h_display/2)
             screen.blit(endSessionImg, (0,0))
@@ -716,7 +676,4 @@ while gameOn:
             else:
                 str(bufferRS2)
                 # sys.stdout.write(char)
-            # time.sleep(1)
-            # pg.time.delay(993) # wait to display the next second on screen
-            # print sec
-            # queue.queue.clear()
+            
