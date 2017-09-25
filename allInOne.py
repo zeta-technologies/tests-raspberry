@@ -202,7 +202,7 @@ while gameOn:
 
     if training:
         sessionF += 1
-        bufferF = []
+        bufferT = []
         screen.blit(sky, (0, 0))
         pg.display.flip()
         queue.queue.clear()
@@ -368,22 +368,22 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathT, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
-                bufferF = []
-                saved_bufferF_ch1 = []
-                saved_bufferF_ch2 = []
-                saved_bufferF_ch3 = []
-                saved_bufferF_ch4 = []
+                saveAllChannelsData(pathT, sessionF, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                bufferT = []
+                saved_bufferT_ch1 = []
+                saved_bufferT_ch2 = []
+                saved_bufferT_ch3 = []
+                saved_bufferT_ch4 = []
                 pg.quit()
                 sys.exit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
-                    saveAllChannelsData(pathT, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
-                    bufferF = []
-                    saved_bufferF_ch1 = []
-                    saved_bufferF_ch2 = []
-                    saved_bufferF_ch3 = []
-                    saved_bufferF_ch4 = []
+                    saveAllChannelsData(pathT, sessionF, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                    bufferT = []
+                    saved_bufferT_ch1 = []
+                    saved_bufferT_ch2 = []
+                    saved_bufferT_ch3 = []
+                    saved_bufferT_ch4 = []
                     training = 0
             elif event.type == MOUSEBUTTONUP:
                 mouseReturn = pg.mouse.get_pos()
@@ -391,18 +391,18 @@ while gameOn:
                     homeOn = 1
                     training = 0
                     restingState1 = 0
-                    saveAllChannelsData(pathT, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
-                    bufferF = []
-                    saved_bufferF_ch1 = []
-                    saved_bufferF_ch2 = []
-                    saved_bufferF_ch3 = []
-                    saved_bufferF_ch4 = []
+                    saveAllChannelsData(pathT, sessionF, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                    bufferT = []
+                    saved_bufferT_ch1 = []
+                    saved_bufferT_ch2 = []
+                    saved_bufferT_ch3 = []
+                    saved_bufferT_ch4 = []
 
         if durationSession > 0:
             try:
-                while len(bufferF) < buffersize * nb_channels:
+                while len(bufferT) < buffersize * nb_channels:
 
-                    if len(bufferF) % int(math.floor(1.*buffersize/5)) == 0:
+                    if len(bufferT) % int(math.floor(1.*buffersize/5)) == 0:
                         screen.blit(sky, (0,0))
                         indColor = get_ind_color(trainingScore(newPosy), 10,0, len(colors))
                         color = (colors[indColor].rgb[0]*255,colors[indColor].rgb[1]*255,colors[indColor].rgb[2]*255)
@@ -419,20 +419,20 @@ while gameOn:
                         veryOldPosy += 1.*(oldPosy - veryOldPosy)/steps
                         pg.display.flip()
 
-                    bufferF.append(queue.get_nowait())
+                    bufferT.append(queue.get_nowait())
 
-                if len(bufferF) == 800 :
-                    bufferF_array = np.asarray(bufferF)
+                if len(bufferT) == 800 :
+                    bufferT_array = np.asarray(bufferT)
 
-                    dataF[0, :] = bufferF_array[ind_channel_1]
-                    dataF[1, :] = bufferF_array[ind_channel_2]
-                    dataF[2, :] = bufferF_array[ind_channel_3]
-                    dataF[3, :] = bufferF_array[ind_channel_4]
+                    dataF[0, :] = bufferT_array[ind_channel_1]
+                    dataF[1, :] = bufferT_array[ind_channel_2]
+                    dataF[2, :] = bufferT_array[ind_channel_3]
+                    dataF[3, :] = bufferT_array[ind_channel_4]
 
-                    saved_bufferF_ch1.append(dataF[0, :])
-                    saved_bufferF_ch2.append(dataF[1, :])
-                    saved_bufferF_ch3.append(dataF[2, :])
-                    saved_bufferF_ch4.append(dataF[3, :])
+                    saved_bufferT_ch1.append(dataF[0, :])
+                    saved_bufferT_ch2.append(dataF[1, :])
+                    saved_bufferT_ch3.append(dataF[2, :])
+                    saved_bufferT_ch4.append(dataF[3, :])
 
                     fdataF[0, :] = filter_data(dataF[0, :], fs_hz)
                     fdataF[1, :] = filter_data(dataF[1, :], fs_hz)
@@ -479,19 +479,19 @@ while gameOn:
             except Empty:
                 continue  # do stuff
             else:
-                str(bufferF)
+                str(bufferT)
                 # sys.stdout.write(char)
             veryOldPosy = oldPosy
             oldPosy = newPosy
-            saved_bufferF.append(bufferF)
-            bufferF = []
+            saved_bufferT.append(bufferT)
+            bufferT = []
 
         elif durationSession == 0 :
-            saveAllChannelsData(pathT, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
-            saved_bufferF_ch1 = []
-            saved_bufferF_ch2 = []
-            saved_bufferF_ch3 = []
-            saved_bufferF_ch4 = []
+            saveAllChannelsData(pathT, sessionF, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+            saved_bufferT_ch1 = []
+            saved_bufferT_ch2 = []
+            saved_bufferT_ch3 = []
+            saved_bufferT_ch4 = []
             screen.blit(nextStepSurf, nextStepRect)
             pg.display.flip()
             for event in pg.event.get():
@@ -499,7 +499,7 @@ while gameOn:
                     mouseRS2 = pg.mouse.get_pos()
                     choiceRS2 = whichButtonHomeV2(mouseRS2, w_display, h_display)
                     if choiceRS2 == 3:
-                        bufferF = []
+                        bufferT = []
                         durationSession = durationSessionInit
                         training = 0
                         homeOn = 1

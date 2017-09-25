@@ -27,7 +27,7 @@ buffersize = 200 # a bit more than one second of data,
 bufferRS1 = []
 bufferRS2 = []
 bufferPB = []
-bufferF = []
+bufferT = []
 
 nb_channels = 4
 ind_2_remove_in_buffer1 = []
@@ -158,7 +158,7 @@ fdataRS2 = np.zeros((nb_channels, buffersize, restingStateDuration))
 
 
 saved_bufferPB = []
-saved_bufferF = []
+saved_bufferT = []
 saved_bufferRS1 = []
 saved_bufferRS2 = []
 saved_bufferRS1_ch1 = []
@@ -170,10 +170,10 @@ saved_bufferRS2_ch2 = []
 saved_bufferRS2_ch3 = []
 saved_bufferRS2_ch4 = []
 
-saved_bufferF_ch1 = []
-saved_bufferF_ch2 = []
-saved_bufferF_ch3 = []
-saved_bufferF_ch4 = []
+saved_bufferT_ch1 = []
+saved_bufferT_ch2 = []
+saved_bufferT_ch3 = []
+saved_bufferT_ch4 = []
 sessionF = 0
 sessionRS = 0
 sessionEnded = 0
