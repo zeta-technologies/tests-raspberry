@@ -78,7 +78,7 @@ if os.path.isfile('sessionsNames.txt'):
     sessionsNames = open('sessionsNames.txt', 'r')
     sessionsNamesLines = sessionsNames.readlines()
     for i in range(len(sessionsNamesLines)):
-        if randomId == sessionsNamesLines[i][8:38] :
+        if randomId == sessionsNamesLines[i][-30:] :
             randomId = binascii.b2a_hex(os.urandom(15))
             sessionName = str(str(now.month)+'_'+str(now.day)+'_'+str(now.minute)+'_'+str(randomId))
     sessionsNames.close()
