@@ -155,40 +155,12 @@ while gameOn:
             elif event.type == MOUSEBUTTONUP and not(sessionEnded):
                 mouseHome = pg.mouse.get_pos()
                 choice = whichButtonHomeV2(mouseHome, w_display, h_display)
-                # if choice == 1: # 1 is for resting state
-                #     homeOn = 0
-                #     punchinBall = 0
-                #     training = 0
-                #     restingState1 = 1
-                #     restingState2 = 0
-                #     questionnaire = 0
 
-                if choice == 2: #  is for traininging game
+                if choice == 2: #  is for training game
                     homeOn = 0
-                    punchinBall = 0
                     training = 0
-                    questionnaire = 0
                     restingState1 = 1
                     restingState2 = 0
-
-                # elif choice == 3: # 3 is for training
-                #     homeOn = 0
-                #     punchinBall = 0
-                #     training = 1
-                #     restingState1 = 0
-                #     questionnaire = 0
-                #     restingState2 = 0
-                #
-                # elif choice == 4: # 3 is for punchinBall
-                #     homeOn = 0
-                #     punchinBall = 0
-                #     training = 0
-                #     restingState1 = 0
-                #     questionnaire = 0
-                #     restingState2 = 1
-            # elif event.type == MOUSEBUTTONUP and sessionEnded:
-                # pg.quit()
-                # sys.exit()
 
         if sessionEnded :
             progressionMetricSurf, progressionMetricRect = text_objects(progressionMetric, buttonText)
@@ -232,16 +204,8 @@ while gameOn:
 
     if training:
         sessionF += 1
-        # Chargement du fond
         bufferF = []
-        '''Position everything on the screen'''
         screen.blit(sky, (0, 0))
-        # screen.blit(cloud, (800*w_display/1024, 100*h_display/576))
-        # screen.blit(plane, (300*w_display/1024, 200*h_display/576))
-        # screen.blit(plane, ( 5.* w_display / 12, maxDisplayY))
-        # screen.blit(scoreBar, (317, 460))
-        # screen.blit(scoreDigit, (800, 30))
-        # screen.blit(test, (317, 460))
         pg.display.flip()
         queue.queue.clear()
 
