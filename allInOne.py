@@ -43,7 +43,7 @@ scoreTxt = pg.transform.scale(scoreTxt, (int(math.floor(0.15*w_display)), int(ma
 scoreDigit = pg.image.load(scoreDigitImages[0])
 scoreDigit = pg.transform.scale(scoreDigit, (int(math.floor(0.068*w_display)), int(math.floor(0.156*h_display))))
 
-'''Fly game'''
+'''training game'''
 sky = pg.image.load(skyImage).convert()
 sky = pg.transform.scale(sky, (w_display, h_display))
 # cloud = pg.image.load(cloudImage).convert()
@@ -77,10 +77,10 @@ if not os.path.isdir('data'):
     os.mkdir('data')
 
 os.mkdir('data/session_'+sessionName)
-os.mkdir('data/session_'+sessionName+'/Fly-data')
+os.mkdir('data/session_'+sessionName+'/training-data')
 os.mkdir('data/session_'+sessionName+'/PB-data')
 os.mkdir('data/session_'+sessionName+'/RS-data')
-pathF = str('data/session_'+sessionName+'/Fly-data/')
+pathF = str('data/session_'+sessionName+'/training-data/')
 pathPB = str('data/session_'+sessionName+'/PB-data/')
 pathRS1 = str('data/session_'+sessionName+'/RS1-data/')
 pathRS2 = str('data/session_'+sessionName+'/RS2-data/')
@@ -135,23 +135,23 @@ while gameOn:
                 # if choice == 1: # 1 is for resting state
                 #     homeOn = 0
                 #     punchinBall = 0
-                #     fly = 0
+                #     training = 0
                 #     restingState1 = 1
                 #     restingState2 = 0
                 #     questionnaire = 0
 
-                if choice == 2: #  is for flying game
+                if choice == 2: #  is for traininging game
                     homeOn = 0
                     punchinBall = 0
-                    fly = 0
+                    training = 0
                     questionnaire = 0
                     restingState1 = 1
                     restingState2 = 0
 
-                # elif choice == 3: # 3 is for fly
+                # elif choice == 3: # 3 is for training
                 #     homeOn = 0
                 #     punchinBall = 0
-                #     fly = 1
+                #     training = 1
                 #     restingState1 = 0
                 #     questionnaire = 0
                 #     restingState2 = 0
@@ -159,7 +159,7 @@ while gameOn:
                 # elif choice == 4: # 3 is for punchinBall
                 #     homeOn = 0
                 #     punchinBall = 0
-                #     fly = 0
+                #     training = 0
                 #     restingState1 = 0
                 #     questionnaire = 0
                 #     restingState2 = 1
@@ -207,7 +207,7 @@ while gameOn:
         pg.display.flip()
         queue.queue.clear()
 
-    if fly:
+    if training:
         sessionF += 1
         # Chargement du fond
         bufferF = []
@@ -259,7 +259,7 @@ while gameOn:
                 if whichButtonReturn(mouseReturn, w_display, h_display):
                     homeOn = 1
                     punchinBall = 0
-                    fly = 0
+                    training = 0
                     restingState1 = 0
                     questionnaire = 0
                     # process.terminate()
@@ -330,7 +330,7 @@ while gameOn:
                     if RS1choice == 3 and sessionRS == 1:
                         homeOn = 0
                         punchinBall = 0
-                        fly = 1
+                        training = 1
                         restingState1 = 0
                         questionnaire = 0
                         bufferRS1 = []
@@ -339,7 +339,7 @@ while gameOn:
                     elif RS1choice == 3 and sessionRS1 == 2:
                         homeOn = 0
                         punchinBall = 0
-                        fly = 0
+                        training = 0
                         restingState2 = 0
                         questionnaire = 0
                         bufferRS1 = []
@@ -407,7 +407,7 @@ while gameOn:
             # print sec
             # queue.queue.clear()
 
-    while fly:
+    while training:
         pg.time.Clock().tick(60)
 
         for event in pg.event.get():
@@ -428,13 +428,13 @@ while gameOn:
                     saved_bufferF_ch2 = []
                     saved_bufferF_ch3 = []
                     saved_bufferF_ch4 = []
-                    fly = 0
+                    training = 0
             elif event.type == MOUSEBUTTONUP:
                 mouseReturn = pg.mouse.get_pos()
                 if whichButtonReturn(mouseReturn, w_display, h_display):
                     homeOn = 1
                     punchinBall = 0
-                    fly = 0
+                    training = 0
                     restingState1 = 0
                     questionnaire = 0
                     # processF.terminate()
@@ -454,7 +454,7 @@ while gameOn:
 
                     if len(bufferF) % int(math.floor(1.*buffersize/5)) == 0:
                         screen.blit(sky, (0,0))
-                        indColor = get_ind_color(flyScore(newPosy), 10,0, len(colors))
+                        indColor = get_ind_color(trainingScore(newPosy), 10,0, len(colors))
                         color = (colors[indColor].rgb[0]*255,colors[indColor].rgb[1]*255,colors[indColor].rgb[2]*255)
                         # screen.blit(plane, (5. * w_display / 12, veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps ))
                         if (veryoldPosy + 1.*(oldPosy - veryoldPosy)/steps) <= minDisplayY + 10 :
@@ -467,7 +467,7 @@ while gameOn:
                         pg.draw.rect(screen, color , (2. * w_display / 12, positionY, 100, 10 ))
                         # displayNumber(math.floor(scoreF), screen, 'down')
                         # print color
-                        # print flyScore(newPosy)
+                        # print trainingScore(newPosy)
                         displayNumber(math.floor(scoreF), screen, 'scoreV011')
                         displayNumber(durationSession, screen, 'timeV011')
                         veryoldPosy += 1.*(oldPosy - veryoldPosy)/steps
@@ -527,7 +527,7 @@ while gameOn:
                         b = maxDisplayY - minRatioAlphaOverDelta * a
                         newPosy = a * medRatioF + b
 
-                    scoreF = scoreF + flyScore(newPosy)
+                    scoreF = scoreF + trainingScore(newPosy)
                     durationSession = durationSession -  1
 
             except Empty:
@@ -546,7 +546,7 @@ while gameOn:
             saved_bufferF_ch2 = []
             saved_bufferF_ch3 = []
             saved_bufferF_ch4 = []
-            # print 'exited fly session '
+            # print 'exited training session '
             screen.blit(gameBSurf, gameBRect)
             pg.display.flip()
             for event in pg.event.get():
@@ -557,7 +557,7 @@ while gameOn:
                         bufferF = []
                         durationSession = durationSessionInit
                         punchinBall = 0
-                        fly = 0
+                        training = 0
                         homeOn = 1
                         restingState1 = 0
                         restingState2 = 0
@@ -586,7 +586,7 @@ while gameOn:
                 if whichButtonReturn(mouseReturn, w_display, h_display):
                     homeOn = 1
                     punchinBall = 0
-                    fly = 0
+                    training = 0
                     restingState2 = 0
                     questionnaire = 0
                     # process.terminate()
@@ -653,7 +653,7 @@ while gameOn:
             sessionEnded = 1
             homeOn = 0
             punchinBall = 0
-            fly = 0
+            training = 0
             restingState2 = 0
             questionnaire = 0
             progressionMetricSurf, progressionMetricRect = text_objects(progressionMetric, buttonText)

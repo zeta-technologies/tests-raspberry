@@ -180,7 +180,7 @@ def movePunchinBall(angle, screen, scoreBar, scoreDigit, fond, image):
         # screen.blit(scoreDigit, (800, 30))
 
 
-#TODO function that returns the next position in flying game
+#TODO function that returns the next position in traininging game
 # def newPosition ( ):
 
 def text_objects(text, font):
@@ -321,7 +321,7 @@ def punchinballmain(screen, cpt2, fond, punchBall, buffer_1, OPB1_data ):
         pg.display.update()
 
 
-def flyScore(posY):
+def trainingScore(posY):
 
     newscore = 1.* (maxScore - minScore)/(minDisplayY - maxDisplayY) * ( posY - minDisplayY) + maxScore
     # print newscore
