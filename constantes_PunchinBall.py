@@ -204,7 +204,6 @@ ratio_arrayRS2 = []
 '''reorder channels index'''
 # the following loop saves the index of the buffer that are interesting, without the channel id every 0 [nb_channels]
 for ind in range(0, buffersize):
-    # starts at index 0 which is the number of the sample
     ind_channel_1.append(ind*4)
     ind_channel_2.append(ind*4+1)
     ind_channel_3.append(ind*4+2)

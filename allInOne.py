@@ -138,9 +138,7 @@ while gameOn:
     progressionRect.center = (4.*w_display/5, 3.3*h_display/4)
 
     screen.blit(launchTrainingSurf, launchTrainingRect)
-    # screen.blit(gameBSurf, gameBRect)
-    # screen.blit(progressionSurf, progressionRect)
-    # screen.blit(settingsSurf, settingsRect)
+
     pg.display.flip()
 
 
@@ -370,7 +368,7 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                saveAllChannelsData(pathT, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
                 bufferF = []
                 saved_bufferF_ch1 = []
                 saved_bufferF_ch2 = []
@@ -380,7 +378,7 @@ while gameOn:
                 sys.exit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
-                    saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                    saveAllChannelsData(pathT, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
                     bufferF = []
                     saved_bufferF_ch1 = []
                     saved_bufferF_ch2 = []
@@ -393,7 +391,7 @@ while gameOn:
                     homeOn = 1
                     training = 0
                     restingState1 = 0
-                    saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                    saveAllChannelsData(pathT, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
                     bufferF = []
                     saved_bufferF_ch1 = []
                     saved_bufferF_ch2 = []
