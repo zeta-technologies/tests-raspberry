@@ -82,14 +82,15 @@ os.mkdir('data/session_'+sessionName+'/PB-data')
 os.mkdir('data/session_'+sessionName+'/RS-data')
 pathF = str('data/session_'+sessionName+'/Fly-data/')
 pathPB = str('data/session_'+sessionName+'/PB-data/')
-pathRS = str('data/session_'+sessionName+'/RS-data/')
+pathRS1 = str('data/session_'+sessionName+'/RS1-data/')
+pathRS2 = str('data/session_'+sessionName+'/RS2-data/')
 
 
 
 print '\n \n \n You are running Zeta Game on ', platform
 print ' \n \n                     -----------------------------\n                     ------ Z E T A    A C S -----\n                     -----------------------------'
 print '\n\n                     --------------------------------------------------------------\n                     -----  ________    ________   _________        .         -----\n                     -----         /   |               |           / \        -----\n                     -----        /    |               |          /   \       -----\n                     -----       /     |               |         /     \      -----\n                     -----      /      |____           |        /       \     -----\n                     -----     /       |               |       /_________\    -----\n                     -----    /        |               |      /           \   -----\n                     -----   /         |               |     /             \  -----\n                     -----  /_______   |_______        |    /               \ -----\n                     --------------------------------------------------------------'
-print ' \n  Data will be saved here : ', pathRS, pathPB, pathF
+print ' \n  Data will be saved here : ', pathRS2, pathRS1, pathPB, pathF
 while gameOn:
 
     #LOAD screen Image
@@ -191,16 +192,16 @@ while gameOn:
             thread.start()
 
         sessionRS += 1
-        sec = 0
-        bufferRS = []
-        band_alphaRS_ch1 = []
-        band_alphaRS_ch2 = []
-        band_alphaRS_ch3 = []
-        band_alphaRS_ch4 = []
-        band_deltaRS_ch1 = []
-        band_deltaRS_ch2 = []
-        band_deltaRS_ch3 = []
-        band_deltaRS_ch4 = []
+        secRS1 = 0
+        bufferRS1 = []
+        band_alphaRS1_ch1 = []
+        band_alphaRS1_ch2 = []
+        band_alphaRS1_ch3 = []
+        band_alphaRS1_ch4 = []
+        band_deltaRS1_ch1 = []
+        band_deltaRS1_ch2 = []
+        band_deltaRS1_ch3 = []
+        band_deltaRS1_ch4 = []
         screen.blit(restingStateImage, (0,0))
         displayNumber(0, screen, 'timeRSV011')
         pg.display.flip()
@@ -223,16 +224,16 @@ while gameOn:
 
     if restingState2:
         sessionRS += 1
-        sec = 0
-        bufferRS = []
-        band_alphaRS_ch1 = []
-        band_alphaRS_ch2 = []
-        band_alphaRS_ch3 = []
-        band_alphaRS_ch4 = []
-        band_deltaRS_ch1 = []
-        band_deltaRS_ch2 = []
-        band_deltaRS_ch3 = []
-        band_deltaRS_ch4 = []
+        secRS2 = 0
+        bufferRS2 = []
+        band_alphaRS2_ch1 = []
+        band_alphaRS2_ch2 = []
+        band_alphaRS2_ch3 = []
+        band_alphaRS2_ch4 = []
+        band_deltaRS2_ch1 = []
+        band_deltaRS2_ch2 = []
+        band_deltaRS2_ch3 = []
+        band_deltaRS2_ch4 = []
         screen.blit(restingStateImage, (0,0))
         displayNumber(0, screen, 'timeRSV011')
         pg.display.flip()
@@ -243,11 +244,11 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
-                saved_bufferRS_ch1 = []
-                saved_bufferRS_ch2 = []
-                saved_bufferRS_ch3 = []
-                saved_bufferRS_ch4 = []
+                saveAllChannelsData(pathRS1, sessionRS, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                saved_bufferRS1_ch1 = []
+                saved_bufferRS1_ch2 = []
+                saved_bufferRS1_ch3 = []
+                saved_bufferRS1_ch4 = []
                 pg.quit()
                 sys.exit()
             if event.type == KEYDOWN:
@@ -265,37 +266,37 @@ while gameOn:
                     # call(['sudo service bluetooth restart'])
                     # os.system('sudo service bluetooth restart')
                     # os.killpg(os.getpgid(process.pid), signal.SIGTERM)  # Send the signal to all the process groups
-                    bufferRS = []
+                    bufferRS1 = []
                     queue.queue.clear()
-                    saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
-                    saved_bufferRS_ch1 = []
-                    saved_bufferRS_ch2 = []
-                    saved_bufferRS_ch3 = []
-                    saved_bufferRS_ch4 = []
+                    saveAllChannelsData(pathRS1, sessionRS, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                    saved_bufferRS1_ch1 = []
+                    saved_bufferRS1_ch2 = []
+                    saved_bufferRS1_ch3 = []
+                    saved_bufferRS1_ch4 = []
                     # print bufferRS
 
                     # print band_alphaRS_ch1
 
-        if sec == restingStateDuration :
+        if secRS1 == restingStateDuration :
             # np.zeros(nb_freq_alpha)
-            band_alphaRS_ch1 = np.asarray(band_alphaRS_ch1)
-            band_alphaRS_ch2 = np.asarray(band_alphaRS_ch2)
-            band_alphaRS_ch3 = np.asarray(band_alphaRS_ch3)
-            band_alphaRS_ch4 = np.asarray(band_alphaRS_ch4)
+            band_alphaRS1_ch1 = np.asarray(band_alphaRS1_ch1)
+            band_alphaRS1_ch2 = np.asarray(band_alphaRS1_ch2)
+            band_alphaRS1_ch3 = np.asarray(band_alphaRS1_ch3)
+            band_alphaRS1_ch4 = np.asarray(band_alphaRS1_ch4)
             # print 'band_alphaRS_ch1', band_alphaRS_ch1
             # print 'band_alphaRS_ch1[:, 0]', np.average(band_alphaRS_ch1[:,0])
-            freqMaxAlphaCh1 = getfreqmaxband(band_alphaRS_ch1, 'alpha', nb_freq_alpha)
-            freqMaxAlphaCh2 = getfreqmaxband(band_alphaRS_ch2, 'alpha', nb_freq_alpha)
-            freqMaxAlphaCh3 = getfreqmaxband(band_alphaRS_ch3, 'alpha', nb_freq_alpha)
-            freqMaxAlphaCh4 = getfreqmaxband(band_alphaRS_ch4, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh1 = getfreqmaxband(band_alphaRS1_ch1, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh2 = getfreqmaxband(band_alphaRS1_ch2, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh3 = getfreqmaxband(band_alphaRS1_ch3, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh4 = getfreqmaxband(band_alphaRS1_ch4, 'alpha', nb_freq_alpha)
 
             freqMaxAlpha = int(np.average([freqMaxAlphaCh1, freqMaxAlphaCh2, freqMaxAlphaCh3, freqMaxAlphaCh4]))
 
             for chunk in range(restingStateDuration):
-                ratios_ch1.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[0,:, chunk], freqMaxAlphaCh1-2, freqMaxAlphaCh1+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[0,:, chunk], 3, 4)[0])))
-                ratios_ch2.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[1,:, chunk], freqMaxAlphaCh2-2, freqMaxAlphaCh2+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[1,:, chunk], 3, 4)[0])))
-                ratios_ch3.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[2,:, chunk], freqMaxAlphaCh3-2, freqMaxAlphaCh3+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[2,:, chunk], 3, 4)[0])))
-                ratios_ch4.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[3,:, chunk], freqMaxAlphaCh4-2, freqMaxAlphaCh4+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[3,:, chunk], 3, 4)[0])))
+                ratios_ch1.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS1[0,:, chunk], freqMaxAlphaCh1-2, freqMaxAlphaCh1+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS1[0,:, chunk], 3, 4)[0])))
+                ratios_ch2.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS1[1,:, chunk], freqMaxAlphaCh2-2, freqMaxAlphaCh2+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS1[1,:, chunk], 3, 4)[0])))
+                ratios_ch3.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS1[2,:, chunk], freqMaxAlphaCh3-2, freqMaxAlphaCh3+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS1[2,:, chunk], 3, 4)[0])))
+                ratios_ch4.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS1[3,:, chunk], freqMaxAlphaCh4-2, freqMaxAlphaCh4+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS1[3,:, chunk], 3, 4)[0])))
 
             median_ratio_ch1 = np.median(ratios_ch1)
             median_ratio_ch2 = np.median(ratios_ch2)
@@ -319,70 +320,70 @@ while gameOn:
 
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
-                    mouseRS = pg.mouse.get_pos()
-                    saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
-                    saved_bufferRS_ch1 = []
-                    saved_bufferRS_ch2 = []
-                    saved_bufferRS_ch3 = []
-                    saved_bufferRS_ch4 = []
-                    RSchoice = whichButtonHomeV2(mouseRS, w_display, h_display)
-                    if RSchoice == 3 and sessionRS == 1:
+                    mouseRS1 = pg.mouse.get_pos()
+                    saveAllChannelsData(pathRS1, sessionRS, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                    saved_bufferRS1_ch1 = []
+                    saved_bufferRS1_ch2 = []
+                    saved_bufferRS1_ch3 = []
+                    saved_bufferRS1_ch4 = []
+                    RS1choice = whichButtonHomeV2(mouseRS1, w_display, h_display)
+                    if RS1choice == 3 and sessionRS == 1:
                         homeOn = 0
                         punchinBall = 0
                         fly = 1
                         restingState1 = 0
                         questionnaire = 0
-                        bufferRS = []
+                        bufferRS1 = []
                         queue.queue.clear()
 
-                    elif RSchoice == 3 and sessionRS == 2:
+                    elif RS1choice == 3 and sessionRS1 == 2:
                         homeOn = 0
                         punchinBall = 0
                         fly = 0
                         restingState2 = 0
                         questionnaire = 0
-                        bufferRS = []
+                        bufferRS1 = []
                         queue.queue.clear()
 
 
-        elif sec < restingStateDuration:
+        elif secRS1 < restingStateDuration:
             try:
                 # queue.queue.clear()
-                while len(bufferRS) < buffersize * nb_channels:
-                    bufferRS.append(queue.get_nowait())
+                while len(bufferRS1) < buffersize * nb_channels:
+                    bufferRS1.append(queue.get_nowait())
 
-                if len(bufferRS) == 800:
+                if len(bufferRS1) == 800:
                     # print sec
-                    bufferRS_array = np.asarray(bufferRS)
+                    bufferRS1_array = np.asarray(bufferRS1)
 
-                    dataRS[0, :, sec] = bufferRS_array[ind_channel_1]
-                    dataRS[1, :, sec] = bufferRS_array[ind_channel_2]
-                    dataRS[2, :, sec] = bufferRS_array[ind_channel_3]
-                    dataRS[3, :, sec] = bufferRS_array[ind_channel_4]
+                    dataRS1[0, :, secRS1] = bufferRS1_array[ind_channel_1]
+                    dataRS1[1, :, secRS1] = bufferRS1_array[ind_channel_2]
+                    dataRS1[2, :, secRS1] = bufferRS1_array[ind_channel_3]
+                    dataRS1[3, :, secRS1] = bufferRS1_array[ind_channel_4]
 
-                    saved_bufferRS_ch1.append(dataRS[0, :, sec])
-                    saved_bufferRS_ch2.append(dataRS[1, :, sec])
-                    saved_bufferRS_ch3.append(dataRS[2, :, sec])
-                    saved_bufferRS_ch4.append(dataRS[3, :, sec])
+                    saved_bufferRS1_ch1.append(dataRS1[0, :, secRS1])
+                    saved_bufferRS1_ch2.append(dataRS1[1, :, secRS1])
+                    saved_bufferRS1_ch3.append(dataRS1[2, :, secRS1])
+                    saved_bufferRS1_ch4.append(dataRS1[3, :, secRS1])
 
-                    fdataRS[0, :, sec] = filter_data(dataRS[0, :, sec], fs_hz)
-                    fdataRS[1, :, sec] = filter_data(dataRS[1, :, sec], fs_hz)
-                    fdataRS[2, :, sec] = filter_data(dataRS[2, :, sec], fs_hz)
-                    fdataRS[3, :, sec] = filter_data(dataRS[3, :, sec], fs_hz)
+                    fdataRS1[0, :, secRS1] = filter_data(dataRS1[0, :, secRS1], fs_hz)
+                    fdataRS1[1, :, secRS1] = filter_data(dataRS1[1, :, secRS1], fs_hz)
+                    fdataRS1[2, :, secRS1] = filter_data(dataRS1[2, :, secRS1], fs_hz)
+                    fdataRS1[3, :, secRS1] = filter_data(dataRS1[3, :, secRS1], fs_hz)
 
-                    band_alphaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:, sec], 6, 13)[0])
-                    band_alphaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:, sec], 6, 13)[0])
-                    band_alphaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:, sec], 6, 13)[0])
-                    band_alphaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:, sec], 6, 13)[0])
+                    band_alphaRS1_ch1.append(extract_freqband(200, fs_hz, fdataRS1[0,:, secRS1], 6, 13)[0])
+                    band_alphaRS1_ch2.append(extract_freqband(200, fs_hz, fdataRS1[1,:, secRS1], 6, 13)[0])
+                    band_alphaRS1_ch3.append(extract_freqband(200, fs_hz, fdataRS1[2,:, secRS1], 6, 13)[0])
+                    band_alphaRS1_ch4.append(extract_freqband(200, fs_hz, fdataRS1[3,:, secRS1], 6, 13)[0])
 
-                    nb_freq_alpha = extract_freqband(200, fs_hz, fdataRS[0,:], 6, 13)[1]
+                    nb_freq_alpha = extract_freqband(200, fs_hz, fdataRS1[0,:], 6, 13)[1]
 
-                    band_deltaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:, sec], 3, 4)[0])
-                    band_deltaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:, sec], 3, 4)[0])
-                    band_deltaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:, sec], 3, 4)[0])
-                    band_deltaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:, sec], 3, 4)[0])
+                    band_deltaRS1_ch1.append(extract_freqband(200, fs_hz, fdataRS1[0,:, secRS1], 3, 4)[0])
+                    band_deltaRS1_ch2.append(extract_freqband(200, fs_hz, fdataRS1[1,:, secRS1], 3, 4)[0])
+                    band_deltaRS1_ch3.append(extract_freqband(200, fs_hz, fdataRS1[2,:, secRS1], 3, 4)[0])
+                    band_deltaRS1_ch4.append(extract_freqband(200, fs_hz, fdataRS1[3,:, secRS1], 3, 4)[0])
 
-                    nb_freq_delta = extract_freqband(200, fs_hz, fdataRS[3,:], 3, 4)[1]
+                    nb_freq_delta = extract_freqband(200, fs_hz, fdataRS1[3,:], 3, 4)[1]
 
                     # for channel in range(4):
                     #     band_alphaRS[channel] = extract_freqband(200, fs_hz, fdataRS[channel,:], 6, 11)
@@ -390,16 +391,16 @@ while gameOn:
                     # globalAlpha.append(bandmean_alphaRS)
 
 
-                    bufferRS = []
-                    displayNumber(sec, screen, 'timeRSV011')
+                    bufferRS1 = []
+                    displayNumber(secRS1, screen, 'timeRSV011')
                     # checkImp() # TODO  check impedances function
                     pg.display.update()
-                    sec = sec + 1
+                    secRS1 = secRS1 + 1
 
             except Empty:
                 continue  # do stuff
             else:
-                str(bufferRS)
+                str(bufferRS1)
                 # sys.stdout.write(char)
             # time.sleep(1)
             # pg.time.delay(993) # wait to display the next second on screen
@@ -550,9 +551,9 @@ while gameOn:
             pg.display.flip()
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
-                    mouseRS2 = pg.mouse.get_pos()
-                    choiceRS2 = whichButtonHomeV2(mouseRS2, w_display, h_display)
-                    if choiceRS2 == 3:
+                    mouseHome = pg.mouse.get_pos()
+                    choiceHome = whichButtonHomeV2(mouseHome, w_display, h_display)
+                    if choiceHome == 3:
                         bufferF = []
                         durationSession = durationSessionInit
                         punchinBall = 0
@@ -560,15 +561,6 @@ while gameOn:
                         homeOn = 1
                         restingState1 = 0
                         restingState2 = 0
-                        bufferRS = []
-                        band_alphaRS_ch1 = []
-                        band_alphaRS_ch2 = []
-                        band_alphaRS_ch3 = []
-                        band_alphaRS_ch4 = []
-                        band_deltaRS_ch1 = []
-                        band_deltaRS_ch2 = []
-                        band_deltaRS_ch3 = []
-                        band_deltaRS_ch4 = []
                         screen.blit(restingStateImage, (0,0))
                         displayNumber(0, screen, 'timeRSV011')
                         pg.display.flip()
@@ -579,11 +571,11 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
-                saved_bufferRS_ch1 = []
-                saved_bufferRS_ch2 = []
-                saved_bufferRS_ch3 = []
-                saved_bufferRS_ch4 = []
+                saveAllChannelsData(pathRS2, sessionRS, 'RS', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                saved_bufferRS2_ch1 = []
+                saved_bufferRS2_ch2 = []
+                saved_bufferRS2_ch3 = []
+                saved_bufferRS2_ch4 = []
                 pg.quit()
                 sys.exit()
             if event.type == KEYDOWN:
@@ -601,37 +593,37 @@ while gameOn:
                     # call(['sudo service bluetooth restart'])
                     # os.system('sudo service bluetooth restart')
                     # os.killpg(os.getpgid(process.pid), signal.SIGTERM)  # Send the signal to all the process groups
-                    bufferRS = []
+                    bufferRS2 = []
                     queue.queue.clear()
-                    saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
-                    saved_bufferRS_ch1 = []
-                    saved_bufferRS_ch2 = []
-                    saved_bufferRS_ch3 = []
-                    saved_bufferRS_ch4 = []
+                    saveAllChannelsData(pathRS2, sessionRS, 'RS', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                    saved_bufferRS2_ch1 = []
+                    saved_bufferRS2_ch2 = []
+                    saved_bufferRS2_ch3 = []
+                    saved_bufferRS2_ch4 = []
                     # print bufferRS
 
                     # print band_alphaRS_ch1
 
-        if sec == restingStateDuration :
+        if secRS2 == restingStateDuration :
             # np.zeros(nb_freq_alpha)
-            band_alphaRS_ch1 = np.asarray(band_alphaRS_ch1)
-            band_alphaRS_ch2 = np.asarray(band_alphaRS_ch2)
-            band_alphaRS_ch3 = np.asarray(band_alphaRS_ch3)
-            band_alphaRS_ch4 = np.asarray(band_alphaRS_ch4)
+            band_alphaRS2_ch1 = np.asarray(band_alphaRS2_ch1)
+            band_alphaRS2_ch2 = np.asarray(band_alphaRS2_ch2)
+            band_alphaRS2_ch3 = np.asarray(band_alphaRS2_ch3)
+            band_alphaRS2_ch4 = np.asarray(band_alphaRS2_ch4)
             # print 'band_alphaRS_ch1', band_alphaRS_ch1
             # print 'band_alphaRS_ch1[:, 0]', np.average(band_alphaRS_ch1[:,0])
-            freqMaxAlphaCh1 = getfreqmaxband(band_alphaRS_ch1, 'alpha', nb_freq_alpha)
-            freqMaxAlphaCh2 = getfreqmaxband(band_alphaRS_ch2, 'alpha', nb_freq_alpha)
-            freqMaxAlphaCh3 = getfreqmaxband(band_alphaRS_ch3, 'alpha', nb_freq_alpha)
-            freqMaxAlphaCh4 = getfreqmaxband(band_alphaRS_ch4, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh1 = getfreqmaxband(band_alphaRS2_ch1, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh2 = getfreqmaxband(band_alphaRS2_ch2, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh3 = getfreqmaxband(band_alphaRS2_ch3, 'alpha', nb_freq_alpha)
+            freqMaxAlphaCh4 = getfreqmaxband(band_alphaRS2_ch4, 'alpha', nb_freq_alpha)
 
             freqMaxAlpha = int(np.average([freqMaxAlphaCh1, freqMaxAlphaCh2, freqMaxAlphaCh3, freqMaxAlphaCh4]))
 
             for chunk in range(restingStateDuration):
-                ratios_ch1.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[0,:, chunk], freqMaxAlphaCh1-2, freqMaxAlphaCh1+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[0,:, chunk], 3, 4)[0])))
-                ratios_ch2.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[1,:, chunk], freqMaxAlphaCh2-2, freqMaxAlphaCh2+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[1,:, chunk], 3, 4)[0])))
-                ratios_ch3.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[2,:, chunk], freqMaxAlphaCh3-2, freqMaxAlphaCh3+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[2,:, chunk], 3, 4)[0])))
-                ratios_ch4.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS[3,:, chunk], freqMaxAlphaCh4-2, freqMaxAlphaCh4+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS[3,:, chunk], 3, 4)[0])))
+                ratios_ch1.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS2[0,:, chunk], freqMaxAlphaCh1-2, freqMaxAlphaCh1+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS2[0,:, chunk], 3, 4)[0])))
+                ratios_ch2.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS2[1,:, chunk], freqMaxAlphaCh2-2, freqMaxAlphaCh2+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS2[1,:, chunk], 3, 4)[0])))
+                ratios_ch3.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS2[2,:, chunk], freqMaxAlphaCh3-2, freqMaxAlphaCh3+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS2[2,:, chunk], 3, 4)[0])))
+                ratios_ch4.append(1.*np.median((extract_freqband(200, fs_hz, fdataRS2[3,:, chunk], freqMaxAlphaCh4-2, freqMaxAlphaCh4+2)[0]))/np.median((extract_freqband(200, fs_hz, fdataRS2[3,:, chunk], 3, 4)[0])))
 
             median_ratio_ch1 = np.median(ratios_ch1)
             median_ratio_ch2 = np.median(ratios_ch2)
@@ -673,52 +665,52 @@ while gameOn:
             # process.terminate()
             # call(['sudo service bluetooth restart'])
             # os.system('sudo service bluetooth restart')
-            bufferRS = []
+            bufferRS2 = []
             queue.queue.clear()
-            saveAllChannelsData(pathRS, sessionRS, 'RS', saved_bufferRS_ch1, saved_bufferRS_ch2, saved_bufferRS_ch3, saved_bufferRS_ch4)
-            saved_bufferRS_ch1 = []
-            saved_bufferRS_ch2 = []
-            saved_bufferRS_ch3 = []
-            saved_bufferRS_ch4 = []
+            saveAllChannelsData(pathRS2, sessionRS, 'RS', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+            saved_bufferRS2_ch1 = []
+            saved_bufferRS2_ch2 = []
+            saved_bufferRS2_ch3 = []
+            saved_bufferRS2_ch4 = []
 
-        elif sec < restingStateDuration:
+        elif secRS2 < restingStateDuration:
             try:
                 # queue.queue.clear()
-                while len(bufferRS) < buffersize * nb_channels:
-                    bufferRS.append(queue.get_nowait())
+                while len(bufferRS2) < buffersize * nb_channels:
+                    bufferRS2.append(queue.get_nowait())
 
-                if len(bufferRS) == 800:
-                    # print sec
-                    bufferRS_array = np.asarray(bufferRS)
+                if len(bufferRS2) == 800:
+                    # print secRS2
+                    bufferRS2_array = np.asarray(bufferRS2)
 
-                    dataRS[0, :, sec] = bufferRS_array[ind_channel_1]
-                    dataRS[1, :, sec] = bufferRS_array[ind_channel_2]
-                    dataRS[2, :, sec] = bufferRS_array[ind_channel_3]
-                    dataRS[3, :, sec] = bufferRS_array[ind_channel_4]
+                    dataRS2[0, :, secRS2] = bufferRS2_array[ind_channel_1]
+                    dataRS2[1, :, secRS2] = bufferRS2_array[ind_channel_2]
+                    dataRS2[2, :, secRS2] = bufferRS2_array[ind_channel_3]
+                    dataRS2[3, :, secRS2] = bufferRS2_array[ind_channel_4]
 
-                    saved_bufferRS_ch1.append(dataRS[0, :, sec])
-                    saved_bufferRS_ch2.append(dataRS[1, :, sec])
-                    saved_bufferRS_ch3.append(dataRS[2, :, sec])
-                    saved_bufferRS_ch4.append(dataRS[3, :, sec])
+                    saved_bufferRS2_ch1.append(dataRS2[0, :, secRS2])
+                    saved_bufferRS2_ch2.append(dataRS2[1, :, secRS2])
+                    saved_bufferRS2_ch3.append(dataRS2[2, :, secRS2])
+                    saved_bufferRS2_ch4.append(dataRS2[3, :, secRS2])
 
-                    fdataRS[0, :, sec] = filter_data(dataRS[0, :, sec], fs_hz)
-                    fdataRS[1, :, sec] = filter_data(dataRS[1, :, sec], fs_hz)
-                    fdataRS[2, :, sec] = filter_data(dataRS[2, :, sec], fs_hz)
-                    fdataRS[3, :, sec] = filter_data(dataRS[3, :, sec], fs_hz)
+                    fdataRS2[0, :, secRS2] = filter_data(dataRS2[0, :, secRS2], fs_hz)
+                    fdataRS2[1, :, secRS2] = filter_data(dataRS2[1, :, secRS2], fs_hz)
+                    fdataRS2[2, :, secRS2] = filter_data(dataRS2[2, :, secRS2], fs_hz)
+                    fdataRS2[3, :, secRS2] = filter_data(dataRS2[3, :, secRS2], fs_hz)
 
-                    band_alphaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:, sec], 6, 13)[0])
-                    band_alphaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:, sec], 6, 13)[0])
-                    band_alphaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:, sec], 6, 13)[0])
-                    band_alphaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:, sec], 6, 13)[0])
+                    band_alphaRS2_ch1.append(extract_freqband(200, fs_hz, fdataRS2[0,:, secRS2], 6, 13)[0])
+                    band_alphaRS2_ch2.append(extract_freqband(200, fs_hz, fdataRS2[1,:, secRS2], 6, 13)[0])
+                    band_alphaRS2_ch3.append(extract_freqband(200, fs_hz, fdataRS2[2,:, secRS2], 6, 13)[0])
+                    band_alphaRS2_ch4.append(extract_freqband(200, fs_hz, fdataRS2[3,:, secRS2], 6, 13)[0])
 
-                    nb_freq_alpha = extract_freqband(200, fs_hz, fdataRS[0,:], 6, 13)[1]
+                    nb_freq_alpha = extract_freqband(200, fs_hz, fdataRS2[0,:], 6, 13)[1]
 
-                    band_deltaRS_ch1.append(extract_freqband(200, fs_hz, fdataRS[0,:, sec], 3, 4)[0])
-                    band_deltaRS_ch2.append(extract_freqband(200, fs_hz, fdataRS[1,:, sec], 3, 4)[0])
-                    band_deltaRS_ch3.append(extract_freqband(200, fs_hz, fdataRS[2,:, sec], 3, 4)[0])
-                    band_deltaRS_ch4.append(extract_freqband(200, fs_hz, fdataRS[3,:, sec], 3, 4)[0])
+                    band_deltaRS2_ch1.append(extract_freqband(200, fs_hz, fdataRS2[0,:, secRS2], 3, 4)[0])
+                    band_deltaRS2_ch2.append(extract_freqband(200, fs_hz, fdataRS2[1,:, secRS2], 3, 4)[0])
+                    band_deltaRS2_ch3.append(extract_freqband(200, fs_hz, fdataRS2[2,:, secRS2], 3, 4)[0])
+                    band_deltaRS2_ch4.append(extract_freqband(200, fs_hz, fdataRS2[3,:, secRS2], 3, 4)[0])
 
-                    nb_freq_delta = extract_freqband(200, fs_hz, fdataRS[3,:], 3, 4)[1]
+                    nb_freq_delta = extract_freqband(200, fs_hz, fdataRS2[3,:], 3, 4)[1]
 
                     # for channel in range(4):
                     #     band_alphaRS[channel] = extract_freqband(200, fs_hz, fdataRS[channel,:], 6, 11)
@@ -726,16 +718,16 @@ while gameOn:
                     # globalAlpha.append(bandmean_alphaRS)
 
 
-                    bufferRS = []
-                    displayNumber(sec, screen, 'timeRSV011')
+                    bufferRS2 = []
+                    displayNumber(secRS2, screen, 'timeRSV011')
                     # checkImp() # TODO  check impedances function
                     pg.display.update()
-                    sec = sec + 1
+                    secRS2 = secRS2 + 1
 
             except Empty:
                 continue  # do stuff
             else:
-                str(bufferRS)
+                str(bufferRS2)
                 # sys.stdout.write(char)
             # time.sleep(1)
             # pg.time.delay(993) # wait to display the next second on screen
