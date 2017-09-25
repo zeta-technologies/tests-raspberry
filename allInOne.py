@@ -292,9 +292,7 @@ while gameOn:
             minRatioAlphaOverDelta = medianratioAlphaoverDelta - 3 * madRatioAlphaOverDelta
             maxRatioAlphaOverDelta = medianratioAlphaoverDelta + 3 * madRatioAlphaOverDelta
 
-            # print minRatioAlphaOverDelta, maxRatioAlphaOverDelta
-            # print 'fin de la seance de reglage', freqMaxAlpha
-            screen.blit(gameBSurf, gameBRect)
+            screen.blit(nextStepSurf, nextStepRect)
             pg.display.flip()
 
 
@@ -496,7 +494,7 @@ while gameOn:
             saved_bufferF_ch2 = []
             saved_bufferF_ch3 = []
             saved_bufferF_ch4 = []
-            screen.blit(gameBSurf, gameBRect)
+            screen.blit(nextStepSurf, nextStepRect)
             pg.display.flip()
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
