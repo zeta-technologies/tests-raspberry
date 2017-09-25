@@ -97,9 +97,9 @@ veryOldPosy = maxDisplayY
 timer = ['images/0.png', 'images/1.png', 'images/2.png', 'images/3.png', 'images/4.png', 'images/5.png',
                     'images/6.png', 'images/7.png', 'images/8.png', 'images/9.png']
 restingState = 'images/restingState.png'
-restingStateDuration = 10 # in seconds
+restingStateDuration = 30 # in seconds
 sec = 0
-durationSessionInit =  20
+durationSessionInit =  350
 durationSession = durationSessionInit
 
 endSessionImg = 'images/endSession.png'
