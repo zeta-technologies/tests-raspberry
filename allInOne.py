@@ -73,22 +73,22 @@ now = datetime.datetime.now()
 randomId = binascii.b2a_hex(os.urandom(15)) #id is 30 characters long
 sessionName = str(str(now.month)+'_'+str(now.day)+'_'+str(now.minute)+'_'+str(randomId))
 
+'''Loop that reads the text file sessionsNames, and check if the randomId has already been chosen in this folder'''
 if os.path.isfile('sessionsNames.txt'):
     sessionsNames = open('sessionsNames.txt', 'r')
     sessionsNamesLines = sessionsNames.readlines()
     for i in range(len(sessionsNamesLines)):
         if randomId == sessionsNamesLines[i][8:38] :
-            RandomId = binascii.b2a_hex(os.urandom(15))
-            Name = str(str(now.month)+'_'+str(now.day)+'_'+str(now.minute)+'_'+str(RandomId))
+            randomId = binascii.b2a_hex(os.urandom(15))
+            sessionName = str(str(now.month)+'_'+str(now.day)+'_'+str(now.minute)+'_'+str(randomId))
     sessionsNames.close()
-    sessionsNames = open('sessionsNames.txt', 'w')
+    sessionsNames = open('sessionsNames.txt', 'a+')
 
 else :
-    sessionsNames = open('sessionsNames.txt', 'w')
+    sessionsNames = open('sessionsNames.txt', 'a+')
 
 sessionsNames.write(sessionName)
 sessionsNames.close()
-
 
 if not os.path.isdir('data'):
     os.mkdir('data')
