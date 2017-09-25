@@ -90,16 +90,17 @@ else :
 sessionsNames.write(sessionName)
 sessionsNames.close()
 
+'''check if the directory /data already exists'''
 if not os.path.isdir('data'):
     os.mkdir('data')
+
+'''create the paths and folders for the new session'''
 if not os.path.isdir('data/'+sessionName):
     os.mkdir('data/'+sessionName)
     os.mkdir('data/'+sessionName+'/training-data')
-    os.mkdir('data/'+sessionName+'/PB-data')
     os.mkdir('data/'+sessionName+'/RS1-data')
     os.mkdir('data/'+sessionName+'/RS2-data')
-    pathF = str('data/'+sessionName+'/training-data/')
-    pathPB = str('data/'+sessionName+'/PB-data/')
+    pathT = str('data/'+sessionName+'/training-data/')
     pathRS1 = str('data/'+sessionName+'/RS1-data/')
     pathRS2 = str('data/'+sessionName+'/RS2-data/')
 
@@ -108,7 +109,10 @@ if not os.path.isdir('data/'+sessionName):
 print '\n \n \n You are running Zeta Game on ', platform
 print ' \n \n                     -----------------------------\n                     ------ Z E T A    A C S -----\n                     -----------------------------'
 print '\n\n                     --------------------------------------------------------------\n                     -----  ________    ________   _________        .         -----\n                     -----         /   |               |           / \        -----\n                     -----        /    |               |          /   \       -----\n                     -----       /     |               |         /     \      -----\n                     -----      /      |____           |        /       \     -----\n                     -----     /       |               |       /_________\    -----\n                     -----    /        |               |      /           \   -----\n                     -----   /         |               |     /             \  -----\n                     -----  /_______   |_______        |    /               \ -----\n                     --------------------------------------------------------------'
-print ' \n  Data will be saved here : ', pathRS2, pathRS1, pathPB, pathF
+print ' \n  Data will be saved here : ', pathRS2, pathRS1, pathT
+
+'''MAIN LOOP'''
+
 while gameOn:
 
     #LOAD screen Image
@@ -430,7 +434,7 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                saveAllChannelsData(pathT, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
                 bufferF = []
                 saved_bufferF_ch1 = []
                 saved_bufferF_ch2 = []
@@ -440,7 +444,7 @@ while gameOn:
                 sys.exit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
-                    saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                    saveAllChannelsData(pathT, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
                     bufferF = []
                     saved_bufferF_ch1 = []
                     saved_bufferF_ch2 = []
@@ -459,7 +463,7 @@ while gameOn:
                     # call(['sudo service bluetooth restart'])
                     # os.system('sudo service bluetooth restart')
                     # queue.queue.clear()
-                    saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+                    saveAllChannelsData(pathT, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
                     bufferF = []
                     saved_bufferF_ch1 = []
                     saved_bufferF_ch2 = []
@@ -559,7 +563,7 @@ while gameOn:
             bufferF = []
 
         elif durationSession == 0 :
-            saveAllChannelsData(pathF, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
+            saveAllChannelsData(pathT, sessionF, 'F', saved_bufferF_ch1, saved_bufferF_ch2, saved_bufferF_ch3, saved_bufferF_ch4)
             saved_bufferF_ch1 = []
             saved_bufferF_ch2 = []
             saved_bufferF_ch3 = []
