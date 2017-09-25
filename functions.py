@@ -180,7 +180,7 @@ def movePunchinBall(angle, screen, scoreBar, scoreDigit, fond, image):
         # screen.blit(scoreDigit, (800, 30))
 
 
-#TODO function that returns the next position in flying game
+#TODO function that returns the next position in training 
 # def newPosition ( ):
 
 def text_objects(text, font):
@@ -193,7 +193,7 @@ def whichButtonHomeV2(mouse, w_display, h_display):
     # if (int(mouse[0]) <= 1.*w_display / 5 + 30) & (int(mouse[0]) >= 1.* w_display / 5 - 30) & (int(mouse[1]) <= h_display - 50) & (int(mouse[1]) >= h_display - 100):
     #     button = 1
 
-    if (int(mouse[0]) <= 2.* w_display / 5 + 30) & (int(mouse[0]) >= 2.*w_display / 5 - 30) & (int(mouse[1]) <= h_display - 20) & (int(mouse[1]) >= h_display - 120):
+    if (int(mouse[0]) <= 4.* w_display / 5) & (int(mouse[0]) >= 1.*w_display / 5 ) & (int(mouse[1]) <= h_display - 20) & (int(mouse[1]) >= h_display - 120):
         button = 2
 
     elif (int(mouse[0]) <= 4.* w_display / 5) & (int(mouse[0]) >= 1.*w_display / 5 ) & (int(mouse[1]) <= h_display-100) & (int(mouse[1]) >= 5):
@@ -321,7 +321,7 @@ def punchinballmain(screen, cpt2, fond, punchBall, buffer_1, OPB1_data ):
         pg.display.update()
 
 
-def flyScore(posY):
+def trainingScore(posY):
 
     newscore = 1.* (maxScore - minScore)/(minDisplayY - maxDisplayY) * ( posY - minDisplayY) + maxScore
     # print newscore
