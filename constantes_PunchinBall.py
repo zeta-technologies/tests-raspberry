@@ -50,7 +50,7 @@ mean_array_uvRS1 = []
 '''Load images, sonds libraries'''
 buttonText = pg.font.Font('fonts/couture-bld.otf', 15) # font for Menu button
 buttonTextHuge = pg.font.Font('fonts/couture-bld.otf', 20) # font for Menu button
-image_home = 'images/home.jpg'
+image_home = 'images/patientLondero.jpg'
 
 '''Punchin Ball Game '''
 punchBallImage = "images/punch3.png"
@@ -100,6 +100,7 @@ restingState = 'images/restingState.png'
 restingStateDuration = 30 # in seconds
 sec = 0
 durationSessionInit =  350
+durationSessionSaving = 5
 durationSession = durationSessionInit
 
 endSessionImg = 'images/endSession.png'
@@ -111,13 +112,16 @@ homeOn = 1
 fly = 0
 restingState1 = 0
 restingState2 = 0
+questions = 0
 questionnaire = 0
+Schoice = 0
 
 '''Tinnitus Questionnary '''
 # useless for now
-questionsSerie1 = 'images/questionsSerie1.png'
+questionsImagePath = 'images/questions.png'
+whiteScreen = 'images/whiteScreen.png'
 answers = []
-questions = ['Pour quel pourcentage de votre temps éveillé \n étiez-vous conscient de vos acouphènes?','Sur une echelle de 0-10, quelle force avaient vos acouphènes ?','Vos acouphènes vous ont géné quel % de votre temps ?','À quel degré avez-vous eu le sentiment que vous pouviez contrôler vos acouphènes?','quelle facilité avez-vous eue à gérer vos acouphènes?','À quel point était-ce facile pour vous d’ignorer vos acouphènes?']
+# questions = ['Pour quel pourcentage de votre temquestionsImagePathps éveillé \n étiez-vous conscient de vos acouphènes?','Sur une echelle de 0-10, quelle force avaient vos acouphènes ?','Vos acouphènes vous ont géné quel % de votre temps ?','À quel degré avez-vous eu le sentiment que vous pouviez contrôler vos acouphènes?','quelle facilité avez-vous eue à gérer vos acouphènes?','À quel point était-ce facile pour vous d’ignorer vos acouphènes?']
 
 
 
@@ -154,17 +158,28 @@ fdataRS1 = np.zeros((nb_channels, buffersize, restingStateDuration))
 dataRS2 = np.zeros((nb_channels, buffersize, restingStateDuration)) # need to store every chunk to reprocess the ratio
 fdataRS2 = np.zeros((nb_channels, buffersize, restingStateDuration))
 
+dataS = np.zeros((nb_channels, buffersize, durationSessionSaving)) # need to store every chunk to reprocess the ratio
+fdataS = np.zeros((nb_channels, buffersize, durationSessionSaving))
+
 ''' Save buffer, to keep data records somewhere'''
 
 
 saved_bufferPB = []
 saved_bufferT = []
+saved_bufferS = []
 saved_bufferRS1 = []
 saved_bufferRS2 = []
+
+saved_bufferS_ch1 = []
+saved_bufferS_ch2 = []
+saved_bufferS_ch3 = []
+saved_bufferS_ch4 = []
+
 saved_bufferRS1_ch1 = []
 saved_bufferRS1_ch2 = []
 saved_bufferRS1_ch3 = []
 saved_bufferRS1_ch4 = []
+
 saved_bufferRS2_ch1 = []
 saved_bufferRS2_ch2 = []
 saved_bufferRS2_ch3 = []
@@ -174,7 +189,9 @@ saved_bufferT_ch1 = []
 saved_bufferT_ch2 = []
 saved_bufferT_ch3 = []
 saved_bufferT_ch4 = []
+
 sessionF = 0
+sessionS = 0
 sessionRS = 0
 sessionEnded = 0
 '''for the fft '''

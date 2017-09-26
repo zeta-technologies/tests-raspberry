@@ -196,13 +196,57 @@ def whichButtonHomeV2(mouse, w_display, h_display):
     if (int(mouse[0]) <= 2.* w_display / 5 + 30) & (int(mouse[0]) >= 2.*w_display / 5 - 30) & (int(mouse[1]) <= h_display - 20) & (int(mouse[1]) >= h_display - 120):
         button = 2
 
-    elif (int(mouse[0]) <= 4.* w_display / 5) & (int(mouse[0]) >= 1.*w_display / 5 ) & (int(mouse[1]) <= h_display-100) & (int(mouse[1]) >= 50):
+    elif (int(mouse[0]) <= 9.* w_display / 10) & (int(mouse[0]) >= 1.*w_display / 10 ) & (int(mouse[1]) <= h_display-50) & (int(mouse[1]) >= 10):
         button = 3
 
     # elif (int(mouse[0]) <= 4.*w_display / 5 + 30) & (int(mouse[0]) >= 4.*w_display / 5 - 30) & (int(mouse[1]) <= h_display - 50) & (int(mouse[1]) >= h_display - 100):
     #     button = 4
     # print button
     # return 1
+    return button
+
+def whichButtonHomePatient(mouse, w_display, h_display):
+    button = 0
+
+    if (int(mouse[0]) <= 1.* w_display / 3 - 5 ) & (int(mouse[0]) >= 0) & (int(mouse[1]) <= h_display) & (int(mouse[1]) >= 1.* h_display/3):
+        button = 1
+
+    elif (int(mouse[0]) <= 2.* w_display / 3 - 5) & (int(mouse[0]) >= 1.*w_display / 3 + 5 ) & (int(mouse[1]) <= h_display) & (int(mouse[1]) >= 1. * h_display/3):
+        button = 2
+
+    elif (int(mouse[0]) <= 1.* w_display ) & (int(mouse[0]) >= 2.*w_display / 3 + 5 ) & (int(mouse[1]) <= h_display) & (int(mouse[1]) >= 1.* h_display/3):
+        button = 3
+
+    # elif (int(mouse[0]) <= 4.*w_display / 5 + 30) & (int(mouse[0]) >= 4.*w_display / 5 - 30) & (int(mouse[1]) <= h_display - 50) & (int(mouse[1]) >= h_display - 100):
+    #     button = 4
+    # print button
+    # return 1
+    return button
+def whichAnswerCliked(mous, w_display, h_display):
+    button = 0
+#First answer from 1 to 5
+    if (int(mouse[0]) <= 2.*w_display / 7 ) & (int(mouse[0]) >= 1.* w_display / 7 ) & (int(mouse[1]) <= 1.* h_display /2) & (int(mouse[1]) >= 5):
+        button = 1
+    elif (int(mouse[0]) <= 3.* w_display / 7) & (int(mouse[0]) >= 2.*w_display / 7) & (int(mouse[1]) <= 1.* h_display /2) & (int(mouse[1]) >= 5):
+        button = 2
+    elif (int(mouse[0]) <= 4.* w_display / 7) & (int(mouse[0]) >= 3.*w_display / 7) & (int(mouse[1]) <= 1.* h_display /2) & (int(mouse[1]) >= 5):
+        button = 3
+    elif (int(mouse[0]) <= 5.* w_display / 7) & (int(mouse[0]) >= 4.*w_display / 7) & (int(mouse[1]) <= 1.* h_display /2) & (int(mouse[1]) >= 5):
+        button = 4
+    elif (int(mouse[0]) <= 6.* w_display / 7) & (int(mouse[0]) >= 5.*w_display / 7) & (int(mouse[1]) <= 1.* h_display /2) & (int(mouse[1]) >= 5):
+        button = 5
+
+#Second answer from 11 to 15
+    elif (int(mouse[0]) <= 2.* w_display / 7 ) & (int(mouse[0]) >= 1.*w_display / 7) & (int(mouse[1]) <= h_display) & (int(mouse[1]) >= 1.*h_display / 2):
+        button = 11
+    elif (int(mouse[0]) <= 3.* w_display / 7 ) & (int(mouse[0]) >= 2.*w_display / 7) & (int(mouse[1]) <= h_display) & (int(mouse[1]) >= 1.*h_display / 2):
+        button = 12
+    elif (int(mouse[0]) <= 4.* w_display / 7 ) & (int(mouse[0]) >= 3.*w_display / 7) & (int(mouse[1]) <= h_display) & (int(mouse[1]) >= 1.*h_display / 2):
+        button = 13
+    elif (int(mouse[0]) <= 5.* w_display / 7 ) & (int(mouse[0]) >= 4.*w_display / 7) & (int(mouse[1]) <= h_display) & (int(mouse[1]) >= 1.*h_display / 2):
+        button = 14
+    elif (int(mouse[0]) <= 6.* w_display / 7 ) & (int(mouse[0]) >= 5.*w_display / 7) & (int(mouse[1]) <= h_display) & (int(mouse[1]) >= 1.*h_display / 2):
+        button = 15
     return button
 
 def whichButtonHome(mouse, w_display, h_display):
