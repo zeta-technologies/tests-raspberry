@@ -222,7 +222,7 @@ def whichButtonHomePatient(mouse, w_display, h_display):
     # print button
     # return 1
     return button
-def whichAnswerCliked(mous, w_display, h_display):
+def whichAnswerCliked(mouse, w_display, h_display):
     button = 0
 #First answer from 1 to 5
     if (int(mouse[0]) <= 2.*w_display / 7 ) & (int(mouse[0]) >= 1.* w_display / 7 ) & (int(mouse[1]) <= 1.* h_display /2) & (int(mouse[1]) >= 5):

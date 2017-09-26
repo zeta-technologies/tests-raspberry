@@ -115,15 +115,14 @@ restingState2 = 0
 questions = 0
 questionnaire = 0
 Schoice = 0
-
+answer2Ind = 0
 '''Tinnitus Questionnary '''
 # useless for now
-questionsImagePath = 'images/questions.png'
+questionImage1Path = 'images/question1.png'
+questionImage2Path = 'images/question2.png'
 whiteScreen = 'images/whiteScreen.png'
 answers = []
 # questions = ['Pour quel pourcentage de votre temquestionsImagePathps éveillé \n étiez-vous conscient de vos acouphènes?','Sur une echelle de 0-10, quelle force avaient vos acouphènes ?','Vos acouphènes vous ont géné quel % de votre temps ?','À quel degré avez-vous eu le sentiment que vous pouviez contrôler vos acouphènes?','quelle facilité avez-vous eue à gérer vos acouphènes?','À quel point était-ce facile pour vous d’ignorer vos acouphènes?']
-
-
 
 '''FREQ'''
 FreqRange = 'alpha'

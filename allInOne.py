@@ -63,8 +63,10 @@ restingImage = pg.image.load('images/restingState.png').convert()
 restingStateImage = pg.transform.scale(restingImage, (w_display, h_display))
 
 '''Tinnitus questionnaire '''
-questionsImage = pg.image.load(questionsImagePath)
-questionsImage = pg.transform.scale(questionsImage, (w_display, h_display))
+questionImage1 = pg.image.load(questionImage1Path)
+questionImage1 = pg.transform.scale(questionImage1, (w_display, h_display))
+questionImage2 = pg.image.load(questionImage2Path)
+questionImage2 = pg.transform.scale(questionImage2, (w_display, h_display))
 
 '''End Session IMG'''
 endSessionImg = pg.image.load(endSessionImg)
@@ -90,7 +92,7 @@ if os.path.isfile('sessionsNames.txt'):
 else :
     sessionsNames = open('sessionsNames.txt', 'a+')
 
-sessionsNames.write(sessionName)
+sessionsNames.write(sessionName +'\n' )
 sessionsNames.close()
 
 '''check if the directory /data already exists'''
@@ -279,6 +281,38 @@ while gameOn:
         pg.display.flip()
         queue.queue.clear()
 
+    if sleep :
+        print "SLEEP"
+        if platform == 'darwin' and sessionRS == 0: # mac
+            process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
+            '''launch node process'''
+            queue = Queue()
+            thread = Thread(target=enqueue_output, args=(process.stdout, queue))
+            thread.daemon = True
+            thread.start()
+        elif platform == 'linux' or platform == 'linux2' and sessionRS == 0: #linux
+            process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE, preexec_fn=os.setsid) # for LINUX
+            '''launch node process'''
+            queue = Queue()
+            thread = Thread(target=enqueue_output, args=(process.stdout, queue))
+            thread.daemon = True
+            thread.start()
+
+        sessionRS += 1
+        secRS1 = 0
+        bufferRS1 = []
+        band_alphaRS1_ch1 = []
+        band_alphaRS1_ch2 = []
+        band_alphaRS1_ch3 = []
+        band_alphaRS1_ch4 = []
+        band_deltaRS1_ch1 = []
+        band_deltaRS1_ch2 = []
+        band_deltaRS1_ch3 = []
+        band_deltaRS1_ch4 = []
+        screen.blit(restingStateImage, (0,0))
+        displayNumber(0, screen, 'timeRSV011')
+        pg.display.flip()
+        queue.queue.clear()
 
     while restingState1:
         pg.time.Clock().tick(60)
@@ -792,18 +826,13 @@ while gameOn:
             # pg.display.flip()
             bufferS = []
             queue.queue.clear()
-
-            screen.blit(questionsImage, (0,0))
-            question1 = 'Quelle est la force de votre acouphene '
-            question1Surf, question1Rect = text_objects(question1, buttonText)
-            question1Rect.center = (5. * w_display / 10, 1.*h_display/4)
-            screen.blit(question1Surf, question1Rect)
-
-            question2 = 'A quel point vous derange-t-il ?'
-            question2Surf, question2Rect = text_objects(question2, buttonText)
-            question2Rect.center = (5.*w_display/10, 2.*h_display/4)
-            screen.blit(question2Surf, question2Rect)
-            pg.display.flip()
+            if answer2Ind == 0 :
+                screen.blit(questionImage1, (0,0))
+                question1 = 'Quelle est la force de votre acouphene ?'
+                question1Surf, question1Rect = text_objects(question1, buttonText)
+                question1Rect.center = (5. * w_display / 10, 1.*h_display/4)
+                screen.blit(question1Surf, question1Rect)
+                pg.display.flip()
 
             ''' END OF THE SESSION, WAITING FOR THE USER TO CLICK ON THE TEXT BUTTON '''
             for event in pg.event.get():
@@ -814,26 +843,30 @@ while gameOn:
                     saved_bufferS_ch2 = []
                     saved_bufferS_ch3 = []
                     saved_bufferS_ch4 = []
-                    Schoice = whichButtonHomeV2(mouseS, w_display, h_display)
-                    print Schoice
-                    if Schoice == 3:
-                        Schoice = 0
-                        bufferS = []
-                        bufferT = []
-                        training = 0
-                        queue.queue.clear()
-                        print "QUESTIONS"
-                        screen.blit(questionsImage, (0,0))
-                        question1 = 'Quelle est la force de votre acouphène '
-                        question1Surf, question1Rect = text_objects(question1, buttonText)
-                        question1Rect.center = (5. * w_display / 10, 1.*h_display/4)
-                        screen.blit(question1Surf, question1Rect)
-
+                    sChoice = whichAnswerCliked(mouseS, w_display, h_display)
+                    if sChoice == 1 or sChoice == 2 or sChoice == 3 or sChoice == 4 or sChoice == 5:
+                         #open file and save the answer
+                        print "level is", sChoice
+                        answer1 = sChoice - 1
+                        sChoice = 0
+                        answer2Ind = 1
+                        screen.blit(questionImage2, (0,0))
                         question2 = 'A quel point vous derange-t-il ?'
                         question2Surf, question2Rect = text_objects(question2, buttonText)
-                        question2Rect.center = (5.*w_display/10, 3.*h_display/4)
+                        question2Rect.center = (5. * w_display / 10, 4.*h_display/7)
                         screen.blit(question2Surf, question2Rect)
                         pg.display.flip()
+                    elif (sChoice == 11 or sChoice == 12 or sChoice == 13 or sChoice == 14 or sChoice == 15) and answer2Ind != 0 :
+                         #open file and save the answer
+                        print "level is", sChoice
+                        answer2 = sChoice - 11
+                        sChoice = 0
+                        answersFile = open('answersFile.txt', 'a+')
+                        answersFile.write(sessionName+ ' | Answers : Quelle est la force de votre acouphene ? '+str(answer1)+ '/4 | '+'A quel point vous derange-t-il ? ' + str(answer2) + '/4\n')
+                        screen.blit(endSessionImg, (0,0))
+                        pg.display.flip()
+
+                # answersFile = open('answers.txt', 'a+')
 
         elif secS < durationSessionSaving:
             try:
@@ -885,40 +918,5 @@ while gameOn:
             else:
                 str(bufferS)
                 # sys.stdout.write(char)
-
-    # while questions:
-    #     pg.time.Clock().tick(60)
-    #     # for event in pg.event.get():
-    #     #     if event.type == QUIT:
-    #     #         saveAllChannelsData(pathT, sessionF, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
-    #     #         bufferT = []
-    #     #         saved_bufferT_ch1 = []
-    #     #         saved_bufferT_ch2 = []
-    #     #         saved_bufferT_ch3 = []
-    #     #         saved_bufferT_ch4 = []
-    #     #         pg.quit()
-    #     #         sys.exit()
-    #     #     if event.type == KEYDOWN:
-    #     #         if event.key == K_ESCAPE:
-    #     #             saveAllChannelsData(pathT, sessionF, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
-    #     #             bufferT = []
-    #     #             saved_bufferT_ch1 = []
-    #     #             saved_bufferT_ch2 = []
-    #     #             saved_bufferT_ch3 = []
-    #     #             saved_bufferT_ch4 = []
-    #     #             training = 0
-    #     #     elif event.type == MOUSEBUTTONUP:
-    #     #         mouseQuestions = pg.mouse.get_pos()
-    #     #         if whichButtonReturn(mouseQuestions, w_display, h_display):
-    #     #             homeOn = 1
-    #     #             training = 0
-    #     #             restingState1 = 0
-    #     #             saveAllChannelsData(pathT, sessionF, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
-    #     #             bufferT = []
-    #     #             saved_bufferT_ch1 = []
-    #     #             saved_bufferT_ch2 = []
-    #     #             saved_bufferT_ch3 = []
-    #     #             saved_bufferT_ch4 = []
-    #     #         # elif
-    #     #         #     tStrength = whichAnswerCliked(mouseQuestions, w_display, h_display) - 1
-    #     #         #     tGene = whichAnswerCliked(mouseQuestions, w_display, h_display) - 10
+    #
+    # while sleep:
