@@ -828,7 +828,6 @@ while gameOn:
             # screen.blit(nextStepSurf, nextStepRect)
             # pg.display.flip()
             bufferS = []
-            queue.queue.clear()
             if answer2Ind == 0 :
                 screen.blit(questionImage1, (0,0))
                 question1 = 'Quelle est la force de votre acouphene ?'
@@ -837,7 +836,7 @@ while gameOn:
                 screen.blit(question1Surf, question1Rect)
                 pg.display.flip()
 
-            ''' END OF THE SESSION, WAITING FOR THE USER TO CLICK ON THE TEXT BUTTON '''
+                ''' END OF THE SESSION, WAITING FOR THE USER TO CLICK ON THE TEXT BUTTON '''
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
                     mouseS = pg.mouse.get_pos()
@@ -869,7 +868,7 @@ while gameOn:
                         answersFile.write(sessionName+ ' | Answers : Quelle est la force de votre acouphene ? '+str(answer1)+ '/4 | '+'A quel point vous derange-t-il ? ' + str(answer2) + '/4\n')
                         screen.blit(endSessionImg, (0,0))
                         pg.display.flip()
-
+                        gameOn = 0
                 # answersFile = open('answers.txt', 'a+')
 
         elif secS < durationSessionSaving:
