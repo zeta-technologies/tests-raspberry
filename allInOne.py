@@ -153,9 +153,8 @@ while gameOn:
     # screen.blit(launchTrainingSurf, launchTrainingRect)
 
     pg.display.flip()
-
-
     # Home window loop
+
     while homeOn:
         pg.time.Clock().tick(60)
 
@@ -197,8 +196,8 @@ while gameOn:
         pg.display.flip()
         saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
 
-        print pg.time.delay(2000)
-        # gameOn = 0
+        pg.time.delay(2000)
+        gameOn = 0
 
     if restingState1:
         print "RESTINGSTATE1"
@@ -430,10 +429,10 @@ while gameOn:
                     dataRS1[2, :, secRS1] = bufferRS1_array[ind_channel_3]
                     dataRS1[3, :, secRS1] = bufferRS1_array[ind_channel_4]
 
-                    saved_bufferRS1_ch1.append(dataRS1[0, :, secRS1])
-                    saved_bufferRS1_ch2.append(dataRS1[1, :, secRS1])
-                    saved_bufferRS1_ch3.append(dataRS1[2, :, secRS1])
-                    saved_bufferRS1_ch4.append(dataRS1[3, :, secRS1])
+                    saved_bufferRS1_ch1.extend(dataRS1[0, :, secRS1])
+                    saved_bufferRS1_ch2.extend(dataRS1[1, :, secRS1])
+                    saved_bufferRS1_ch3.extend(dataRS1[2, :, secRS1])
+                    saved_bufferRS1_ch4.extend(dataRS1[3, :, secRS1])
 
                     fdataRS1[0, :, secRS1] = filter_data(dataRS1[0, :, secRS1], fs_hz)
                     fdataRS1[1, :, secRS1] = filter_data(dataRS1[1, :, secRS1], fs_hz)
@@ -519,7 +518,7 @@ while gameOn:
                             positionY = veryOldPosy + 1.*(oldPosy - veryOldPosy)/steps
 
                         pg.draw.rect(screen, color , (2. * w_display / 12, positionY, 100, 10 ))
-                        displayNumber(math.floor(scoreF), screen, 'scoreV011')
+                        displayNumber(math.floor(scoreT), screen, 'scoreV011')
                         displayNumber(durationSession, screen, 'timeV011')
                         veryOldPosy += 1.*(oldPosy - veryOldPosy)/steps
                         pg.display.flip()
@@ -529,20 +528,21 @@ while gameOn:
                 if len(bufferT) == buffersize * nb_channels :
                     bufferT_array = np.asarray(bufferT)
 
-                    dataF[0, :] = bufferT_array[ind_channel_1]
-                    dataF[1, :] = bufferT_array[ind_channel_2]
-                    dataF[2, :] = bufferT_array[ind_channel_3]
-                    dataF[3, :] = bufferT_array[ind_channel_4]
+                    dataT[0, :] = bufferT_array[ind_channel_1]
+                    dataT[1, :] = bufferT_array[ind_channel_2]
+                    dataT[2, :] = bufferT_array[ind_channel_3]
+                    dataT[3, :] = bufferT_array[ind_channel_4]
 
-                    saved_bufferT_ch1.append(dataF[0, :])
-                    saved_bufferT_ch2.append(dataF[1, :])
-                    saved_bufferT_ch3.append(dataF[2, :])
-                    saved_bufferT_ch4.append(dataF[3, :])
+                    saved_bufferT_ch1.extend(dataT[0, :])
+                    saved_bufferT_ch2.extend(dataT[1, :])
+                    saved_bufferT_ch3.extend(dataT[2, :])
+                    saved_bufferT_ch4.extend(dataT[3, :])
+                    # print 'NEW CHUNK ', saved_bufferT_ch1
 
-                    fdataF[0, :] = filter_data(dataF[0, :], fs_hz)
-                    fdataF[1, :] = filter_data(dataF[1, :], fs_hz)
-                    fdataF[2, :] = filter_data(dataF[2, :], fs_hz)
-                    fdataF[3, :] = filter_data(dataF[3, :], fs_hz)
+                    fdataT[0, :] = filter_data(dataT[0, :], fs_hz)
+                    fdataT[1, :] = filter_data(dataT[1, :], fs_hz)
+                    fdataT[2, :] = filter_data(dataT[2, :], fs_hz)
+                    fdataT[3, :] = filter_data(dataT[3, :], fs_hz)
 
                     bandmean_alphaF = np.zeros(nb_channels)
                     bandmax_alphaF = np.zeros(nb_channels)
@@ -554,8 +554,8 @@ while gameOn:
                     ratioF = np.zeros(nb_channels)
 
                     for channel in range(nb_channels):
-                        bandmean_alphaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
-                        bandmean_deltaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], 3, 4)
+                        bandmean_alphaF[channel] = extract_freqbandmean(200, fs_hz, fdataT[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
+                        bandmean_deltaF[channel] = extract_freqbandmean(200, fs_hz, fdataT[channel,:], 3, 4)
                         ratioF[channel] = 1.* bandmean_alphaF[channel] / bandmean_deltaF[channel]
 
                     # maximiser alpha/delta
@@ -578,8 +578,9 @@ while gameOn:
                         b = maxDisplayY - minRatioAlphaOverDelta * a
                         newPosy = a * medRatioF + b
 
-                    scoreF = scoreF + trainingScore(newPosy)
+                    scoreT = scoreT + trainingScore(newPosy)
                     durationSession = durationSession -  1
+                    bufferT = []
 
             except Empty:
                 continue  # do stuff
@@ -588,8 +589,6 @@ while gameOn:
                 # sys.stdout.write(char)
             veryOldPosy = oldPosy
             oldPosy = newPosy
-            saved_bufferT.append(bufferT)
-            bufferT = []
 
         elif durationSession == 0 :
             screen.blit(restingStateImage, (0,0))
@@ -597,10 +596,12 @@ while gameOn:
             pg.display.flip()
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
-                    mouseT = pg.mouse.get_pos()
-                    choiceT = whichButtonHomeV2(mouseT, w_display, h_display)
+                    # print type(saved_bufferT_ch1)
+                    # print saved_bufferT_ch1
                     saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
                     sessionT += 1
+                    mouseT = pg.mouse.get_pos()
+                    choiceT = whichButtonHomeV2(mouseT, w_display, h_display)
                     saved_bufferT_ch1 = []
                     saved_bufferT_ch2 = []
                     saved_bufferT_ch3 = []
@@ -720,10 +721,10 @@ while gameOn:
                     dataRS2[2, :, secRS2] = bufferRS2_array[ind_channel_3]
                     dataRS2[3, :, secRS2] = bufferRS2_array[ind_channel_4]
 
-                    saved_bufferRS2_ch1.append(dataRS2[0, :, secRS2])
-                    saved_bufferRS2_ch2.append(dataRS2[1, :, secRS2])
-                    saved_bufferRS2_ch3.append(dataRS2[2, :, secRS2])
-                    saved_bufferRS2_ch4.append(dataRS2[3, :, secRS2])
+                    saved_bufferRS2_ch1.extend(dataRS2[0, :, secRS2])
+                    saved_bufferRS2_ch2.extend(dataRS2[1, :, secRS2])
+                    saved_bufferRS2_ch3.extend(dataRS2[2, :, secRS2])
+                    saved_bufferRS2_ch4.extend(dataRS2[3, :, secRS2])
 
                     fdataRS2[0, :, secRS2] = filter_data(dataRS2[0, :, secRS2], fs_hz)
                     fdataRS2[1, :, secRS2] = filter_data(dataRS2[1, :, secRS2], fs_hz)
@@ -886,10 +887,10 @@ while gameOn:
                     dataS[2, :, secS] = bufferS_array[ind_channel_3]
                     dataS[3, :, secS] = bufferS_array[ind_channel_4]
 
-                    saved_bufferS_ch1.append(dataS[0, :, secS])
-                    saved_bufferS_ch2.append(dataS[1, :, secS])
-                    saved_bufferS_ch3.append(dataS[2, :, secS])
-                    saved_bufferS_ch4.append(dataS[3, :, secS])
+                    saved_bufferS_ch1.extend(dataS[0, :, secS])
+                    saved_bufferS_ch2.extend(dataS[1, :, secS])
+                    saved_bufferS_ch3.extend(dataS[2, :, secS])
+                    saved_bufferS_ch4.extend(dataS[3, :, secS])
 
                     fdataS[0, :, secS] = filter_data(dataS[0, :, secS], fs_hz)
                     fdataS[1, :, secS] = filter_data(dataS[1, :, secS], fs_hz)
@@ -961,10 +962,10 @@ while gameOn:
                 if len(bufferSleep) == buffersize * nb_channels:
                     bufferSleep_array = np.asarray(bufferSleep)
 
-                    saved_bufferSleep_ch1.append(bufferSleep_array[ind_channel_1])
-                    saved_bufferSleep_ch2.append(bufferSleep_array[ind_channel_2])
-                    saved_bufferSleep_ch3.append(bufferSleep_array[ind_channel_3])
-                    saved_bufferSleep_ch4.append(bufferSleep_array[ind_channel_4])
+                    saved_bufferSleep_ch1.extend(bufferSleep_array[ind_channel_1])
+                    saved_bufferSleep_ch2.extend(bufferSleep_array[ind_channel_2])
+                    saved_bufferSleep_ch3.extend(bufferSleep_array[ind_channel_3])
+                    saved_bufferSleep_ch4.extend(bufferSleep_array[ind_channel_4])
 
                     bufferSleep = []
                     displayNumber(secSleep, screen, 'timeSleep')
