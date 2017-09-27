@@ -110,10 +110,12 @@ if not os.path.isdir('data/'+sessionName):
     os.mkdir('data/'+sessionName+'/RS1-data')
     os.mkdir('data/'+sessionName+'/RS2-data')
     os.mkdir('data/'+sessionName+'/Saving-data')
+    os.mkdir('data/'+sessionName+'/Sleep-data')
     pathT = str('data/'+sessionName+'/training-data/')
     pathS = str('data/'+sessionName+'/saving-data/')
     pathRS1 = str('data/'+sessionName+'/RS1-data/')
     pathRS2 = str('data/'+sessionName+'/RS2-data/')
+    pathSleep = str('data/'+sessionName+'/Sleep-data/')
 
 
 
@@ -182,7 +184,7 @@ while gameOn:
                 elif choice == 3: #  is for sleep session, starts and stops when he decides
                     homeOn = 0
                     training = 0
-                    restingState1 = 1
+                    restingState1 = 0
                     restingState2 = 0
                     sleep = 1
                     saving = 0
@@ -925,11 +927,11 @@ while gameOn:
     while sleep:
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathRS1, sessionRS, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
-                saved_bufferRS1_ch1 = []
-                saved_bufferRS1_ch2 = []
-                saved_bufferRS1_ch3 = []
-                saved_bufferRS1_ch4 = []
+                saveAllChannelsData(pathSleep, sessionRS, 'Sleep', saved_bufferSleep_ch1, saved_bufferSleep_ch2, saved_bufferSleep_ch3, saved_bufferSleep_ch4)
+                saved_bufferSleep_ch1 = []
+                saved_bufferSleep_ch2 = []
+                saved_bufferSleep_ch3 = []
+                saved_bufferSleep_ch4 = []
                 pg.quit()
                 sys.exit()
             if event.type == KEYDOWN:
@@ -940,11 +942,49 @@ while gameOn:
                 if whichButtonReturn(mouseReturn, w_display, h_display):
                     homeOn = 1
                     training = 0
+                    sleep = 0
                     restingState1 = 0
-                    bufferRS1 = []
+                    bufferSleep = []
                     queue.queue.clear()
-                    saveAllChannelsData(pathRS1, sessionRS, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
-                    saved_bufferRS1_ch1 = []
-                    saved_bufferRS1_ch2 = []
-                    saved_bufferRS1_ch3 = []
-                    saved_bufferRS1_ch4 = []
+                    saveAllChannelsData(pathSleep, sessionRS, 'Sleep', saved_bufferSleep_ch1, saved_bufferSleep_ch2, saved_bufferSleep_ch3, saved_bufferSleep_ch4)
+                    saved_bufferSleep_ch1 = []
+                    saved_bufferSleep_ch2 = []
+                    saved_bufferSleep_ch3 = []
+                    saved_bufferSleep_ch4 = []
+
+        bufferSleep = []
+        saveAllChannelsData(pathSleep, sessionRS, 'Sleep', saved_bufferSleep_ch1, saved_bufferSleep_ch2, saved_bufferSleep_ch3, saved_bufferSleep_ch4)
+
+        queue.queue.clear()
+        while secSleep < 9999:
+            pg.time.Clock().tick(60)
+
+            try:
+                while len(bufferSleep) < buffersize * nb_channels:
+                    bufferSleep.append(queue.get_nowait())
+
+                if len(bufferSleep) == buffersize * nb_channels:
+                    bufferSleep_array = np.asarray(bufferSleep)
+                    dataSleep = np.zeros((nb_channels, buffersize)) # need to store every chunk to reprocess the ratio
+                    fdataSleep = np.zeros((nb_channels, buffersize))
+
+                    dataSleep[0, :] = bufferSleep_array[ind_channel_1]
+                    dataSleep[1, :] = bufferSleep_array[ind_channel_2]
+                    dataSleep[2, :] = bufferSleep_array[ind_channel_3]
+                    dataSleep[3, :] = bufferSleep_array[ind_channel_4]
+
+                    saved_bufferSleep_ch1.append(dataSleep[0, :])
+                    saved_bufferSleep_ch2.append(dataSleep[1, :])
+                    saved_bufferSleep_ch3.append(dataSleep[2, :])
+                    saved_bufferSleep_ch4.append(dataSleep[3, :])
+
+                    bufferSleep = []
+                    displayNumber(secSleep, screen, 'timeSleep')
+                    pg.display.update()
+                    secSleep = secSleep + 1
+                    print secSleep
+            except Empty:
+                continue  # do stuff
+            else:
+                str(bufferSleep)
+                # sys.stdout.write(char)

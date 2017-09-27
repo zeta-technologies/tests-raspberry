@@ -108,6 +108,7 @@ endSessionImg = 'images/endSession.png'
 '''Sleep'''
 sleepImgPath = 'images/sleep.png'
 sleepDuration = 0
+sleepTrigger = 0
 '''Navigation among the pages'''
 # booleans for each window
 punchinBall = 0
@@ -163,6 +164,9 @@ fdataRS2 = np.zeros((nb_channels, buffersize, restingStateDuration))
 dataS = np.zeros((nb_channels, buffersize, durationSessionSaving)) # need to store every chunk to reprocess the ratio
 fdataS = np.zeros((nb_channels, buffersize, durationSessionSaving))
 
+dataSleep = np.zeros((nb_channels, buffersize)) # need to store every chunk to reprocess the ratio
+fdataSleep = np.zeros((nb_channels, buffersize))
+
 ''' Save buffer, to keep data records somewhere'''
 
 
@@ -191,6 +195,11 @@ saved_bufferT_ch1 = []
 saved_bufferT_ch2 = []
 saved_bufferT_ch3 = []
 saved_bufferT_ch4 = []
+
+saved_bufferSleep_ch1 = []
+saved_bufferSleep_ch2 = []
+saved_bufferSleep_ch3 = []
+saved_bufferSleep_ch4 = []
 
 sessionF = 0
 sessionS = 0
