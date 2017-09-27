@@ -109,13 +109,13 @@ if not os.path.isdir('data/'+sessionName):
     os.mkdir('data/'+sessionName+'/training-data')
     os.mkdir('data/'+sessionName+'/RS1-data')
     os.mkdir('data/'+sessionName+'/RS2-data')
-    os.mkdir('data/'+sessionName+'/Saving-data')
-    os.mkdir('data/'+sessionName+'/Sleep-data')
+    os.mkdir('data/'+sessionName+'/saving-data')
+    os.mkdir('data/'+sessionName+'/sleep-data')
     pathT = str('data/'+sessionName+'/training-data/')
     pathS = str('data/'+sessionName+'/saving-data/')
     pathRS1 = str('data/'+sessionName+'/RS1-data/')
     pathRS2 = str('data/'+sessionName+'/RS2-data/')
-    pathSleep = str('data/'+sessionName+'/Sleep-data/')
+    pathSleep = str('data/'+sessionName+'/sleep-data/')
 
 
 
