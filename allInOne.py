@@ -201,7 +201,7 @@ while gameOn:
         queue.queue.clear()
 
     if training:
-        sessionF += 1
+        sessionT += 1
         bufferT = []
         screen.blit(sky, (0, 0))
         pg.display.flip()
@@ -368,7 +368,7 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathT, sessionF, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                saveAllChannelsData(pathT, sessionT, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
                 bufferT = []
                 saved_bufferT_ch1 = []
                 saved_bufferT_ch2 = []
@@ -378,7 +378,7 @@ while gameOn:
                 sys.exit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
-                    saveAllChannelsData(pathT, sessionF, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                    saveAllChannelsData(pathT, sessionT, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
                     bufferT = []
                     saved_bufferT_ch1 = []
                     saved_bufferT_ch2 = []
@@ -391,7 +391,7 @@ while gameOn:
                     homeOn = 1
                     training = 0
                     restingState1 = 0
-                    saveAllChannelsData(pathT, sessionF, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                    saveAllChannelsData(pathT, sessionT, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
                     bufferT = []
                     saved_bufferT_ch1 = []
                     saved_bufferT_ch2 = []
@@ -487,7 +487,7 @@ while gameOn:
             bufferT = []
 
         elif durationSession == 0 :
-            saveAllChannelsData(pathT, sessionF, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+            saveAllChannelsData(pathT, sessionT, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
             saved_bufferT_ch1 = []
             saved_bufferT_ch2 = []
             saved_bufferT_ch3 = []
