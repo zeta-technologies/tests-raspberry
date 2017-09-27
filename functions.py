@@ -601,6 +601,7 @@ def get_ind_color(score, scoreMax, scoreMin, nbOfColors):
     if ind >= nbOfColors:
         ind = nbOfColors - 1
     # print ind
+    # TODO if ind is NaN , write error
     return int(ind)
 
 

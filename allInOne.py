@@ -189,12 +189,18 @@ while gameOn:
                     sleep = 1
                     saving = 0
 
-        if sessionEnded :
-            progressionMetricSurf, progressionMetricRect = text_objects(progressionMetric, buttonText)
-            progressionMetricRect.center = (1.*w_display/2, 1.*h_display/2)
-            screen.blit(endSessionImg, (0,0))
-            screen.blit(progressionMetricSurf, progressionMetricRect)
-            pg.display.flip()
+    if sessionEnded :
+        progressionMetricSurf, progressionMetricRect = text_objects(progressionMetric, buttonText)
+        progressionMetricRect.center = (1.*w_display/2, 1.*h_display/2)
+        screen.blit(endSessionImg, (0,0))
+        screen.blit(progressionMetricSurf, progressionMetricRect)
+        pg.display.flip()
+
+        bufferRS2 = []
+        queue.queue.clear()
+        saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+        sessionRS2 += 1
+        gameOn = 0
 
     if restingState1:
         print "RESTINGSTATE1"
@@ -589,35 +595,36 @@ while gameOn:
             bufferT = []
 
         elif durationSession == 0 :
-            saveAllChannelsData(pathT, sessionT, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
-            sessionT += 1
-            saved_bufferT_ch1 = []
-            saved_bufferT_ch2 = []
-            saved_bufferT_ch3 = []
-            saved_bufferT_ch4 = []
+            screen.blit(restingStateImage, (0,0))
             screen.blit(nextStepSurf, nextStepRect)
             pg.display.flip()
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
-                    mouseRS2 = pg.mouse.get_pos()
-                    choiceRS2 = whichButtonHomeV2(mouseRS2, w_display, h_display)
-                    if choiceRS2 == 3:
+                    mouseT = pg.mouse.get_pos()
+                    choiceT = whichButtonHomeV2(mouseT, w_display, h_display)
+                    saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                    sessionT += 1
+                    saved_bufferT_ch1 = []
+                    saved_bufferT_ch2 = []
+                    saved_bufferT_ch3 = []
+                    saved_bufferT_ch4 = []
+                    print choiceT
+                    if choiceT == 3:
                         bufferT = []
                         durationSession = durationSessionInit
                         training = 0
-                        homeOn = 1
+                        homeOn = 0
                         restingState1 = 0
-                        restingState2 = 0
-                        bufferRS1 = []
-                        band_alphaRS1_ch1 = []
-                        band_alphaRS1_ch2 = []
-                        band_alphaRS1_ch3 = []
-                        band_alphaRS1_ch4 = []
-                        band_deltaRS1_ch1 = []
-                        band_deltaRS1_ch2 = []
-                        band_deltaRS1_ch3 = []
-                        band_deltaRS1_ch4 = []
-                        screen.blit(restingStateImage, (0,0))
+                        restingState2 = 1
+                        bufferRS2 = []
+                        band_alphaRS2_ch1 = []
+                        band_alphaRS2_ch2 = []
+                        band_alphaRS2_ch3 = []
+                        band_alphaRS2_ch4 = []
+                        band_deltaRS2_ch1 = []
+                        band_deltaRS2_ch2 = []
+                        band_deltaRS2_ch3 = []
+                        band_deltaRS2_ch4 = []
                         displayNumber(0, screen, 'timeRSV011')
                         pg.display.flip()
                         queue.queue.clear()
@@ -698,28 +705,8 @@ while gameOn:
                 progressionMetric = 'Progression ' + str( metric )[0] + '.' + str(metric)[2:5]
             elif metric < 0 :
                 progressionMetric = 'Progression : -' + str( metric )[1] + '.' + str(metric)[3:6]
-
             sessionEnded = 1
-            homeOn = 0
-            training = 0
             restingState2 = 0
-            progressionMetricSurf, progressionMetricRect = text_objects(progressionMetric, buttonText)
-            progressionMetricRect.center = (1.*w_display/2, 1.*h_display/2)
-            screen.blit(endSessionImg, (0,0))
-            screen.blit(progressionMetricSurf, progressionMetricRect)
-            pg.display.flip()
-
-            # process.terminate()
-            # call(['sudo service bluetooth restart'])
-            # os.system('sudo service bluetooth restart')
-            bufferRS2 = []
-            queue.queue.clear()
-            saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
-            sessionRS2 += 1
-            saved_bufferRS2_ch1 = []
-            saved_bufferRS2_ch2 = []
-            saved_bufferRS2_ch3 = []
-            saved_bufferRS2_ch4 = []
 
         elif secRS2 < restingStateDuration:
             try:
