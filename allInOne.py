@@ -293,7 +293,7 @@ while gameOn:
 
     if sleep :
         print "SLEEP"
-        sessionSleep
+        sessionSleep = 1
         if platform == 'darwin' and sessionRS1 == 0: # mac
             process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
             '''launch node process'''
@@ -841,8 +841,9 @@ while gameOn:
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
                     mouseS = pg.mouse.get_pos()
-                    saveAllChannelsData(pathS, sessionS, 'Saving', saved_bufferS_ch1, saved_bufferS_ch2, saved_bufferS_ch3, saved_bufferS_ch4)
-                    sessionS += 1
+                    if sessionS == 1:
+                        saveAllChannelsData(pathS, sessionS, 'Saving', saved_bufferS_ch1, saved_bufferS_ch2, saved_bufferS_ch3, saved_bufferS_ch4)
+                        sessionS += 1
                     saved_bufferS_ch1 = []
                     saved_bufferS_ch2 = []
                     saved_bufferS_ch3 = []

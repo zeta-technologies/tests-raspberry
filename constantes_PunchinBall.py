@@ -80,7 +80,7 @@ minDisplayY = 15 # min and max position that the bird can reach, 10px is top of 
 maxDisplayY = 220
 maxScore = 15 # score ruler is 15 max
 minScore = 1
-scoreF = 0
+scoreT = 0
 steps = 1.*buffersize/40
 newPosy = maxDisplayY
 veryOldPosy = maxDisplayY
@@ -97,12 +97,12 @@ veryOldPosy = maxDisplayY
 timer = ['images/0.png', 'images/1.png', 'images/2.png', 'images/3.png', 'images/4.png', 'images/5.png',
                     'images/6.png', 'images/7.png', 'images/8.png', 'images/9.png']
 restingState = 'images/restingState.png'
-restingStateDuration = 30 # in seconds
+restingStateDuration = 5 # in seconds
 sec = 0
 secRS1 = 0
 secRS2 = 0
-durationSessionInit = 350
-durationSessionSaving = 90
+durationSessionInit = 5
+durationSessionSaving = 5
 durationSession = durationSessionInit
 
 endSessionImg = 'images/endSession.png'
@@ -154,8 +154,8 @@ elif FreqRange == 'XXII_gamma':
 dataPB = np.zeros((nb_channels, buffersize))
 fdataPB = np.zeros((nb_channels, buffersize))
 
-dataF = np.zeros((nb_channels, buffersize))
-fdataF = np.zeros((nb_channels, buffersize))
+dataT = np.zeros((nb_channels, buffersize))
+fdataT = np.zeros((nb_channels, buffersize))
 
 dataRS1 = np.zeros((nb_channels, buffersize, restingStateDuration)) # need to store every chunk to reprocess the ratio
 fdataRS1 = np.zeros((nb_channels, buffersize, restingStateDuration))

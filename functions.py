@@ -633,7 +633,8 @@ def getfreqmaxband(data, rangefreq, nb_freq):
 
 def saveData(path, session, kind, channel, data):
     # kind is either 'F', 'PB', or 'RS'
-    outfile = path+kind+'_'+channel+'_'+'session'+str(session)+'_'+'.txt'
+    outfile = path+kind+'-'+channel+'-'+'session'+str(session)+'-'+'.txt'
+    
     np.savetxt(outfile, np.asarray(data), delimiter=',')
 
 def saveAllChannelsData(path, session, kind, data1, data2, data3, data4):
