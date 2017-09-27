@@ -87,7 +87,7 @@ if os.path.isfile('sessionsNames.txt'):
 else :
     sessionsNames = open('sessionsNames.txt', 'a+')
 
-sessionsNames.write(sessionName)
+sessionsNames.write(sessionName+'\n')
 sessionsNames.close()
 
 '''check if the directory /data already exists'''
@@ -228,7 +228,7 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathRS1, sessionRS, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                saveAllChannelsData(pathRS1, sessionRS, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
                 saved_bufferRS1_ch1 = []
                 saved_bufferRS1_ch2 = []
                 saved_bufferRS1_ch3 = []
@@ -246,7 +246,7 @@ while gameOn:
                     restingState1 = 0
                     bufferRS1 = []
                     queue.queue.clear()
-                    saveAllChannelsData(pathRS1, sessionRS, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                    saveAllChannelsData(pathRS1, sessionRS, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
                     saved_bufferRS1_ch1 = []
                     saved_bufferRS1_ch2 = []
                     saved_bufferRS1_ch3 = []
