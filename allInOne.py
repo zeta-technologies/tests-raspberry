@@ -195,12 +195,10 @@ while gameOn:
         screen.blit(endSessionImg, (0,0))
         screen.blit(progressionMetricSurf, progressionMetricRect)
         pg.display.flip()
-
-        bufferRS2 = []
-        queue.queue.clear()
         saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
-        sessionRS2 += 1
-        gameOn = 0
+
+        print pg.time.delay(2000)
+        # gameOn = 0
 
     if restingState1:
         print "RESTINGSTATE1"
@@ -470,7 +468,6 @@ while gameOn:
 
     while training:
         pg.time.Clock().tick(60)
-
         for event in pg.event.get():
             if event.type == QUIT:
                 saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
@@ -608,9 +605,10 @@ while gameOn:
                     saved_bufferT_ch2 = []
                     saved_bufferT_ch3 = []
                     saved_bufferT_ch4 = []
-                    print choiceT
                     if choiceT == 3:
                         bufferT = []
+                        screen.blit(restingStateImage, (0,0))
+                        pg.display.flip()
                         durationSession = durationSessionInit
                         training = 0
                         homeOn = 0
@@ -631,7 +629,6 @@ while gameOn:
 
     while restingState2:
         pg.time.Clock().tick(60)
-
         for event in pg.event.get():
             if event.type == QUIT:
                 saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
