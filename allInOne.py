@@ -80,7 +80,7 @@ if os.path.isfile('sessionsNames.txt'):
     for i in range(len(sessionsNamesLines)):
         if randomId == sessionsNamesLines[i][-30:] :
             randomId = binascii.b2a_hex(os.urandom(15))
-            sessionName = str(str(now.month)+'_'+str(now.day)+'_'+str(now.minute)+'_'+str(randomId))
+            sessionName = str(str(now.month)+'-'+str(now.day)+'-'+str(now.hour)+'-'+str(now.minute)+'_'+str(randomId))
     sessionsNames.close()
     sessionsNames = open('sessionsNames.txt', 'a+')
 
@@ -103,7 +103,6 @@ if not os.path.isdir('data/'+sessionName):
     pathT = str('data/'+sessionName+'/training-data/')
     pathRS1 = str('data/'+sessionName+'/RS1-data/')
     pathRS2 = str('data/'+sessionName+'/RS2-data/')
-
 
 
 print '\n \n \n You are running Zeta Game on ', platform
