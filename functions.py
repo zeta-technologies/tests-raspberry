@@ -375,7 +375,7 @@ def trainingScore(posY):
 def displayNumber(nb, screen, position):
     # print nb
     nb = int(nb)
-    if position == 'scoreV011':
+    if position == 'scoreV011' or position == 'timeSleep':
         if nb >= 1000 :
             timerSec = pg.image.load(timer[int(str(nb)[3])]).convert()
             timerSec = pg.transform.scale(timerSec, (int(1.* w_display / 15), int(1.*h_display / 10)))

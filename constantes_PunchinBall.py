@@ -105,6 +105,9 @@ durationSession = durationSessionInit
 
 endSessionImg = 'images/endSession.png'
 
+'''Sleep'''
+sleepImgPath = 'images/sleep.png'
+sleepDuration = 0
 '''Navigation among the pages'''
 # booleans for each window
 punchinBall = 0

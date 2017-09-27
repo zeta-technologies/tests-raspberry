@@ -68,6 +68,10 @@ questionImage1 = pg.transform.scale(questionImage1, (w_display, h_display))
 questionImage2 = pg.image.load(questionImage2Path)
 questionImage2 = pg.transform.scale(questionImage2, (w_display, h_display))
 
+'''sleep'''
+sleepImage = pg.image.load(sleepImgPath).convert()
+sleepImage = pg.transform.scale(sleepImage, (w_display, h_display))
+
 '''End Session IMG'''
 endSessionImg = pg.image.load(endSessionImg)
 endSessionImg = pg.transform.scale(endSessionImg, (w_display, h_display))
@@ -298,19 +302,18 @@ while gameOn:
             thread.daemon = True
             thread.start()
 
-        sessionRS += 1
-        secRS1 = 0
-        bufferRS1 = []
-        band_alphaRS1_ch1 = []
-        band_alphaRS1_ch2 = []
-        band_alphaRS1_ch3 = []
-        band_alphaRS1_ch4 = []
-        band_deltaRS1_ch1 = []
-        band_deltaRS1_ch2 = []
-        band_deltaRS1_ch3 = []
-        band_deltaRS1_ch4 = []
-        screen.blit(restingStateImage, (0,0))
-        displayNumber(0, screen, 'timeRSV011')
+        secSleep = 0
+        bufferSleep = []
+        band_alphaSleep_ch1 = []
+        band_alphaSleep_ch2 = []
+        band_alphaSleep_ch3 = []
+        band_alphaSleep_ch4 = []
+        band_deltaSleep_ch1 = []
+        band_deltaSleep_ch2 = []
+        band_deltaSleep_ch3 = []
+        band_deltaSleep_ch4 = []
+        screen.blit(sleepImage, (0,0))
+        displayNumber(0, screen, 'timeSleep')
         pg.display.flip()
         queue.queue.clear()
 
@@ -918,5 +921,30 @@ while gameOn:
             else:
                 str(bufferS)
                 # sys.stdout.write(char)
-    #
-    # while sleep:
+
+    while sleep:
+        for event in pg.event.get():
+            if event.type == QUIT:
+                saveAllChannelsData(pathRS1, sessionRS, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                saved_bufferRS1_ch1 = []
+                saved_bufferRS1_ch2 = []
+                saved_bufferRS1_ch3 = []
+                saved_bufferRS1_ch4 = []
+                pg.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    restingState1 = 0
+            elif event.type == MOUSEBUTTONUP:
+                mouseReturn = pg.mouse.get_pos()
+                if whichButtonReturn(mouseReturn, w_display, h_display):
+                    homeOn = 1
+                    training = 0
+                    restingState1 = 0
+                    bufferRS1 = []
+                    queue.queue.clear()
+                    saveAllChannelsData(pathRS1, sessionRS, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                    saved_bufferRS1_ch1 = []
+                    saved_bufferRS1_ch2 = []
+                    saved_bufferRS1_ch3 = []
+                    saved_bufferRS1_ch4 = []
