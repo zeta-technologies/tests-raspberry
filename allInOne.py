@@ -228,7 +228,7 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathRS1, sessionRS, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                saveAllChannelsData(pathRS1, sessipusponRS, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
                 saved_bufferRS1_ch1 = []
                 saved_bufferRS1_ch2 = []
                 saved_bufferRS1_ch3 = []
