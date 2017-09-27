@@ -198,14 +198,14 @@ while gameOn:
 
     if restingState1:
         print "RESTINGSTATE1"
-        if platform == 'darwin' and sessionRS == 0: # mac
+        if platform == 'darwin' and sessionRS1 == 0: # mac
             process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
             '''launch node process'''
             queue = Queue()
             thread = Thread(target=enqueue_output, args=(process.stdout, queue))
             thread.daemon = True
             thread.start()
-        elif platform == 'linux' or platform == 'linux2' and sessionRS == 0: #linux
+        elif platform == 'linux' or platform == 'linux2' and sessionRS1 == 0: #linux
             process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE, preexec_fn=os.setsid) # for LINUX
             '''launch node process'''
             queue = Queue()
@@ -213,7 +213,7 @@ while gameOn:
             thread.daemon = True
             thread.start()
 
-        sessionRS += 1
+        sessionRS1 = 1
         secRS1 = 0
         bufferRS1 = []
         band_alphaRS1_ch1 = []
@@ -231,7 +231,7 @@ while gameOn:
 
     if training:
         print "TRAINING"
-        sessionF += 1
+        sessionT += 1
         bufferT = []
         screen.blit(sky, (0, 0))
         pg.display.flip()
@@ -239,7 +239,7 @@ while gameOn:
 
     if restingState2:
         print "RESTINGSTATE2"
-        sessionRS += 1
+        sessionRS2 = 1
         secRS2 = 0
         bufferRS2 = []
         band_alphaRS2_ch1 = []
@@ -257,14 +257,15 @@ while gameOn:
 
     if saving:
         print "SAVING"
-        if platform == 'darwin' and sessionRS == 0: # mac
+        sessionS = 1
+        if platform == 'darwin' and sessionRS1 == 0: # mac
             process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
             '''launch node process'''
             queue = Queue()
             thread = Thread(target=enqueue_output, args=(process.stdout, queue))
             thread.daemon = True
             thread.start()
-        elif platform == 'linux' or platform == 'linux2' and sessionRS == 0: #linux
+        elif platform == 'linux' or platform == 'linux2' and sessionRS1 == 0: #linux
             process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE, preexec_fn=os.setsid) # for LINUX
             '''launch node process'''
             queue = Queue()
@@ -289,14 +290,15 @@ while gameOn:
 
     if sleep :
         print "SLEEP"
-        if platform == 'darwin' and sessionRS == 0: # mac
+        sessionSleep
+        if platform == 'darwin' and sessionRS1 == 0: # mac
             process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
             '''launch node process'''
             queue = Queue()
             thread = Thread(target=enqueue_output, args=(process.stdout, queue))
             thread.daemon = True
             thread.start()
-        elif platform == 'linux' or platform == 'linux2' and sessionRS == 0: #linux
+        elif platform == 'linux' or platform == 'linux2' and sessionRS1 == 0: #linux
             process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE, preexec_fn=os.setsid) # for LINUX
             '''launch node process'''
             queue = Queue()
@@ -324,7 +326,8 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathRS1, sessionRS, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                saveAllChannelsData(pathRS1, sessionRS1, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                sessionRS1 += 1
                 saved_bufferRS1_ch1 = []
                 saved_bufferRS1_ch2 = []
                 saved_bufferRS1_ch3 = []
@@ -342,7 +345,8 @@ while gameOn:
                     restingState1 = 0
                     bufferRS1 = []
                     queue.queue.clear()
-                    saveAllChannelsData(pathRS1, sessionRS, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                    saveAllChannelsData(pathRS1, sessionRS1, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                    sessionRS1 += 1
                     saved_bufferRS1_ch1 = []
                     saved_bufferRS1_ch2 = []
                     saved_bufferRS1_ch3 = []
@@ -392,7 +396,8 @@ while gameOn:
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
                     mouseRS1 = pg.mouse.get_pos()
-                    saveAllChannelsData(pathRS1, sessionRS, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                    saveAllChannelsData(pathRS1, sessionRS1, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                    sessionRS1 += 1
                     saved_bufferRS1_ch1 = []
                     saved_bufferRS1_ch2 = []
                     saved_bufferRS1_ch3 = []
@@ -462,7 +467,8 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathT, sessionF, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                sessionT += 1
                 bufferT = []
                 saved_bufferT_ch1 = []
                 saved_bufferT_ch2 = []
@@ -472,7 +478,8 @@ while gameOn:
                 sys.exit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
-                    saveAllChannelsData(pathT, sessionF, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                    saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                    sessionT += 1
                     bufferT = []
                     saved_bufferT_ch1 = []
                     saved_bufferT_ch2 = []
@@ -485,7 +492,8 @@ while gameOn:
                     homeOn = 1
                     training = 0
                     restingState1 = 0
-                    saveAllChannelsData(pathT, sessionF, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                    saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                    sessionT += 1
                     bufferT = []
                     saved_bufferT_ch1 = []
                     saved_bufferT_ch2 = []
@@ -581,7 +589,8 @@ while gameOn:
             bufferT = []
 
         elif durationSession == 0 :
-            saveAllChannelsData(pathT, sessionF, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+            saveAllChannelsData(pathT, sessionT, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+            sessionT += 1
             saved_bufferT_ch1 = []
             saved_bufferT_ch2 = []
             saved_bufferT_ch3 = []
@@ -618,7 +627,8 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathRS2, sessionRS, 'RS', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                sessionRS2 += 1
                 saved_bufferRS2_ch1 = []
                 saved_bufferRS2_ch2 = []
                 saved_bufferRS2_ch3 = []
@@ -637,7 +647,8 @@ while gameOn:
                     questionnaire = 0
                     bufferRS2 = []
                     queue.queue.clear()
-                    saveAllChannelsData(pathRS2, sessionRS, 'RS', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                    saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                    sessionRS2 += 1
                     saved_bufferRS2_ch1 = []
                     saved_bufferRS2_ch2 = []
                     saved_bufferRS2_ch3 = []
@@ -703,7 +714,8 @@ while gameOn:
             # os.system('sudo service bluetooth restart')
             bufferRS2 = []
             queue.queue.clear()
-            saveAllChannelsData(pathRS2, sessionRS, 'RS', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+            saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+            sessionRS2 += 1
             saved_bufferRS2_ch1 = []
             saved_bufferRS2_ch2 = []
             saved_bufferRS2_ch3 = []
@@ -766,7 +778,8 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathS, sessionS, 'RS', saved_bufferS_ch1, saved_bufferS_ch2, saved_bufferS_ch3, saved_bufferS_ch4)
+                saveAllChannelsData(pathS, sessionS, 'Saving', saved_bufferS_ch1, saved_bufferS_ch2, saved_bufferS_ch3, saved_bufferS_ch4)
+                sessionS += 1
                 saved_bufferS_ch1 = []
                 saved_bufferS_ch2 = []
                 saved_bufferS_ch3 = []
@@ -784,7 +797,8 @@ while gameOn:
                     restingState1 = 0
                     bufferS = []
                     queue.queue.clear()
-                    saveAllChannelsData(pathS, sessionRS, 'RS', saved_bufferS_ch1, saved_bufferS_ch2, saved_bufferS_ch3, saved_bufferS_ch4)
+                    saveAllChannelsData(pathS, sessionS, 'Saving', saved_bufferS_ch1, saved_bufferS_ch2, saved_bufferS_ch3, saved_bufferS_ch4)
+                    sessionS += 1
                     saved_bufferS_ch1 = []
                     saved_bufferS_ch2 = []
                     saved_bufferS_ch3 = []
@@ -843,7 +857,8 @@ while gameOn:
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
                     mouseS = pg.mouse.get_pos()
-                    saveAllChannelsData(pathS, sessionRS, 'RS', saved_bufferS_ch1, saved_bufferS_ch2, saved_bufferS_ch3, saved_bufferS_ch4)
+                    saveAllChannelsData(pathS, sessionS, 'Saving', saved_bufferS_ch1, saved_bufferS_ch2, saved_bufferS_ch3, saved_bufferS_ch4)
+                    sessionS += 1
                     saved_bufferS_ch1 = []
                     saved_bufferS_ch2 = []
                     saved_bufferS_ch3 = []
@@ -929,7 +944,8 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathSleep, sessionRS, 'Sleep', saved_bufferSleep_ch1, saved_bufferSleep_ch2, saved_bufferSleep_ch3, saved_bufferSleep_ch4)
+                saveAllChannelsData(pathSleep, sessionSleep, 'Sleep', saved_bufferSleep_ch1, saved_bufferSleep_ch2, saved_bufferSleep_ch3, saved_bufferSleep_ch4)
+                sessionSleep += 1
                 saved_bufferSleep_ch1 = []
                 saved_bufferSleep_ch2 = []
                 saved_bufferSleep_ch3 = []
@@ -945,7 +961,8 @@ while gameOn:
                 training = 0
                 sleep = 0
                 bufferSleep = []
-                saveAllChannelsData(pathSleep, sessionRS, 'Sleep', saved_bufferSleep_ch1, saved_bufferSleep_ch2, saved_bufferSleep_ch3, saved_bufferSleep_ch4)
+                saveAllChannelsData(pathSleep, sessionSleep, 'Sleep', saved_bufferSleep_ch1, saved_bufferSleep_ch2, saved_bufferSleep_ch3, saved_bufferSleep_ch4)
+                sessionSleep += 1
                 saved_bufferSleep_ch1 = []
                 saved_bufferSleep_ch2 = []
                 saved_bufferSleep_ch3 = []

@@ -151,7 +151,7 @@ elif FreqRange == 'XXII_gamma':
 
 dataPB = np.zeros((nb_channels, buffersize))
 fdataPB = np.zeros((nb_channels, buffersize))
- 
+
 dataF = np.zeros((nb_channels, buffersize))
 fdataF = np.zeros((nb_channels, buffersize))
 
@@ -201,9 +201,11 @@ saved_bufferSleep_ch2 = []
 saved_bufferSleep_ch3 = []
 saved_bufferSleep_ch4 = []
 
-sessionF = 0
+sessionT = 0
 sessionS = 0
-sessionRS = 0
+sessionRS1 = 0
+sessionRS2 = 0
+sessionSleep = 0
 sessionEnded = 0
 '''for the fft '''
 length = 200
