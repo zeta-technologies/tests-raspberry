@@ -151,7 +151,7 @@ elif FreqRange == 'XXII_gamma':
 
 dataPB = np.zeros((nb_channels, buffersize))
 fdataPB = np.zeros((nb_channels, buffersize))
-
+ 
 dataF = np.zeros((nb_channels, buffersize))
 fdataF = np.zeros((nb_channels, buffersize))
 

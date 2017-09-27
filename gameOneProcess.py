@@ -636,7 +636,7 @@ while gameOn:
                     saved_bufferF_ch2 = []
                     saved_bufferF_ch3 = []
                     saved_bufferF_ch4 = []
-
+                    
         if durationSession > 0:
             try:
                 while len(bufferF) < buffersize * nb_channels:

@@ -1,0 +1,6 @@
+9_26_30_2d0364d52de1ecc98fae4c19e5f970,  answers : Quelle est la force de votre acouphene ?2/5
+   A quel point vous derange-t-il ?13/5
+9_26_37_280bbb238c2a8a9f3ca50eb5f803ba,  answers : Quelle est la force de votre acouphene ? 4/5
+A quel point vous derange-t-il ? 4/5
+9_27_43_8e48555eda9ff051cb8543edfe0fc0 | Answers : Quelle est la force de votre acouphene ? 2/4 | A quel point vous derange-t-il ? 4/4
+9_27_43_2663bc120655d1b47ea1938248a70f | Answers : Quelle est la force de votre acouphene ? 4/4 | A quel point vous derange-t-il ? 4/4

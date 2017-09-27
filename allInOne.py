@@ -848,7 +848,7 @@ while gameOn:
                     saved_bufferS_ch2 = []
                     saved_bufferS_ch3 = []
                     saved_bufferS_ch4 = []
-                    sChoice = whichAnswerCliked(mouseS, w_display, h_display)
+                    sChoice = whichAnswerClicked(mouseS, w_display, h_display)
                     if sChoice == 1 or sChoice == 2 or sChoice == 3 or sChoice == 4 or sChoice == 5:
                          #open file and save the answer
                         print "level is", sChoice
@@ -940,19 +940,17 @@ while gameOn:
                 if event.key == K_ESCAPE:
                     restingState1 = 0
             elif event.type == MOUSEBUTTONUP:
-                mouseReturn = pg.mouse.get_pos()
-                if whichButtonReturn(mouseReturn, w_display, h_display):
-                    homeOn = 1
-                    training = 0
-                    sleep = 0
-                    restingState1 = 0
-                    bufferSleep = []
-                    queue.queue.clear()
-                    saveAllChannelsData(pathSleep, sessionRS, 'Sleep', saved_bufferSleep_ch1, saved_bufferSleep_ch2, saved_bufferSleep_ch3, saved_bufferSleep_ch4)
-                    saved_bufferSleep_ch1 = []
-                    saved_bufferSleep_ch2 = []
-                    saved_bufferSleep_ch3 = []
-                    saved_bufferSleep_ch4 = []
+                mouseSleep = pg.mouse.get_pos()
+                homeOn = 1
+                training = 0
+                sleep = 0
+                bufferSleep = []
+                saveAllChannelsData(pathSleep, sessionRS, 'Sleep', saved_bufferSleep_ch1, saved_bufferSleep_ch2, saved_bufferSleep_ch3, saved_bufferSleep_ch4)
+                saved_bufferSleep_ch1 = []
+                saved_bufferSleep_ch2 = []
+                saved_bufferSleep_ch3 = []
+                saved_bufferSleep_ch4 = []
+                queue.queue.clear()
 
         if secSleep < 9999:
 
@@ -962,18 +960,11 @@ while gameOn:
 
                 if len(bufferSleep) == buffersize * nb_channels:
                     bufferSleep_array = np.asarray(bufferSleep)
-                    dataSleep = np.zeros((nb_channels, buffersize)) # need to store every chunk to reprocess the ratio
-                    fdataSleep = np.zeros((nb_channels, buffersize))
 
-                    dataSleep[0, :] = bufferSleep_array[ind_channel_1]
-                    dataSleep[1, :] = bufferSleep_array[ind_channel_2]
-                    dataSleep[2, :] = bufferSleep_array[ind_channel_3]
-                    dataSleep[3, :] = bufferSleep_array[ind_channel_4]
-
-                    saved_bufferSleep_ch1.append(dataSleep[0, :])
-                    saved_bufferSleep_ch2.append(dataSleep[1, :])
-                    saved_bufferSleep_ch3.append(dataSleep[2, :])
-                    saved_bufferSleep_ch4.append(dataSleep[3, :])
+                    saved_bufferSleep_ch1.append(bufferSleep_array[ind_channel_1])
+                    saved_bufferSleep_ch2.append(bufferSleep_array[ind_channel_2])
+                    saved_bufferSleep_ch3.append(bufferSleep_array[ind_channel_3])
+                    saved_bufferSleep_ch4.append(bufferSleep_array[ind_channel_4])
 
                     bufferSleep = []
                     displayNumber(secSleep, screen, 'timeSleep')
