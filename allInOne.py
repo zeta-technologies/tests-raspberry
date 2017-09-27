@@ -412,7 +412,7 @@ while gameOn:
                 while len(bufferRS1) < buffersize * nb_channels:
                     bufferRS1.append(queue.get_nowait())
 
-                if len(bufferRS1) == 800:
+                if len(bufferRS1) == buffersize * nb_channels:
                     # print sec
                     bufferRS1_array = np.asarray(bufferRS1)
 
@@ -515,7 +515,7 @@ while gameOn:
 
                     bufferT.append(queue.get_nowait())
 
-                if len(bufferT) == 800 :
+                if len(bufferT) == buffersize * nb_channels :
                     bufferT_array = np.asarray(bufferT)
 
                     dataF[0, :] = bufferT_array[ind_channel_1]
@@ -715,7 +715,7 @@ while gameOn:
                 while len(bufferRS2) < buffersize * nb_channels:
                     bufferRS2.append(queue.get_nowait())
 
-                if len(bufferRS2) == 800:
+                if len(bufferRS2) == buffersize * nb_channels:
                     # print secRS2
                     bufferRS2_array = np.asarray(bufferRS2)
 
@@ -879,7 +879,7 @@ while gameOn:
                 while len(bufferS) < buffersize * nb_channels:
                     bufferS.append(queue.get_nowait())
 
-                if len(bufferS) == 800:
+                if len(bufferS) == buffersize * nb_channels:
 
                     bufferS_array = np.asarray(bufferS)
 
@@ -925,6 +925,8 @@ while gameOn:
                 # sys.stdout.write(char)
 
     while sleep:
+        pg.time.Clock().tick(60)
+
         for event in pg.event.get():
             if event.type == QUIT:
                 saveAllChannelsData(pathSleep, sessionRS, 'Sleep', saved_bufferSleep_ch1, saved_bufferSleep_ch2, saved_bufferSleep_ch3, saved_bufferSleep_ch4)
@@ -952,12 +954,7 @@ while gameOn:
                     saved_bufferSleep_ch3 = []
                     saved_bufferSleep_ch4 = []
 
-        bufferSleep = []
-        saveAllChannelsData(pathSleep, sessionRS, 'Sleep', saved_bufferSleep_ch1, saved_bufferSleep_ch2, saved_bufferSleep_ch3, saved_bufferSleep_ch4)
-
-        queue.queue.clear()
-        while secSleep < 9999:
-            pg.time.Clock().tick(60)
+        if secSleep < 9999:
 
             try:
                 while len(bufferSleep) < buffersize * nb_channels:
@@ -981,8 +978,7 @@ while gameOn:
                     bufferSleep = []
                     displayNumber(secSleep, screen, 'timeSleep')
                     pg.display.update()
-                    secSleep = secSleep + 1
-                    print secSleep
+                    secSleep += 1
             except Empty:
                 continue  # do stuff
             else:
