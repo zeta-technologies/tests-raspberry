@@ -179,7 +179,6 @@ while gameOn:
 
     # if training:
     #     sessionT += 1
-    #     bufferT = []
     #     screen.blit(sky, (0, 0))
     #     pg.display.flip()
     #     queue.queue.clear()
@@ -288,6 +287,7 @@ while gameOn:
                         bufferRS1 = []
                         bufferT = [] # init Training session
                         queue.queue.clear()
+                        sessionT == 0
 
         elif secRS1 < restingStateDuration:
             try:
@@ -463,9 +463,9 @@ while gameOn:
 
         elif durationSession == 0 :
             # print saved_bufferT_ch1
-
-            saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
-
+            if sessionT == 0:
+                saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                sessionT += 1
 
             screen.blit(restingStateImage, (0,0))
             screen.blit(nextStepSurf, nextStepRect)
@@ -479,7 +479,6 @@ while gameOn:
                     print 'line 471'
                     if choiceRS2 == 2:
                         training = 0
-                        bufferT = []
                         secRS2 = 0
                         sessionRS2 += 1
                         restingState2 = 1
@@ -567,9 +566,17 @@ while gameOn:
                 progressionMetric = 'Progression : -' + str( metric )[1] + '.' + str(metric)[3:6]
 
 
-
-            sessionEnded = 1
-            restingState2 = 0
+            if sessionRS2 == 0 :
+                progressionMetricSurf, progressionMetricRect = text_objects(progressionMetric, buttonText)
+                progressionMetricRect.center = (1.*w_display/2, 1.*h_display/2)
+                screen.blit(endSessionImg, (0,0))
+                screen.blit(progressionMetricSurf, progressionMetricRect)
+                pg.display.flip()
+                saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                sessionRS2 += 1
+                pg.time.delay(2000)
+            # sessionEnded = 1
+            # restingState2 = 0
 
 
         elif secRS2 < restingStateDuration:
