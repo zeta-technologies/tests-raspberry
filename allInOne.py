@@ -183,22 +183,22 @@ while gameOn:
     #     pg.display.flip()
     #     queue.queue.clear()
 
-    if restingState2:
-        sessionRS2 += 1
-        secRS2 = 0
-        bufferRS2 = []
-        band_alphaRS2_ch1 = []
-        band_alphaRS2_ch2 = []
-        band_alphaRS2_ch3 = []
-        band_alphaRS2_ch4 = []
-        band_deltaRS2_ch1 = []
-        band_deltaRS2_ch2 = []
-        band_deltaRS2_ch3 = []
-        band_deltaRS2_ch4 = []
-        screen.blit(restingStateImage, (0,0))
-        displayNumber(0, screen, 'timeRSV011')
-        pg.display.flip()
-        queue.queue.clear()
+    # if restingState2:
+    #     sessionRS2 += 1
+    #     secRS2 = 0
+    #     bufferRS2 = []
+    #     band_alphaRS2_ch1 = []
+    #     band_alphaRS2_ch2 = []
+    #     band_alphaRS2_ch3 = []
+    #     band_alphaRS2_ch4 = []
+    #     band_deltaRS2_ch1 = []
+    #     band_deltaRS2_ch2 = []
+    #     band_deltaRS2_ch3 = []
+    #     band_deltaRS2_ch4 = []
+    #     screen.blit(restingStateImage, (0,0))
+    #     displayNumber(0, screen, 'timeRSV011')
+    #     pg.display.flip()
+    #     queue.queue.clear()
 
     while restingState1:
         pg.time.Clock().tick(60)
@@ -475,12 +475,12 @@ while gameOn:
                 if event.type == MOUSEBUTTONUP:
                     mouseRS2 = pg.mouse.get_pos()
                     choiceRS2 = whichButtonHomeV011(mouseRS2, w_display, h_display)
-                    queue.queue.clear()
                     print 'line 471'
                     if choiceRS2 == 2:
+                        queue.queue.clear()
                         training = 0
                         secRS2 = 0
-                        sessionRS2 += 1
+                        sessionRS2 = 0
                         restingState2 = 1
                         bufferRS2 = []
                         band_alphaRS2_ch1 = []
@@ -501,7 +501,9 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                if sessionRS2 == 0:
+                    saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                    sessionRS2 += 1
                 saved_bufferRS2_ch1 = []
                 saved_bufferRS2_ch2 = []
                 saved_bufferRS2_ch3 = []
@@ -520,7 +522,9 @@ while gameOn:
                     questionnaire = 0
                     bufferRS2 = []
                     queue.queue.clear()
-                    saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                    if sessionRS2 == 0:
+                        sessionRS2 += 1
+                        saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
                     saved_bufferRS2_ch1 = []
                     saved_bufferRS2_ch2 = []
                     saved_bufferRS2_ch3 = []
@@ -575,8 +579,6 @@ while gameOn:
                 saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
                 sessionRS2 += 1
                 pg.time.delay(2000)
-            # sessionEnded = 1
-            # restingState2 = 0
 
 
         elif secRS2 < restingStateDuration:
