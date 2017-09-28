@@ -2,7 +2,6 @@
 """Constantes of ZETA Games first App"""
 
 import pygame as pg
-# from pyaudio import PyAudio
 import numpy as np
 from subprocess import Popen, PIPE
 from threading  import Thread
@@ -50,7 +49,7 @@ mean_array_uvRS1 = []
 '''Load images, sonds libraries'''
 buttonText = pg.font.Font('fonts/couture-bld.otf', 15) # font for Menu button
 buttonTextHuge = pg.font.Font('fonts/couture-bld.otf', 20) # font for Menu button
-image_home = 'images/home.jpg'
+image_home = 'images/homev011.jpg'
 
 '''Punchin Ball Game '''
 punchBallImage = "images/punch3.png"
@@ -101,6 +100,7 @@ restingStateDuration = 30 # in seconds
 sec = 0
 durationSessionInit =  350
 durationSession = durationSessionInit
+
 
 endSessionImg = 'images/endSession.png'
 

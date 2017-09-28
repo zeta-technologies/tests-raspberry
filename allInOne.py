@@ -1,8 +1,7 @@
 #!/usr/bin/python
 import pygame as pg
 from pygame.locals import *
-from constantes_PunchinBall import *
-# from constantesDataStream import *
+from constantes import *
 import os
 import sys
 import signal
@@ -16,6 +15,15 @@ import datetime
 from functions import *
 import os, binascii
 from colour import Color
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument("--test")
+args = parser.parse_args()
+if args.test :
+    durationSessionInit = args.test
+    restingStateDuration = args.test
+print durationSessionInit
+print restingStateDuration
 
 '''background'''
 screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
@@ -228,7 +236,7 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathRS1, sessipusponRS, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                saveAllChannelsData(pathRS1, sessionRS, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
                 saved_bufferRS1_ch1 = []
                 saved_bufferRS1_ch2 = []
                 saved_bufferRS1_ch3 = []
@@ -326,10 +334,10 @@ while gameOn:
                     dataRS1[2, :, secRS1] = bufferRS1_array[ind_channel_3]
                     dataRS1[3, :, secRS1] = bufferRS1_array[ind_channel_4]
 
-                    saved_bufferRS1_ch1.append(dataRS1[0, :, secRS1])
-                    saved_bufferRS1_ch2.append(dataRS1[1, :, secRS1])
-                    saved_bufferRS1_ch3.append(dataRS1[2, :, secRS1])
-                    saved_bufferRS1_ch4.append(dataRS1[3, :, secRS1])
+                    saved_bufferRS1_ch1.extend(dataRS1[0, :, secRS1])
+                    saved_bufferRS1_ch2.extend(dataRS1[1, :, secRS1])
+                    saved_bufferRS1_ch3.extend(dataRS1[2, :, secRS1])
+                    saved_bufferRS1_ch4.extend(dataRS1[3, :, secRS1])
 
                     fdataRS1[0, :, secRS1] = filter_data(dataRS1[0, :, secRS1], fs_hz)
                     fdataRS1[1, :, secRS1] = filter_data(dataRS1[1, :, secRS1], fs_hz)
@@ -428,10 +436,10 @@ while gameOn:
                     dataF[2, :] = bufferT_array[ind_channel_3]
                     dataF[3, :] = bufferT_array[ind_channel_4]
 
-                    saved_bufferT_ch1.append(dataF[0, :])
-                    saved_bufferT_ch2.append(dataF[1, :])
-                    saved_bufferT_ch3.append(dataF[2, :])
-                    saved_bufferT_ch4.append(dataF[3, :])
+                    saved_bufferT_ch1.extend(dataF[0, :])
+                    saved_bufferT_ch2.extend(dataF[1, :])
+                    saved_bufferT_ch3.extend(dataF[2, :])
+                    saved_bufferT_ch4.extend(dataF[3, :])
 
                     fdataF[0, :] = filter_data(dataF[0, :], fs_hz)
                     fdataF[1, :] = filter_data(dataF[1, :], fs_hz)
@@ -482,7 +490,7 @@ while gameOn:
                 # sys.stdout.write(char)
             veryOldPosy = oldPosy
             oldPosy = newPosy
-            saved_bufferT.append(bufferT)
+            saved_bufferT.extend(bufferT)
             bufferT = []
 
         elif durationSession == 0 :
@@ -630,10 +638,10 @@ while gameOn:
                     dataRS2[2, :, secRS2] = bufferRS2_array[ind_channel_3]
                     dataRS2[3, :, secRS2] = bufferRS2_array[ind_channel_4]
 
-                    saved_bufferRS2_ch1.append(dataRS2[0, :, secRS2])
-                    saved_bufferRS2_ch2.append(dataRS2[1, :, secRS2])
-                    saved_bufferRS2_ch3.append(dataRS2[2, :, secRS2])
-                    saved_bufferRS2_ch4.append(dataRS2[3, :, secRS2])
+                    saved_bufferRS2_ch1.extend(dataRS2[0, :, secRS2])
+                    saved_bufferRS2_ch2.extend(dataRS2[1, :, secRS2])
+                    saved_bufferRS2_ch3.extend(dataRS2[2, :, secRS2])
+                    saved_bufferRS2_ch4.extend(dataRS2[3, :, secRS2])
 
                     fdataRS2[0, :, secRS2] = filter_data(dataRS2[0, :, secRS2], fs_hz)
                     fdataRS2[1, :, secRS2] = filter_data(dataRS2[1, :, secRS2], fs_hz)
