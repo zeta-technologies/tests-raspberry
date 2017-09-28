@@ -60,6 +60,12 @@ typings/
 .env
 
 # data folder
-data/
-/bin/
+answersFile.txt
 sessionsNames.txt
+answersFile.txt
+constantesDataStream.pyc
+constantes_PunchinBall.pyc
+functions.pyc
+sessionsNames.txt
+/bin/
+data/
