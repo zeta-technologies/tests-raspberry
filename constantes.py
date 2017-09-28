@@ -49,25 +49,13 @@ mean_array_uvRS1 = []
 '''Load images, sonds libraries'''
 buttonText = pg.font.Font('fonts/couture-bld.otf', 15) # font for Menu button
 buttonTextHuge = pg.font.Font('fonts/couture-bld.otf', 20) # font for Menu button
-image_home = 'images/homev011.jpg'
+image_home = 'images/homev011.png'
 
-'''Punchin Ball Game '''
-punchBallImage = "images/punch3.png"
-image_ring = "images/ring.png"
-image_score = "images/scoretxt.png"
-levels_images = ['images/level0.png', 'images/level1.png', 'images/level2.png', 'images/level3.png',
-                 'images/level4.png', 'images/level5.png', 'images/level6.png']
-winImg = "images/win.png"
+
 scoreDigitImages = ['images/0.png', 'images/1.png', 'images/2.png', 'images/3.png', 'images/4.png', 'images/5.png',
                     'images/6.png', 'images/7.png', 'images/8.png', 'images/9.png']
-punchinballSprite = ['images/punch1.png', 'images/punch2.png', 'images/punch3.png', 'images/punch4.png',
-                     'images/punch5.png', ]
-scorePB = 0
-level = 0
-# punch_noise = pg.mixer.Sound("songs/punch.ogg")
 
-
-'''Fly game'''
+'''training game'''
 skyImage = 'images/beach.png' # which is a beach now
 planeImage = 'images/bird.png' # which is a bird now
 # skyImage = 'images/sky.png'
@@ -79,7 +67,7 @@ minDisplayY = 15 # min and max position that the bird can reach, 10px is top of 
 maxDisplayY = 220
 maxScore = 15 # score ruler is 15 max
 minScore = 1
-scoreF = 0
+scoreT = 0
 steps = 1.*buffersize/40
 newPosy = maxDisplayY
 veryOldPosy = maxDisplayY
@@ -98,6 +86,8 @@ timer = ['images/0.png', 'images/1.png', 'images/2.png', 'images/3.png', 'images
 restingState = 'images/restingState.png'
 restingStateDuration = 30 # in seconds
 sec = 0
+secRS2 = 0
+secRS1 = 0
 durationSessionInit =  350
 durationSession = durationSessionInit
 
@@ -108,7 +98,7 @@ endSessionImg = 'images/endSession.png'
 # booleans for each window
 punchinBall = 0
 homeOn = 1
-fly = 0
+training = 0
 restingState1 = 0
 restingState2 = 0
 questionnaire = 0
@@ -174,8 +164,9 @@ saved_bufferT_ch1 = []
 saved_bufferT_ch2 = []
 saved_bufferT_ch3 = []
 saved_bufferT_ch4 = []
-sessionF = 0
-sessionRS = 0
+sessionT = 0
+sessionRS1 = 0
+sessionRS2 = 0
 sessionEnded = 0
 '''for the fft '''
 length = 200

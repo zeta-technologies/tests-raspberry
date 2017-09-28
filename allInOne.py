@@ -20,8 +20,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--test")
 args = parser.parse_args()
 if args.test :
-    durationSessionInit = args.test
-    restingStateDuration = args.test
+    durationSessionInit = int(args.test)
+    durationSession = durationSessionInit
+    restingStateDuration = int(args.test)
 print durationSessionInit
 print restingStateDuration
 
@@ -30,37 +31,11 @@ screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
 fond = pg.image.load(image_ring).convert()
 fond = pg.transform.scale( fond, (w_display, h_display))
 
-'''Punching ball'''
-punchBall = pg.image.load(punchBallImage)
-punchBall = pg.transform.scale(punchBall, (int(math.floor(0.244 * w_display)), int(math.floor(0.78*h_display))))
-
-'''Score Bar'''
-scoreBar = pg.image.load(levels_images[level]).convert_alpha()
-scoreBar = pg.transform.scale(scoreBar, (int(math.floor(0.088*w_display)), int(math.floor(0.69*h_display))))
-scoreBar = pg.transform.rotate(scoreBar, -90)
-# test =pg.transform.scale(scoreBar, (90, 400))
-
-'''Winner image'''
-winImg = pg.image.load(winImg).convert_alpha()
-winImg = pg.transform.scale(winImg, (int(math.floor(0.68*w_display)), int(math.floor(0.76*h_display))))
-# punchBall = punch.set_colorkey((255,255,255))
-
-'''Score digit '''
-scoreTxt = pg.image.load(image_score)
-scoreTxt = pg.transform.scale(scoreTxt, (int(math.floor(0.15*w_display)), int(math.floor(h_display*0.087))))
-scoreDigit = pg.image.load(scoreDigitImages[0])
-scoreDigit = pg.transform.scale(scoreDigit, (int(math.floor(0.068*w_display)), int(math.floor(0.156*h_display))))
-
 '''training game'''
 sky = pg.image.load(skyImage).convert()
 sky = pg.transform.scale(sky, (w_display, h_display))
-# cloud = pg.image.load(cloudImage).convert()
-# cloud = pg.image.transform(cloud, ())
-plane = pg.image.load(planeImage).convert_alpha()
-plane = pg.transform.scale(plane, (50, 50))
 red = Color("red")
 colors = list(red.range_to(Color("green"), 100))
-# plane = plane.set_colorkey((255, 255, 255))
 
 '''Resting state'''
 timerImage = pg.image.load(timer[0])
@@ -86,7 +61,7 @@ if os.path.isfile('sessionsNames.txt'):
     sessionsNames = open('sessionsNames.txt', 'r')
     sessionsNamesLines = sessionsNames.readlines()
     for i in range(len(sessionsNamesLines)):
-        if randomId == sessionsNamesLines[i][-30:] :
+        while randomId == sessionsNamesLines[i][-30:] :
             randomId = binascii.b2a_hex(os.urandom(15))
             sessionName = str(str(now.month)+'-'+str(now.day)+'-'+str(now.hour)+'-'+str(now.minute)+'_'+str(randomId))
     sessionsNames.close()
@@ -123,18 +98,13 @@ print ' \n  Data will be saved here : ', pathRS2, pathRS1, pathT
 while gameOn:
 
     #LOAD screen Image
-    home = pg.image.load(image_home).convert() #TODO add image_home
+    home = pg.image.load(image_home).convert()
     home = pg.transform.scale(home, (w_display, h_display))
     screen.blit(home, (0,0))
 
-    # load home menu buttons
-    settings = 'Lancer la session'
-    settingsSurf, settingsRect = text_objects(settings, buttonText)
-    settingsRect.center = (3.*w_display/10, 3.3*h_display/4)
-
-    launchTraining = 'Lancer la session'
-    launchTrainingSurf, launchTrainingRect = text_objects(launchTraining, buttonText)
-    launchTrainingRect.center = (2.*w_display/5, 3.3*h_display/4)
+    # launchTraining = 'Lancer la session'
+    # launchTrainingSurf, launchTrainingRect = text_objects(launchTraining, buttonText)
+    # launchTrainingRect.center = (2.*w_display/5, 3.3*h_display/4)
 
     nextStep = 'Etape suivante ICI'
     nextStepSurf, nextStepRect = text_objects(nextStep, buttonTextHuge)
@@ -144,10 +114,8 @@ while gameOn:
     progressionSurf, progressionRect = text_objects(progression, buttonText)
     progressionRect.center = (4.*w_display/5, 3.3*h_display/4)
 
-    screen.blit(launchTrainingSurf, launchTrainingRect)
-
+    # screen.blit(launchTrainingSurf, launchTrainingRect)
     pg.display.flip()
-
 
     # Home window loop
     while homeOn:
@@ -159,31 +127,33 @@ while gameOn:
                 sys.exit()
             elif event.type == MOUSEBUTTONUP and not(sessionEnded):
                 mouseHome = pg.mouse.get_pos()
-                choice = whichButtonHomeV2(mouseHome, w_display, h_display)
+                choice = whichButtonHomeV011(mouseHome, w_display, h_display)
 
-                if choice == 2: #  is for training game
+                if choice == 2: #  Launches Resting State 1
                     homeOn = 0
-                    training = 0
                     restingState1 = 1
-                    restingState2 = 0
 
-        if sessionEnded :
-            progressionMetricSurf, progressionMetricRect = text_objects(progressionMetric, buttonText)
-            progressionMetricRect.center = (1.*w_display/2, 1.*h_display/2)
-            screen.blit(endSessionImg, (0,0))
-            screen.blit(progressionMetricSurf, progressionMetricRect)
-            pg.display.flip()
+    if sessionEnded :
+        progressionMetricSurf, progressionMetricRect = text_objects(progressionMetric, buttonText)
+        progressionMetricRect.center = (1.*w_display/2, 1.*h_display/2)
+        screen.blit(endSessionImg, (0,0))
+        screen.blit(progressionMetricSurf, progressionMetricRect)
+        pg.display.flip()
+        saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+
+        pg.time.delay(2000)
+        # gameOn = 0
 
     if restingState1:
 
-        if platform == 'darwin' and sessionRS == 0: # mac
+        if platform == 'darwin' and sessionRS1 == 0: # mac
             process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
             '''launch node process'''
             queue = Queue()
             thread = Thread(target=enqueue_output, args=(process.stdout, queue))
             thread.daemon = True
             thread.start()
-        elif platform == 'linux' or platform == 'linux2' and sessionRS == 0: #linux
+        elif platform == 'linux' or platform == 'linux2' and sessionRS1 == 0: #linux
             process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE, preexec_fn=os.setsid) # for LINUX
             '''launch node process'''
             queue = Queue()
@@ -207,15 +177,15 @@ while gameOn:
         pg.display.flip()
         queue.queue.clear()
 
-    if training:
-        sessionT += 1
-        bufferT = []
-        screen.blit(sky, (0, 0))
-        pg.display.flip()
-        queue.queue.clear()
+    # if training:
+    #     sessionT += 1
+    #     bufferT = []
+    #     screen.blit(sky, (0, 0))
+    #     pg.display.flip()
+    #     queue.queue.clear()
 
     if restingState2:
-        sessionRS += 1
+        sessionRS2 += 1
         secRS2 = 0
         bufferRS2 = []
         band_alphaRS2_ch1 = []
@@ -236,7 +206,7 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathRS1, sessionRS, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                saveAllChannelsData(pathRS1, sessionR1, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
                 saved_bufferRS1_ch1 = []
                 saved_bufferRS1_ch2 = []
                 saved_bufferRS1_ch3 = []
@@ -246,7 +216,7 @@ while gameOn:
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     restingState1 = 0
-            elif event.type == MOUSEBUTTONUP:
+            if event.type == MOUSEBUTTONUP:
                 mouseReturn = pg.mouse.get_pos()
                 if whichButtonReturn(mouseReturn, w_display, h_display):
                     homeOn = 1
@@ -254,12 +224,11 @@ while gameOn:
                     restingState1 = 0
                     bufferRS1 = []
                     queue.queue.clear()
-                    saveAllChannelsData(pathRS1, sessionRS, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                    saveAllChannelsData(pathRS1, sessionRS1, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
                     saved_bufferRS1_ch1 = []
                     saved_bufferRS1_ch2 = []
                     saved_bufferRS1_ch3 = []
                     saved_bufferRS1_ch4 = []
-
 
         if secRS1 == restingStateDuration :
             # np.zeros(nb_freq_alpha)
@@ -305,28 +274,27 @@ while gameOn:
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
                     mouseRS1 = pg.mouse.get_pos()
-                    saveAllChannelsData(pathRS1, sessionRS, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                    saveAllChannelsData(pathRS1, sessionRS1, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
                     saved_bufferRS1_ch1 = []
                     saved_bufferRS1_ch2 = []
                     saved_bufferRS1_ch3 = []
                     saved_bufferRS1_ch4 = []
-                    RS1choice = whichButtonHomeV2(mouseRS1, w_display, h_display)
-                    if RS1choice == 3:
+                    RS1choice = whichButtonHomeV011(mouseRS1, w_display, h_display)
+                    if RS1choice == 2:
                         homeOn = 0
                         training = 1
+                        print training
                         restingState1 = 0
                         bufferRS1 = []
+                        bufferT = [] # init Training session
                         queue.queue.clear()
-
 
         elif secRS1 < restingStateDuration:
             try:
-                # queue.queue.clear()
                 while len(bufferRS1) < buffersize * nb_channels:
                     bufferRS1.append(queue.get_nowait())
 
                 if len(bufferRS1) == 800:
-                    # print sec
                     bufferRS1_array = np.asarray(bufferRS1)
 
                     dataRS1[0, :, secRS1] = bufferRS1_array[ind_channel_1]
@@ -375,7 +343,7 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathT, sessionT, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
                 bufferT = []
                 saved_bufferT_ch1 = []
                 saved_bufferT_ch2 = []
@@ -385,7 +353,7 @@ while gameOn:
                 sys.exit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
-                    saveAllChannelsData(pathT, sessionT, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                    saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
                     bufferT = []
                     saved_bufferT_ch1 = []
                     saved_bufferT_ch2 = []
@@ -398,7 +366,7 @@ while gameOn:
                     homeOn = 1
                     training = 0
                     restingState1 = 0
-                    saveAllChannelsData(pathT, sessionT, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                    saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
                     bufferT = []
                     saved_bufferT_ch1 = []
                     saved_bufferT_ch2 = []
@@ -421,7 +389,7 @@ while gameOn:
                             positionY = veryOldPosy + 1.*(oldPosy - veryOldPosy)/steps
 
                         pg.draw.rect(screen, color , (2. * w_display / 12, positionY, 100, 10 ))
-                        displayNumber(math.floor(scoreF), screen, 'scoreV011')
+                        displayNumber(math.floor(scoreT), screen, 'scoreV011')
                         displayNumber(durationSession, screen, 'timeV011')
                         veryOldPosy += 1.*(oldPosy - veryOldPosy)/steps
                         pg.display.flip()
@@ -480,7 +448,7 @@ while gameOn:
                         b = maxDisplayY - minRatioAlphaOverDelta * a
                         newPosy = a * medRatioF + b
 
-                    scoreF = scoreF + trainingScore(newPosy)
+                    scoreT = scoreT + trainingScore(newPosy)
                     durationSession = durationSession -  1
 
             except Empty:
@@ -494,37 +462,39 @@ while gameOn:
             bufferT = []
 
         elif durationSession == 0 :
-            saveAllChannelsData(pathT, sessionT, 'F', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
-            saved_bufferT_ch1 = []
-            saved_bufferT_ch2 = []
-            saved_bufferT_ch3 = []
-            saved_bufferT_ch4 = []
+            # print saved_bufferT_ch1
+
+            saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+
+
+            screen.blit(restingStateImage, (0,0))
             screen.blit(nextStepSurf, nextStepRect)
             pg.display.flip()
+
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
                     mouseRS2 = pg.mouse.get_pos()
-                    choiceRS2 = whichButtonHomeV2(mouseRS2, w_display, h_display)
-                    if choiceRS2 == 3:
-                        bufferT = []
-                        durationSession = durationSessionInit
+                    choiceRS2 = whichButtonHomeV011(mouseRS2, w_display, h_display)
+                    queue.queue.clear()
+                    print 'line 471'
+                    if choiceRS2 == 2:
                         training = 0
-                        homeOn = 1
-                        restingState1 = 0
-                        restingState2 = 0
-                        bufferRS1 = []
-                        band_alphaRS1_ch1 = []
-                        band_alphaRS1_ch2 = []
-                        band_alphaRS1_ch3 = []
-                        band_alphaRS1_ch4 = []
-                        band_deltaRS1_ch1 = []
-                        band_deltaRS1_ch2 = []
-                        band_deltaRS1_ch3 = []
-                        band_deltaRS1_ch4 = []
+                        bufferT = []
+                        secRS2 = 0
+                        sessionRS2 += 1
+                        restingState2 = 1
+                        bufferRS2 = []
+                        band_alphaRS2_ch1 = []
+                        band_alphaRS2_ch2 = []
+                        band_alphaRS2_ch3 = []
+                        band_alphaRS2_ch4 = []
+                        band_deltaRS2_ch1 = []
+                        band_deltaRS2_ch2 = []
+                        band_deltaRS2_ch3 = []
+                        band_deltaRS2_ch4 = []
                         screen.blit(restingStateImage, (0,0))
                         displayNumber(0, screen, 'timeRSV011')
                         pg.display.flip()
-                        queue.queue.clear()
 
 
     while restingState2:
@@ -532,7 +502,7 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathRS2, sessionRS, 'RS', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
                 saved_bufferRS2_ch1 = []
                 saved_bufferRS2_ch2 = []
                 saved_bufferRS2_ch3 = []
@@ -551,23 +521,17 @@ while gameOn:
                     questionnaire = 0
                     bufferRS2 = []
                     queue.queue.clear()
-                    saveAllChannelsData(pathRS2, sessionRS, 'RS', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                    saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
                     saved_bufferRS2_ch1 = []
                     saved_bufferRS2_ch2 = []
                     saved_bufferRS2_ch3 = []
                     saved_bufferRS2_ch4 = []
-                    # print bufferRS
-
-                    # print band_alphaRS_ch1
 
         if secRS2 == restingStateDuration :
-            # np.zeros(nb_freq_alpha)
             band_alphaRS2_ch1 = np.asarray(band_alphaRS2_ch1)
             band_alphaRS2_ch2 = np.asarray(band_alphaRS2_ch2)
             band_alphaRS2_ch3 = np.asarray(band_alphaRS2_ch3)
             band_alphaRS2_ch4 = np.asarray(band_alphaRS2_ch4)
-            # print 'band_alphaRS_ch1', band_alphaRS_ch1
-            # print 'band_alphaRS_ch1[:, 0]', np.average(band_alphaRS_ch1[:,0])
             freqMaxAlphaCh1 = getfreqmaxband(band_alphaRS2_ch1, 'alpha', nb_freq_alpha)
             freqMaxAlphaCh2 = getfreqmaxband(band_alphaRS2_ch2, 'alpha', nb_freq_alpha)
             freqMaxAlphaCh3 = getfreqmaxband(band_alphaRS2_ch3, 'alpha', nb_freq_alpha)
@@ -602,35 +566,18 @@ while gameOn:
             elif metric < 0 :
                 progressionMetric = 'Progression : -' + str( metric )[1] + '.' + str(metric)[3:6]
 
-            sessionEnded = 1
-            homeOn = 0
-            training = 0
-            restingState2 = 0
-            progressionMetricSurf, progressionMetricRect = text_objects(progressionMetric, buttonText)
-            progressionMetricRect.center = (1.*w_display/2, 1.*h_display/2)
-            screen.blit(endSessionImg, (0,0))
-            screen.blit(progressionMetricSurf, progressionMetricRect)
-            pg.display.flip()
 
-            # process.terminate()
-            # call(['sudo service bluetooth restart'])
-            # os.system('sudo service bluetooth restart')
-            bufferRS2 = []
-            queue.queue.clear()
-            saveAllChannelsData(pathRS2, sessionRS, 'RS', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
-            saved_bufferRS2_ch1 = []
-            saved_bufferRS2_ch2 = []
-            saved_bufferRS2_ch3 = []
-            saved_bufferRS2_ch4 = []
+
+            sessionEnded = 1
+            restingState2 = 0
+
 
         elif secRS2 < restingStateDuration:
             try:
-                # queue.queue.clear()
                 while len(bufferRS2) < buffersize * nb_channels:
                     bufferRS2.append(queue.get_nowait())
 
                 if len(bufferRS2) == 800:
-                    # print secRS2
                     bufferRS2_array = np.asarray(bufferRS2)
 
                     dataRS2[0, :, secRS2] = bufferRS2_array[ind_channel_1]
@@ -664,7 +611,6 @@ while gameOn:
 
                     bufferRS2 = []
                     displayNumber(secRS2, screen, 'timeRSV011')
-                    # checkImp() # TODO  check impedances function
                     pg.display.update()
                     secRS2 = secRS2 + 1
 
