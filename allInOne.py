@@ -19,6 +19,17 @@ import datetime
 from functions import *
 import os, binascii
 from colour import Color
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--test")
+args = parser.parse_args()
+if args.test :
+    durationSessionInit = int(args.test)
+    durationSession = durationSessionInit
+    restingStateDuration = int(args.test)
+print durationSessionInit
+print restingStateDuration
 
 '''background'''
 screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
