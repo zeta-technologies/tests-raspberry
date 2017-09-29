@@ -511,9 +511,10 @@ def displayNumber(nb, screen, position):
 def get_ind_color(score, scoreMax, scoreMin, nbOfColors):
 
     ind = 1.*nbOfColors/scoreMax*score
-
+    if score >= scoreMax :
+        ind = 99
     if ind >= nbOfColors:
-        ind = nbOfColors - 1
+        ind = 99
     # print ind
     return int(ind)
 
