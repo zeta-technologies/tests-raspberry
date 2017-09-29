@@ -17,7 +17,6 @@ import math
 from time import sleep
 import pygame as pg
 from pyaudio import PyAudio
-from constantesDataStream import *
 from constantes import *
 
 def filter_data(data, fs_hz):

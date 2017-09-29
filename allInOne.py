@@ -16,6 +16,7 @@ from functions import *
 import os, binascii
 from colour import Color
 import argparse
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--test")
 args = parser.parse_args()
@@ -28,8 +29,6 @@ print restingStateDuration
 
 '''background'''
 screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
-fond = pg.image.load(image_ring).convert()
-fond = pg.transform.scale( fond, (w_display, h_display))
 
 '''training game'''
 sky = pg.image.load(skyImage).convert()
@@ -161,7 +160,6 @@ while gameOn:
             thread.daemon = True
             thread.start()
 
-        sessionRS += 1
         secRS1 = 0
         bufferRS1 = []
         band_alphaRS1_ch1 = []
@@ -250,7 +248,9 @@ while gameOn:
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
                     mouseRS1 = pg.mouse.get_pos()
-                    saveAllChannelsData(pathRS1, sessionRS1, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                    if sessionRS1 == 0 :
+                        saveAllChannelsData(pathRS1, sessionRS1, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                        sessionRS1 += 1
                     saved_bufferRS1_ch1 = []
                     saved_bufferRS1_ch2 = []
                     saved_bufferRS1_ch3 = []
@@ -259,7 +259,6 @@ while gameOn:
                     if RS1choice == 2:
                         homeOn = 0
                         training = 1
-                        print training
                         restingState1 = 0
                         bufferRS1 = []
                         bufferT = [] # init Training session
@@ -357,6 +356,8 @@ while gameOn:
                     if len(bufferT) % int(math.floor(1.*buffersize/5)) == 0:
                         screen.blit(sky, (0,0))
                         indColor = get_ind_color(trainingScore(newPosy), 10,0, len(colors))
+                        if indColor > 100 :
+                            indColor = 100
                         color = (colors[indColor].rgb[0]*255,colors[indColor].rgb[1]*255,colors[indColor].rgb[2]*255)
                         if (veryOldPosy + 1.*(oldPosy - veryOldPosy)/steps) <= minDisplayY + 10 :
                             positionY = minDisplayY + 10
@@ -452,7 +453,6 @@ while gameOn:
                 if event.type == MOUSEBUTTONUP:
                     mouseRS2 = pg.mouse.get_pos()
                     choiceRS2 = whichButtonHomeV011(mouseRS2, w_display, h_display)
-                    print 'line 471'
                     if choiceRS2 == 2:
                         queue.queue.clear()
                         training = 0
@@ -464,7 +464,7 @@ while gameOn:
                         band_alphaRS2_ch2 = []
                         band_alphaRS2_ch3 = []
                         band_alphaRS2_ch4 = []
-                        
+
                         band_deltaRS2_ch1 = []
                         band_deltaRS2_ch2 = []
                         band_deltaRS2_ch3 = []
