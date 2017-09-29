@@ -132,11 +132,8 @@ elif FreqRange == 'XXII_gamma':
 
 
 
-dataPB = np.zeros((nb_channels, buffersize))
-fdataPB = np.zeros((nb_channels, buffersize))
-
-dataF = np.zeros((nb_channels, buffersize))
-fdataF = np.zeros((nb_channels, buffersize))
+dataT = np.zeros((nb_channels, buffersize))
+fdataT = np.zeros((nb_channels, buffersize))
 
 dataRS1 = np.zeros((nb_channels, buffersize, restingStateDuration)) # need to store every chunk to reprocess the ratio
 fdataRS1 = np.zeros((nb_channels, buffersize, restingStateDuration))
@@ -177,9 +174,6 @@ fs_hz = 200
 '''Neurofeedback loop'''
 # newMean = 0 # useless now
 # oldMean = 5E-13 # useless now
-mean_array_alphaPB = []
-mean_array_deltaPB = []
-ratio_arrayPB = []
 
 mean_array_alphaF = []
 mean_array_deltaF = []
@@ -192,6 +186,7 @@ ratio_arrayRS1 = []
 mean_array_alphaRS2 = []
 mean_array_deltaRS2 = []
 ratio_arrayRS2 = []
+
 '''reorder channels index'''
 # the following loop saves the index of the buffer that are interesting, without the channel id every 0 [nb_channels]
 for ind in range(0, buffersize):

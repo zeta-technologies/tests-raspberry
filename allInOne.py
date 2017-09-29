@@ -177,29 +177,6 @@ while gameOn:
         pg.display.flip()
         queue.queue.clear()
 
-    # if training:
-    #     sessionT += 1
-    #     screen.blit(sky, (0, 0))
-    #     pg.display.flip()
-    #     queue.queue.clear()
-
-    # if restingState2:
-    #     sessionRS2 += 1
-    #     secRS2 = 0
-    #     bufferRS2 = []
-    #     band_alphaRS2_ch1 = []
-    #     band_alphaRS2_ch2 = []
-    #     band_alphaRS2_ch3 = []
-    #     band_alphaRS2_ch4 = []
-    #     band_deltaRS2_ch1 = []
-    #     band_deltaRS2_ch2 = []
-    #     band_deltaRS2_ch3 = []
-    #     band_deltaRS2_ch4 = []
-    #     screen.blit(restingStateImage, (0,0))
-    #     displayNumber(0, screen, 'timeRSV011')
-    #     pg.display.flip()
-    #     queue.queue.clear()
-
     while restingState1:
         pg.time.Clock().tick(60)
 
@@ -399,54 +376,54 @@ while gameOn:
                 if len(bufferT) == 800 :
                     bufferT_array = np.asarray(bufferT)
 
-                    dataF[0, :] = bufferT_array[ind_channel_1]
-                    dataF[1, :] = bufferT_array[ind_channel_2]
-                    dataF[2, :] = bufferT_array[ind_channel_3]
-                    dataF[3, :] = bufferT_array[ind_channel_4]
+                    dataT[0, :] = bufferT_array[ind_channel_1]
+                    dataT[1, :] = bufferT_array[ind_channel_2]
+                    dataT[2, :] = bufferT_array[ind_channel_3]
+                    dataT[3, :] = bufferT_array[ind_channel_4]
 
-                    saved_bufferT_ch1.extend(dataF[0, :])
-                    saved_bufferT_ch2.extend(dataF[1, :])
-                    saved_bufferT_ch3.extend(dataF[2, :])
-                    saved_bufferT_ch4.extend(dataF[3, :])
+                    saved_bufferT_ch1.extend(dataT[0, :])
+                    saved_bufferT_ch2.extend(dataT[1, :])
+                    saved_bufferT_ch3.extend(dataT[2, :])
+                    saved_bufferT_ch4.extend(dataT[3, :])
 
-                    fdataF[0, :] = filter_data(dataF[0, :], fs_hz)
-                    fdataF[1, :] = filter_data(dataF[1, :], fs_hz)
-                    fdataF[2, :] = filter_data(dataF[2, :], fs_hz)
-                    fdataF[3, :] = filter_data(dataF[3, :], fs_hz)
+                    fdataT[0, :] = filter_data(dataT[0, :], fs_hz)
+                    fdataT[1, :] = filter_data(dataT[1, :], fs_hz)
+                    fdataT[2, :] = filter_data(dataT[2, :], fs_hz)
+                    fdataT[3, :] = filter_data(dataT[3, :], fs_hz)
 
-                    bandmean_alphaF = np.zeros(nb_channels)
-                    bandmax_alphaF = np.zeros(nb_channels)
-                    bandmin_alphaF = np.zeros(nb_channels)
+                    bandmean_alphaT = np.zeros(nb_channels)
+                    bandmax_alphaT = np.zeros(nb_channels)
+                    bandmin_alphaT = np.zeros(nb_channels)
 
-                    bandmean_deltaF = np.zeros(nb_channels)
-                    bandmax_deltaF = np.zeros(nb_channels)
-                    bandmin_deltaF = np.zeros(nb_channels)
-                    ratioF = np.zeros(nb_channels)
+                    bandmean_deltaT = np.zeros(nb_channels)
+                    bandmax_deltaT = np.zeros(nb_channels)
+                    bandmin_deltaT = np.zeros(nb_channels)
+                    ratioT = np.zeros(nb_channels)
 
                     for channel in range(nb_channels):
-                        bandmean_alphaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
-                        bandmean_deltaF[channel] = extract_freqbandmean(200, fs_hz, fdataF[channel,:], 3, 4)
-                        ratioF[channel] = 1.* bandmean_alphaF[channel] / bandmean_deltaF[channel]
+                        bandmean_alphaT[channel] = extract_freqbandmean(200, fs_hz, fdataT[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
+                        bandmean_deltaT[channel] = extract_freqbandmean(200, fs_hz, fdataT[channel,:], 3, 4)
+                        ratioT[channel] = 1.* bandmean_alphaT[channel] / bandmean_deltaT[channel]
 
                     # maximiser alpha/delta
                     ''' Get the mean, min and max of the last reslt of all channels'''
-                    newMean_alphaF = np.average(bandmean_alphaF)
-                    # maxAlphaF = np.amax(mean_array_uvF)
-                    # minAlphaF = np.min(mean_array_uvF)
+                    newMean_alphaT = np.average(bandmean_alphaT)
+                    # maxalphaT = np.amax(mean_array_uvT)
+                    # minalphaT = np.min(mean_array_uvT)
 
-                    medRatioF = np.median(ratioF)
-                    mean_array_uvF.append(medRatioF)
+                    medRatioT = np.median(ratioT)
+                    mean_array_uvT.append(medRatioT)
 
-                    if medRatioF == maxRatioAlphaOverDelta:
+                    if medRatioT == maxRatioAlphaOverDelta:
                         newPosy = minDisplayY
 
-                    elif medRatioF == minRatioAlphaOverDelta:
+                    elif medRatioT == minRatioAlphaOverDelta:
                         newPosy = maxDisplayY
 
                     else:
                         a = (maxDisplayY - minDisplayY) * 1. / (minRatioAlphaOverDelta - maxRatioAlphaOverDelta)
                         b = maxDisplayY - minRatioAlphaOverDelta * a
-                        newPosy = a * medRatioF + b
+                        newPosy = a * medRatioT + b
 
                     scoreT = scoreT + trainingScore(newPosy)
                     durationSession = durationSession -  1
@@ -480,13 +457,14 @@ while gameOn:
                         queue.queue.clear()
                         training = 0
                         secRS2 = 0
-                        sessionRS2 = 0
+                        sessionRS2 = 0 #when it's 1, it wont save data anymore
                         restingState2 = 1
                         bufferRS2 = []
                         band_alphaRS2_ch1 = []
                         band_alphaRS2_ch2 = []
                         band_alphaRS2_ch3 = []
                         band_alphaRS2_ch4 = []
+                        
                         band_deltaRS2_ch1 = []
                         band_deltaRS2_ch2 = []
                         band_deltaRS2_ch3 = []
