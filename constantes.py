@@ -40,8 +40,7 @@ ratios_ch2 = []
 ratios_ch3 = []
 ratios_ch4 = []
 
-mean_array_uvPB = []
-mean_array_uvF = []
+mean_array_uvT = []
 mean_array_uvRS2 = []
 mean_array_uvRS1 = []
 
