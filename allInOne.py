@@ -545,22 +545,26 @@ while gameOn:
 
             metric = (medianratioAlphaoverDeltaEnd - medianratioAlphaoverDelta)
             displayedMetric = metric * progressionCoeff
-            if  metric >= 0 & metric >= 0.00:
-                progressionMetric = 'Progression aujourd\'hui :' + str(displayedMetric)[0]+ '.' + str(displayedMetric)[2:5]
-            elif metric < 0 :
-                progressionMetric = 'Progression aujourd\'hui : -' + str(displayedMetric)[1] + '.' + str(displayedMetric)[3:6]
-
             dailyProgressionFile = open('dailyProgression.txt', 'a+')
             dailyProgressionFile.write(sessionName+'_Progression Metric_'+str(metric)+'\n')
             dailyProgressionFile.close()
+            dailyProgressionMetrics = [line.rstrip('\n') for line in open('dailyProgression.txt')]
 
             if sessionRS2 == 0 :
                 sessionRS2 += 1
-                progressionMetricSurf, progressionMetricRect = text_objects(progressionMetric, buttonText)
-                progressionMetricRect.center = (1.*w_display/2, 1.*h_display/2)
                 screen.blit(endSessionImg, (0,0))
-                screen.blit(progressionMetricSurf, progressionMetricRect)
-                pg.display.flip()
+                for s in range(len(dailyProgressionMetrics)-1): # we dont take the last one, it's today's and we want to print it bigger
+                    displayedMetric = dailyProgressionMetrics[s] * progressionCoeff
+                    if  metric >= 0 :
+                        progressionText = 'JOUR ' + str(s) + ' :' +  str(displayedMetric)[0]+ '.' + str(displayedMetric)[2:5]
+                    elif metric < 0 :
+                        progressionText = 'JOUR ' + str(s) + ' :' + str(displayedMetric)[1] + '.' + str(displayedMetric)[3:6]
+
+                    progressionMetricSurf, progressionMetricRect = text_objects(displayedMetric, progressionText)
+                    progressionMetricRect.center = (s*w_display/(s+1), 1.*h_display/2)
+                    screen.blit(progressionMetricSurf, progressionMetricRect)
+                    pg.display.flip()
+
                 saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
                 pg.time.delay(2000)
 

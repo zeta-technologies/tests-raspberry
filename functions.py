@@ -567,3 +567,9 @@ def mad(a, axis=None):
     mad = np.median(np.absolute(a - med))  # MAD along given axis
 
     return mad
+
+def file_len(fname):
+    with open(fname) as f:
+        for i, l in enumerate(f):
+            pass
+    return i + 1
