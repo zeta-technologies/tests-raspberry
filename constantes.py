@@ -89,9 +89,11 @@ secRS2 = 0
 secRS1 = 0
 durationSessionInit =  350
 durationSession = durationSessionInit
-
-
 endSessionImg = 'images/endSession.png'
+
+'''Progression '''
+progressionCoeff = 100 #coefficient that higher the progression metric since it's a low coeff ~ 0.001
+displayedMetric = 0
 
 '''Navigation among the pages'''
 # booleans for each window
