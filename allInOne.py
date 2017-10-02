@@ -132,7 +132,7 @@ while gameOn:
                     homeOn = 0
                     restingState1 = 1
 
-    if sessionEnded :
+    if sessionEnded:
         progressionMetricSurf, progressionMetricRect = text_objects(progressionMetric, buttonText)
         progressionMetricRect.center = (1.*w_display/2, 1.*h_display/2)
         screen.blit(endSessionImg, (0,0))
@@ -143,7 +143,7 @@ while gameOn:
         pg.time.delay(2000)
         # gameOn = 0
 
-    if restingState1:
+    elif restingState1:
 
         if platform == 'darwin' and sessionRS1 == 0: # mac
             process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
@@ -174,6 +174,9 @@ while gameOn:
         displayNumber(0, screen, 'timeRSV011')
         pg.display.flip()
         queue.queue.clear()
+
+    elif progression:
+        print progression
 
     while restingState1:
         pg.time.Clock().tick(60)
@@ -473,7 +476,6 @@ while gameOn:
                         displayNumber(0, screen, 'timeRSV011')
                         pg.display.flip()
 
-
     while restingState2:
         pg.time.Clock().tick(60)
 
@@ -606,3 +608,7 @@ while gameOn:
             else:
                 str(bufferRS2)
                 # sys.stdout.write(char)
+
+    while progression:
+        print "day 1 :"
+        print "day 2 :"
