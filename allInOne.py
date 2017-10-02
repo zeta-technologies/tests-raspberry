@@ -543,27 +543,35 @@ while gameOn:
             minRatioAlphaOverDelta = medianratioAlphaoverDelta - 3 * madRatioAlphaOverDelta
             maxRatioAlphaOverDelta = medianratioAlphaoverDelta + 3 * madRatioAlphaOverDelta
 
-            metric = (medianratioAlphaoverDeltaEnd - medianratioAlphaoverDelta)
-            displayedMetric = metric * progressionCoeff
-            dailyProgressionFile = open('dailyProgression.txt', 'a+')
-            dailyProgressionFile.write(sessionName+'_Progression Metric_'+str(metric)+'\n')
-            dailyProgressionFile.close()
-            dailyProgressionMetrics = [line.rstrip('\n') for line in open('dailyProgression.txt')]
+
 
             if sessionRS2 == 0 :
+                metric = (medianratioAlphaoverDeltaEnd - medianratioAlphaoverDelta)
+                displayedMetric = metric * progressionCoeff
+                dailyProgressionFile = open('dailyProgression.txt', 'a+')
+                dailyProgressionFile.write(str(metric)+'***_Progression Metric_'+sessionName+'\n') #*** is the marker i use to stop reading the line which means "it's not the metric anymore"
+                dailyProgressionFile.close()
+                dailyProgressionMetrics = [line.rstrip('\n') for line in open('dailyProgression.txt')]
+                dailyProgressionMetrics = [float(i.split('***')[0]) for i in dailyProgressionMetrics] # we take the 0th element beacause '***' can be in the middle of number : for instance '569348278***706958' returns ['569348278','706958']
+                dailyProgressionMetrics = [ i * progressionCoeff for i in dailyProgressionMetrics]
+
                 sessionRS2 += 1
                 screen.blit(endSessionImg, (0,0))
-                for s in range(len(dailyProgressionMetrics)-1): # we dont take the last one, it's today's and we want to print it bigger
-                    displayedMetric = dailyProgressionMetrics[s] * progressionCoeff
-                    if  metric >= 0 :
-                        progressionText = 'JOUR ' + str(s) + ' :' +  str(displayedMetric)[0]+ '.' + str(displayedMetric)[2:5]
-                    elif metric < 0 :
-                        progressionText = 'JOUR ' + str(s) + ' :' + str(displayedMetric)[1] + '.' + str(displayedMetric)[3:6]
 
-                    progressionMetricSurf, progressionMetricRect = text_objects(displayedMetric, progressionText)
-                    progressionMetricRect.center = (s*w_display/(s+1), 1.*h_display/2)
-                    screen.blit(progressionMetricSurf, progressionMetricRect)
-                    pg.display.flip()
+                for s in range(len(dailyProgressionMetrics)-2): # we dont take the last one, it's today's and we want to print it bigger
+                    # displayedMetric = dailyProgressionMetrics[s]
+                    pg.draw.lines(screen, 0x00ff00, False, ((s*w_display/(len(dailyProgressionMetrics)-1), dailyProgressionMetrics[s]+1.*h_display/2), (((s+1)*w_display/(len(dailyProgressionMetrics)-1), dailyProgressionMetrics[s+1]+1.*h_display/2), 5 )
+                    # if  metric >= 0 :
+                    #     progressionText = 'JOUR ' + str(s) + ' :' +  str(displayedMetric)[0]+ '.' + str(displayedMetric)[2:5]
+                    #     print progressionText
+                    # elif metric < 0 :
+                    #     progressionText = 'JOUR ' + str(s) + ' :' + str(displayedMetric)[1] + '.' + str(displayedMetric)[3:6]
+                    #     print progressionText
+
+                progressionMetricSurf, progressionMetricRect = text_objects(progressionText, progressionTextFont)
+                progressionMetricRect.center = (s*w_display/(len(dailyProgressionMetrics)-1), 1.*h_display/2)
+                screen.blit(progressionMetricSurf, progressionMetricRect)
+                pg.display.flip()
 
                 saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
                 pg.time.delay(2000)

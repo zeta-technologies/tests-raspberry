@@ -47,7 +47,7 @@ mean_array_uvRS1 = []
 
 '''Load images, sonds libraries'''
 buttonText = pg.font.Font('fonts/couture-bld.otf', 15) # font for Menu button
-progressionText = pg.font.Font('fonts/couture-bld.otf', 5) # font for Menu button
+progressionTextFont = pg.font.Font('fonts/couture-bld.otf', 5) # font for Menu button
 
 buttonTextHuge = pg.font.Font('fonts/couture-bld.otf', 20) # font for Menu button
 image_home = 'images/homev011.png'
@@ -91,6 +91,7 @@ secRS2 = 0
 secRS1 = 0
 durationSessionInit =  350
 durationSession = durationSessionInit
+restingState1isDone = 0
 endSessionImg = 'images/endSession.png'
 
 '''Progression '''

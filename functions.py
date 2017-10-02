@@ -321,6 +321,8 @@ def trainingScore(posY):
 
     newscore = 1.* (maxScore - minScore)/(minDisplayY - maxDisplayY) * ( posY - minDisplayY) + maxScore
     # print newscore
+    if newscore < 0:
+        newscore = 0
     return newscore
 
 
