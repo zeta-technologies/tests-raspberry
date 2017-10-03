@@ -557,13 +557,13 @@ while gameOn:
 
                 sessionRS2 += 1
                 screen.blit(endSessionImg, (0,0))
-                print dailyProgressionMetrics
+                # print dailyProgressionMetrics
 
                 dailyProgressionMetricsDisplayed = progressionFunc(dailyProgressionMetrics, h_display, w_display, h_display * 5/6, h_display*1/6)
                 for s in range(len(dailyProgressionMetrics)-1): # we dont take the last one, it's today's and we want to print it bigger
                     # displayedMetric = dailyProgressionMetrics[s]
-                    print ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s+1])
-                    pg.draw.line(screen, 0x00ff00, ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s+1]), 2 )
+                    # print ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s+1])
+                    pg.draw.line(screen, 0x4F89D8, ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s+1]), 1 )
 
                     # if  metric >= 0 :
                     #     progressionText = 'JOUR ' + str(s) + ' :' +  str(displayedMetric)[0]+ '.' + str(displayedMetric)[2:5]
