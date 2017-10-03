@@ -24,8 +24,6 @@ if args.test :
     durationSessionInit = int(args.test)
     durationSession = durationSessionInit
     restingStateDuration = int(args.test)
-print durationSessionInit
-print restingStateDuration
 
 '''background'''
 screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
@@ -53,7 +51,10 @@ endSessionImg = pg.transform.scale(endSessionImg, (w_display, h_display))
 gameOn = 1
 now = datetime.datetime.now()
 randomId = binascii.b2a_hex(os.urandom(15)) #id is 30 characters long
-sessionName = str(str(now.month)+'-'+str(now.day)+'-'+str(now.hour)+'-'+str(now.minute)+'-'+str(randomId))
+if args.test:
+    sessionName = str('TEST-'+str(now.month)+'-'+str(now.day)+'-'+str(now.hour)+'-'+str(now.minute)+'-'+str(randomId))
+else:
+    sessionName = str(str(now.month)+'-'+str(now.day)+'-'+str(now.hour)+'-'+str(now.minute)+'-'+str(randomId))
 
 '''Loop that reads the text file sessionsNames, and check if the randomId has already been chosen in this folder'''
 if os.path.isfile('sessionsNames.txt'):
