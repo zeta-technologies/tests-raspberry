@@ -559,7 +559,7 @@ while gameOn:
                 screen.blit(endSessionImg, (0,0))
                 # print dailyProgressionMetrics
 
-                dailyProgressionMetricsDisplayed = progressionFunc(dailyProgressionMetrics, h_display, w_display, h_display * 5/6, h_display*1/6)
+                dailyProgressionMetricsDisplayed = progressionFunc(dailyProgressionMetrics, h_display, w_display, h_display * 3/4, h_display*1/4)
                 for s in range(len(dailyProgressionMetrics)-1): # we dont take the last one, it's today's and we want to print it bigger
                     # displayedMetric = dailyProgressionMetrics[s]
                     # print ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s+1])
