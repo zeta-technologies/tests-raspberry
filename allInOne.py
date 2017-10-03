@@ -108,8 +108,10 @@ if os.path.isfile('sessionsNames.txt'):
 
 else :
     sessionsNames = open('sessionsNames.txt', 'a+')
-
-sessionsNames.write(sessionName +'\n' )
+if argparse.test:
+    sessionsNames.write('TEST - '+ sessionName +'\n' )
+else:
+    sessionsNames.write(sessionName +'\n' )
 sessionsNames.close()
 
 '''check if the directory /data already exists'''
