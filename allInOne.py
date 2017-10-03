@@ -343,7 +343,6 @@ while gameOn:
         for event in pg.event.get():
             if event.type == QUIT:
                 saveAllChannelsData(pathRS1, sessionRS1, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
-                sessionRS1 += 1
                 saved_bufferRS1_ch1 = []
                 saved_bufferRS1_ch2 = []
                 saved_bufferRS1_ch3 = []
@@ -362,7 +361,6 @@ while gameOn:
                     bufferRS1 = []
                     queue.queue.clear()
                     saveAllChannelsData(pathRS1, sessionRS1, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
-                    sessionRS1 += 1
                     saved_bufferRS1_ch1 = []
                     saved_bufferRS1_ch2 = []
                     saved_bufferRS1_ch3 = []
@@ -413,7 +411,6 @@ while gameOn:
                 if event.type == MOUSEBUTTONUP:
                     mouseRS1 = pg.mouse.get_pos()
                     saveAllChannelsData(pathRS1, sessionRS1, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
-                    sessionRS1 += 1
                     saved_bufferRS1_ch1 = []
                     saved_bufferRS1_ch2 = []
                     saved_bufferRS1_ch3 = []
@@ -483,7 +480,6 @@ while gameOn:
         for event in pg.event.get():
             if event.type == QUIT:
                 saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
-                sessionT += 1
                 bufferT = []
                 saved_bufferT_ch1 = []
                 saved_bufferT_ch2 = []
@@ -494,7 +490,6 @@ while gameOn:
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
-                    sessionT += 1
                     bufferT = []
                     saved_bufferT_ch1 = []
                     saved_bufferT_ch2 = []
@@ -508,7 +503,6 @@ while gameOn:
                     training = 0
                     restingState1 = 0
                     saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
-                    sessionT += 1
                     bufferT = []
                     saved_bufferT_ch1 = []
                     saved_bufferT_ch2 = []
@@ -612,7 +606,6 @@ while gameOn:
                     # print type(saved_bufferT_ch1)
                     # print saved_bufferT_ch1
                     saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
-                    sessionT += 1
                     mouseT = pg.mouse.get_pos()
                     choiceT = whichButtonHomeV2(mouseT, w_display, h_display)
                     saved_bufferT_ch1 = []
@@ -646,7 +639,6 @@ while gameOn:
         for event in pg.event.get():
             if event.type == QUIT:
                 saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
-                sessionRS2 += 1
                 saved_bufferRS2_ch1 = []
                 saved_bufferRS2_ch2 = []
                 saved_bufferRS2_ch3 = []
@@ -777,11 +769,10 @@ while gameOn:
         for event in pg.event.get():
             if event.type == QUIT:
                 saveAllChannelsData(pathS, sessionS, 'Saving', saved_bufferS_ch1, saved_bufferS_ch2, saved_bufferS_ch3, saved_bufferS_ch4)
-                sessionS += 1
-                saved_bufferS_ch1 = []
-                saved_bufferS_ch2 = []
-                saved_bufferS_ch3 = []
-                saved_bufferS_ch4 = []
+                # saved_bufferS_ch1 = []
+                # saved_bufferS_ch2 = []
+                # saved_bufferS_ch3 = []
+                # saved_bufferS_ch4 = []
                 pg.quit()
                 sys.exit()
             if event.type == KEYDOWN:
@@ -796,11 +787,10 @@ while gameOn:
                     bufferS = []
                     queue.queue.clear()
                     saveAllChannelsData(pathS, sessionS, 'Saving', saved_bufferS_ch1, saved_bufferS_ch2, saved_bufferS_ch3, saved_bufferS_ch4)
-                    sessionS += 1
-                    saved_bufferS_ch1 = []
-                    saved_bufferS_ch2 = []
-                    saved_bufferS_ch3 = []
-                    saved_bufferS_ch4 = []
+                    # saved_bufferS_ch1 = []
+                    # saved_bufferS_ch2 = []
+                    # saved_bufferS_ch3 = []
+                    # saved_bufferS_ch4 = []
 
 
         if secS == durationSessionSaving :
@@ -854,13 +844,11 @@ while gameOn:
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
                     mouseS = pg.mouse.get_pos()
-                    if sessionS == 1:
-                        saveAllChannelsData(pathS, sessionS, 'Saving', saved_bufferS_ch1, saved_bufferS_ch2, saved_bufferS_ch3, saved_bufferS_ch4)
-                        sessionS += 1
-                    saved_bufferS_ch1 = []
-                    saved_bufferS_ch2 = []
-                    saved_bufferS_ch3 = []
-                    saved_bufferS_ch4 = []
+                    saveAllChannelsData(pathS, sessionS, 'Saving', saved_bufferS_ch1, saved_bufferS_ch2, saved_bufferS_ch3, saved_bufferS_ch4)
+                    # saved_bufferS_ch1 = []
+                    # saved_bufferS_ch2 = []
+                    # saved_bufferS_ch3 = []
+                    # saved_bufferS_ch4 = []
                     sChoice = whichAnswerClicked(mouseS, w_display, h_display)
                     if sChoice == 1 or sChoice == 2 or sChoice == 3 or sChoice == 4 or sChoice == 5:
                          #open file and save the answer
@@ -885,8 +873,10 @@ while gameOn:
                         answersFile.write(sessionName+ ' | Answers : Quelle est la force de votre acouphene ? '+str(answer1)+ '/4 | '+'A quel point vous derange-t-il ? ' + str(answer2) + '/4\n')
                         screen.blit(endSessionImg, (0,0))
                         answersFile.close()
+                        pg.quit()
+                        sys.exit()
                         pg.display.flip()
-                        gameOn = 0
+
                 # answersFile = open('answers.txt', 'a+')
 
         elif secS < durationSessionSaving:
@@ -946,7 +936,6 @@ while gameOn:
         for event in pg.event.get():
             if event.type == QUIT:
                 saveAllChannelsData(pathSleep, sessionSleep, 'Sleep', saved_bufferSleep_ch1, saved_bufferSleep_ch2, saved_bufferSleep_ch3, saved_bufferSleep_ch4)
-                sessionSleep += 1
                 saved_bufferSleep_ch1 = []
                 saved_bufferSleep_ch2 = []
                 saved_bufferSleep_ch3 = []
@@ -963,7 +952,6 @@ while gameOn:
                 sleep = 0
                 bufferSleep = []
                 saveAllChannelsData(pathSleep, sessionSleep, 'Sleep', saved_bufferSleep_ch1, saved_bufferSleep_ch2, saved_bufferSleep_ch3, saved_bufferSleep_ch4)
-                sessionSleep += 1
                 saved_bufferSleep_ch1 = []
                 saved_bufferSleep_ch2 = []
                 saved_bufferSleep_ch3 = []
