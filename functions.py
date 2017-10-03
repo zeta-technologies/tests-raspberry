@@ -325,6 +325,11 @@ def trainingScore(posY):
         newscore = 0
     return newscore
 
+def progressionFunc(array, h, w, max_disp, min_disp) :
+    a = (max_disp - min_disp) / (min(array) - max(array))
+    b = min_disp - a* max(array)
+    new_array = [a*array[i] + b for i in range(len(array))]
+    return new_array
 
 def displayNumber(nb, screen, position):
     # print nb

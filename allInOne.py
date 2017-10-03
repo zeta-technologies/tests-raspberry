@@ -553,14 +553,18 @@ while gameOn:
                 dailyProgressionFile.close()
                 dailyProgressionMetrics = [line.rstrip('\n') for line in open('dailyProgression.txt')]
                 dailyProgressionMetrics = [float(i.split('***')[0]) for i in dailyProgressionMetrics] # we take the 0th element beacause '***' can be in the middle of number : for instance '569348278***706958' returns ['569348278','706958']
-                dailyProgressionMetrics = [ i * progressionCoeff for i in dailyProgressionMetrics]
+                # dailyProgressionMetrics = [ i * progressionCoeff for i in dailyProgressionMetrics]
 
                 sessionRS2 += 1
                 screen.blit(endSessionImg, (0,0))
+                print dailyProgressionMetrics
 
-                for s in range(len(dailyProgressionMetrics)-2): # we dont take the last one, it's today's and we want to print it bigger
+                dailyProgressionMetricsDisplayed = progressionFunc(dailyProgressionMetrics, h_display, w_display, h_display * 5/6, h_display*1/6)
+                for s in range(len(dailyProgressionMetrics)-1): # we dont take the last one, it's today's and we want to print it bigger
                     # displayedMetric = dailyProgressionMetrics[s]
-                    pg.draw.lines(screen, 0x00ff00, False, ((s*w_display/(len(dailyProgressionMetrics)-1), dailyProgressionMetrics[s]+1.*h_display/2), (((s+1)*w_display/(len(dailyProgressionMetrics)-1), dailyProgressionMetrics[s+1]+1.*h_display/2), 5 )
+                    print ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s+1])
+                    pg.draw.line(screen, 0x00ff00, ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s+1]), 2 )
+
                     # if  metric >= 0 :
                     #     progressionText = 'JOUR ' + str(s) + ' :' +  str(displayedMetric)[0]+ '.' + str(displayedMetric)[2:5]
                     #     print progressionText
@@ -568,9 +572,9 @@ while gameOn:
                     #     progressionText = 'JOUR ' + str(s) + ' :' + str(displayedMetric)[1] + '.' + str(displayedMetric)[3:6]
                     #     print progressionText
 
-                progressionMetricSurf, progressionMetricRect = text_objects(progressionText, progressionTextFont)
-                progressionMetricRect.center = (s*w_display/(len(dailyProgressionMetrics)-1), 1.*h_display/2)
-                screen.blit(progressionMetricSurf, progressionMetricRect)
+                # progressionMetricSurf, progressionMetricRect = text_objects(progressionText, progressionTextFont)
+                # progressionMetricRect.center = (s*w_display/(len(dailyProgressionMetrics)-1), 1.*h_display/2)
+                # screen.blit(progressionMetricSurf, progressionMetricRect)
                 pg.display.flip()
 
                 saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
