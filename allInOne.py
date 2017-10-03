@@ -27,6 +27,7 @@ args = parser.parse_args()
 if args.test :
     durationSessionInit = int(args.test)
     durationSession = durationSessionInit
+    durationSessionSaving = durationSessionInit
     restingStateDuration = int(args.test)
 print durationSessionInit
 print restingStateDuration
@@ -866,21 +867,24 @@ while gameOn:
                         print "level is", sChoice
                         answer1 = sChoice - 1
                         sChoice = 0
-                        answer2Ind = 1
                         screen.blit(questionImage2, (0,0))
                         question2 = 'A quel point vous derange-t-il ?'
                         question2Surf, question2Rect = text_objects(question2, buttonText)
                         question2Rect.center = (5. * w_display / 10, 4.*h_display/7)
                         screen.blit(question2Surf, question2Rect)
                         pg.display.flip()
+                        answer2Ind = 1
+
                     elif (sChoice == 11 or sChoice == 12 or sChoice == 13 or sChoice == 14 or sChoice == 15) and answer2Ind != 0 :
                          #open file and save the answer
                         print "level is", sChoice
                         answer2 = sChoice - 11
                         sChoice = 0
                         answersFile = open('answersFile.txt', 'a+')
+                        print sessionName + ' | Answers : Quelle est la force de votre acouphene ? '+str(answer1)+ '/4 | '+'A quel point vous derange-t-il ? ' + str(answer2) + '/4\n'
                         answersFile.write(sessionName+ ' | Answers : Quelle est la force de votre acouphene ? '+str(answer1)+ '/4 | '+'A quel point vous derange-t-il ? ' + str(answer2) + '/4\n')
                         screen.blit(endSessionImg, (0,0))
+                        answersFile.close()
                         pg.display.flip()
                         gameOn = 0
                 # answersFile = open('answers.txt', 'a+')
