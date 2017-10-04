@@ -28,7 +28,7 @@ if args.test :
     durationSessionInit = int(args.test)
     durationSession = durationSessionInit
     durationSessionSaving = durationSessionInit
-    restingStateDuration = int(args.test)
+    restingStateDuration = durationSessionInit
 print durationSessionInit
 print restingStateDuration
 
