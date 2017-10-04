@@ -108,7 +108,7 @@ if os.path.isfile('sessionsNames.txt'):
 
 else :
     sessionsNames = open('sessionsNames.txt', 'a+')
-if argparse.test:
+if args.test:
     sessionsNames.write('TEST - '+ sessionName +'\n' )
 else:
     sessionsNames.write(sessionName +'\n' )
