@@ -135,18 +135,7 @@ elif FreqRange == 'XXII_gamma':
     freqRange = np.array([38, 40])
 
 
-
-dataT = np.zeros((nb_channels, buffersize))
-fdataT = np.zeros((nb_channels, buffersize))
-
-dataRS1 = np.zeros((nb_channels, buffersize, restingStateDuration)) # need to store every chunk to reprocess the ratio
-fdataRS1 = np.zeros((nb_channels, buffersize, restingStateDuration))
-
-dataRS2 = np.zeros((nb_channels, buffersize, restingStateDuration)) # need to store every chunk to reprocess the ratio
-fdataRS2 = np.zeros((nb_channels, buffersize, restingStateDuration))
-
 ''' Save buffer, to keep data records somewhere'''
-
 
 saved_bufferPB = []
 saved_bufferT = []

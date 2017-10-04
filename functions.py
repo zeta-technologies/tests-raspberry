@@ -504,7 +504,20 @@ def displayNumber(nb, screen, position):
             screen.blit(timerSec, (25.* w_display / 30, 7.* h_display / 10))
 
     elif position =='timeRSV011':
-        if nb >= 10 and nb <= 99:
+
+        if nb >= 100 and nb <= 999:
+            timerSec = pg.image.load(timer[int(str(nb)[2])]).convert()
+            timerSec = pg.transform.scale(timerSec,(int(1.* w_display / 15), int(1.*h_display / 10)))
+            timerDiz = pg.image.load(timer[int(str(nb)[1])]).convert()
+            timerDiz = pg.transform.scale(timerDiz, (int(1.* w_display / 15), int(1.*h_display / 10)))
+            timerDiz = pg.image.load(timer[int(str(nb)[0])]).convert()
+            timerDiz = pg.transform.scale(timerDiz, (int(1.* w_display / 15), int(1.*h_display / 10)))
+
+            screen.blit(timerSec, (8.* w_display / 30, 1.* h_display / 20))
+            screen.blit(timerDiz, (6.* w_display / 30, 1.* h_display / 20))
+            screen.blit(timerCen, (4.* w_display / 30, 1.* h_display / 20))
+
+        elif nb >= 10 and nb <= 99:
             timerSec = pg.image.load(timer[int(str(nb)[1])]).convert()
             timerSec = pg.transform.scale(timerSec,(int(1.* w_display / 15), int(1.*h_display / 10)))
             timerDiz = pg.image.load(timer[int(str(nb)[0])]).convert()
