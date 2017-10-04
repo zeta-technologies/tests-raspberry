@@ -31,6 +31,23 @@ if args.test :
     restingStateDuration = durationSessionInit
 print durationSessionInit
 print restingStateDuration
+dataPB = np.zeros((nb_channels, buffersize))
+fdataPB = np.zeros((nb_channels, buffersize))
+
+dataT = np.zeros((nb_channels, buffersize))
+fdataT = np.zeros((nb_channels, buffersize))
+
+dataRS1 = np.zeros((nb_channels, buffersize, restingStateDuration)) # need to store every chunk to reprocess the ratio
+fdataRS1 = np.zeros((nb_channels, buffersize, restingStateDuration))
+
+dataRS2 = np.zeros((nb_channels, buffersize, restingStateDuration)) # need to store every chunk to reprocess the ratio
+fdataRS2 = np.zeros((nb_channels, buffersize, restingStateDuration))
+
+dataS = np.zeros((nb_channels, buffersize, durationSessionSaving)) # need to store every chunk to reprocess the ratio
+fdataS = np.zeros((nb_channels, buffersize, durationSessionSaving))
+
+dataSleep = np.zeros((nb_channels, buffersize)) # need to store every chunk to reprocess the ratio
+fdataSleep = np.zeros((nb_channels, buffersize))
 
 '''background'''
 screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
