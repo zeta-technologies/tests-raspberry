@@ -61,7 +61,7 @@ def extract_freqband(N, fe, signal, fmin, fmax):
     fftsig = fftsig[fmin:fmax+1]
     length = len(fftsig)
     # freq = np.fft.fftfreq(N, timestep)
-    return fftsig, length
+    return fftsig, length # why is there no indication on the fft length ?
 
 def extract_freqbandmin(N, fe, signal, fmin, fmax):
     #f = np.linspace(0,fe/2,int(np.floor(N/2)))
@@ -321,8 +321,11 @@ def trainingScore(posY):
 
     newscore = 1.* (maxScore - minScore)/(minDisplayY - maxDisplayY) * ( posY - minDisplayY) + maxScore
     # print newscore
+
     if newscore < 0:
         newscore = 0
+    elif newscore >= maxScore:
+        newscore = 15
     return newscore
 
 def progressionFunc(array, h, w, max_disp, min_disp) :
@@ -552,13 +555,13 @@ def cleanData(cdata, data):
 
 def getfreqmaxband(data, rangefreq, nb_freq):
     # this function finds the peak of the alpha band and returns the freq associated to the peak
-    maxBandAlpha = 0
+    maxBand = 0
     for ind in range(nb_freq): # for each channel, first we need to get the average of each freq during the period
-        if np.average(data[:, ind]) >= maxBandAlpha :
+        if np.average(data[:, ind]) >= maxBand :
             ind_freqMax = ind
         else:
             pass
-    # maxBandAlpha = np.average(band_alphaRS_ch1[ind_freqMax])
+    # maxBand = np.average(band_alphaRS_ch1[ind_freqMax])
 
     if rangefreq == 'alpha':
         frequencies = [6, 7, 8, 9, 10, 11, 12, 13]
