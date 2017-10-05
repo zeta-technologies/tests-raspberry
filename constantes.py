@@ -57,11 +57,7 @@ scoreDigitImages = ['images/0.png', 'images/1.png', 'images/2.png', 'images/3.pn
                     'images/6.png', 'images/7.png', 'images/8.png', 'images/9.png']
 
 '''training game'''
-skyImage = 'images/beach.png' # which is a beach now
-planeImage = 'images/bird.png' # which is a bird now
-# skyImage = 'images/sky.png'
-# planeImage = 'images/plane.jpg'
-cloudImage = 'images/cloud.png'
+backgroundImage = 'images/background.png' # which is a beach now
 oldPosy = 180 # initial position of the Bird
 # steps = 10
 minDisplayY = 15 # min and max position that the bird can reach, 10px is top of the screen
@@ -75,7 +71,7 @@ veryOldPosy = maxDisplayY
 oldPosy = maxDisplayY
 deltaPosy_1 = 1. * (newPosy - oldPosy) / steps
 deltaPosy_2 = 1. * (oldPosy - veryOldPosy) / steps
-scorT = 1
+
 maxRatioAlphaOverDelta = 1
 minRatioAlphaOverDelta = 0
 coef_mad = 3
@@ -113,7 +109,7 @@ if FreqRange == '':
     logging.warning('No frequency passed as argument')
 
 if FreqRange == 'alpha':
-    freqRange = np.array([6, 11])
+    freqRange = np.array([6, 13])
 elif FreqRange == 'gamma':
     freqRange = np.array([25, 50])
 elif FreqRange == 'beta':

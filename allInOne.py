@@ -39,8 +39,6 @@ fdataRS2 = np.zeros((nb_channels, buffersize, restingStateDuration))
 screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
 
 '''training game'''
-sky = pg.image.load(skyImage).convert()
-sky = pg.transform.scale(sky, (w_display, h_display))
 red = Color("red")
 colors = list(red.range_to(Color("green"), 100))
 
@@ -115,6 +113,8 @@ while gameOn:
     # launchTraining = 'Lancer la session'
     # launchTrainingSurf, launchTrainingRect = text_objects(launchTraining, buttonText)
     # launchTrainingRect.center = (2.*w_display/5, 3.3*h_display/4)
+    background = pg.image.load(backgroundImage).convert()
+    background = pg.transform.scale(background, (w_display, h_display))
 
     nextStep = 'Etape suivante ICI'
     nextStepSurf, nextStepRect = text_objects(nextStep, buttonTextHuge)
@@ -194,7 +194,7 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathRS1, sessionR1, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                saveAllChannelsData(pathRS1, sessionRS1, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
                 saved_bufferRS1_ch1 = []
                 saved_bufferRS1_ch2 = []
                 saved_bufferRS1_ch3 = []
@@ -368,7 +368,7 @@ while gameOn:
                 while len(bufferT) < buffersize * nb_channels:
 
                     if len(bufferT) % int(math.floor(1.*buffersize/5)) == 0:
-                        screen.blit(sky, (0,0))
+                        screen.blit(background, (0,0))
                         indColor = get_ind_color(trainingScore(newPosy), 10,0, len(colors))
                         if indColor > 100 :
                             indColor = 100
@@ -450,7 +450,6 @@ while gameOn:
                 # sys.stdout.write(char)
             veryOldPosy = oldPosy
             oldPosy = newPosy
-            saved_bufferT.extend(bufferT)
             bufferT = []
 
         elif durationSession == 0 :
