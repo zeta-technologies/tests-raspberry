@@ -35,7 +35,6 @@ fdataRS1 = np.zeros((nb_channels, buffersize, restingStateDuration))
 
 dataRS2 = np.zeros((nb_channels, buffersize, restingStateDuration)) # need to store every chunk to reprocess the ratio
 fdataRS2 = np.zeros((nb_channels, buffersize, restingStateDuration))
-
 '''background'''
 screen = pg.display.set_mode((w_display, h_display), RESIZABLE)
 
