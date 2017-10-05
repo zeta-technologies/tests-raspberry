@@ -321,6 +321,7 @@ while gameOn:
                     # checkImp() # TODO  check impedances function
                     pg.display.update()
                     secRS1 = secRS1 + 1
+                    # TODO add a queue.queue.clear() and a time study to find out where does the program take so long
 
             except Empty:
                 continue  # do stuff
@@ -335,20 +336,14 @@ while gameOn:
             if event.type == QUIT:
                 saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
                 bufferT = []
-                saved_bufferT_ch1 = []
-                saved_bufferT_ch2 = []
-                saved_bufferT_ch3 = []
-                saved_bufferT_ch4 = []
+
                 pg.quit()
                 sys.exit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
                     bufferT = []
-                    saved_bufferT_ch1 = []
-                    saved_bufferT_ch2 = []
-                    saved_bufferT_ch3 = []
-                    saved_bufferT_ch4 = []
+
                     training = 0
             elif event.type == MOUSEBUTTONUP:
                 mouseReturn = pg.mouse.get_pos()
@@ -358,10 +353,7 @@ while gameOn:
                     restingState1 = 0
                     saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
                     bufferT = []
-                    saved_bufferT_ch1 = []
-                    saved_bufferT_ch2 = []
-                    saved_bufferT_ch3 = []
-                    saved_bufferT_ch4 = []
+
 
         if durationSession > 0:
             try:
@@ -396,7 +388,7 @@ while gameOn:
                     dataT[2, :] = bufferT_array[ind_channel_3]
                     dataT[3, :] = bufferT_array[ind_channel_4]
 
-                    saved_bufferT_ch1.extend(dataT[0, :])
+                    saved_bufferT_ch1.extend(dataT[0, :]) # extend instead of append, it does save correctly after that, with extend it does not
                     saved_bufferT_ch2.extend(dataT[1, :])
                     saved_bufferT_ch3.extend(dataT[2, :])
                     saved_bufferT_ch4.extend(dataT[3, :])
@@ -441,6 +433,7 @@ while gameOn:
                         newPosy = a * medRatioT + b
 
                     scoreT = scoreT + trainingScore(newPosy)
+                    
                     durationSession = durationSession -  1
 
             except Empty:
