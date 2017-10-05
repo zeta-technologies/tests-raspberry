@@ -75,7 +75,7 @@ veryOldPosy = maxDisplayY
 oldPosy = maxDisplayY
 deltaPosy_1 = 1. * (newPosy - oldPosy) / steps
 deltaPosy_2 = 1. * (oldPosy - veryOldPosy) / steps
-scorF = 1
+scorT = 1
 maxRatioAlphaOverDelta = 1
 minRatioAlphaOverDelta = 0
 coef_mad = 3
@@ -105,15 +105,6 @@ homeOn = 1
 training = 0
 restingState1 = 0
 restingState2 = 0
-questionnaire = 0
-
-'''Tinnitus Questionnary '''
-# useless for now
-questionsSerie1 = 'images/questionsSerie1.png'
-answers = []
-questions = ['Pour quel pourcentage de votre temps éveillé \n étiez-vous conscient de vos acouphènes?','Sur une echelle de 0-10, quelle force avaient vos acouphènes ?','Vos acouphènes vous ont géné quel % de votre temps ?','À quel degré avez-vous eu le sentiment que vous pouviez contrôler vos acouphènes?','quelle facilité avez-vous eue à gérer vos acouphènes?','À quel point était-ce facile pour vous d’ignorer vos acouphènes?']
-
-
 
 '''FREQ'''
 FreqRange = 'alpha'
@@ -137,8 +128,6 @@ elif FreqRange == 'XXII_gamma':
 
 ''' Save buffer, to keep data records somewhere'''
 
-saved_bufferPB = []
-saved_bufferT = []
 saved_bufferRS1 = []
 saved_bufferRS2 = []
 saved_bufferRS1_ch1 = []
@@ -168,9 +157,9 @@ fs_hz = 200
 # newMean = 0 # useless now
 # oldMean = 5E-13 # useless now
 
-mean_array_alphaF = []
-mean_array_deltaF = []
-ratio_arrayF = []
+mean_array_alphaT = []
+mean_array_deltaT = []
+ratio_arrayT = []
 
 mean_array_alphaRS1 = []
 mean_array_deltaRS1 = []
