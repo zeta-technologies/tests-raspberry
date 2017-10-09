@@ -317,7 +317,7 @@ def punchinballmain(screen, cpt2, fond, punchBall, buffer_1, OPB1_data ):
         pg.display.update()
 
 
-def trainingScore(posY):
+def trainingScore(posY, maxScore, minScore):
 
     newscore = 1.* (maxScore - minScore)/(minDisplayY - maxDisplayY) * ( posY - minDisplayY) + maxScore
     # print newscore

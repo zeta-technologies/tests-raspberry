@@ -23,7 +23,7 @@ args = parser.parse_args()
 if args.test :
     durationSessionInit = int(args.test)
     durationSession = durationSessionInit
-    restingStateDuration = int(args.test)
+    restingStateDuration = int(math.floor(int(args.test)/10))
 
 '''Data initialization '''
 
@@ -129,7 +129,7 @@ while gameOn:
 
     # Home window loop
     while homeOn:
-        pg.time.Clock().tick(60)
+        # pg.time.Clock().tick(60)
 
         for event in pg.event.get():
             if event.type == QUIT:
@@ -190,7 +190,7 @@ while gameOn:
         print progression
 
     while restingState1:
-        pg.time.Clock().tick(60)
+        # pg.time.Clock().tick(60)
 
         for event in pg.event.get():
             if event.type == QUIT:
@@ -282,9 +282,12 @@ while gameOn:
         elif secRS1 < restingStateDuration:
             try:
                 while len(bufferRS1) < buffersize * nb_channels:
+
                     bufferRS1.append(queue.get_nowait())
+                    # print bufferRS1
 
                 if len(bufferRS1) == 800:
+
                     bufferRS1_array = np.asarray(bufferRS1)
 
                     dataRS1[0, :, secRS1] = bufferRS1_array[ind_channel_1]
@@ -329,9 +332,11 @@ while gameOn:
                 str(bufferRS1)
                 # sys.stdout.write(char)
 
-    while training:
-        pg.time.Clock().tick(60)
 
+    while training:
+        # delta2 = datetime.datetime.now() - now
+        # print 'NOW training loop begins, line 337', delta2
+        # pg.time.Clock().tick(60)
         for event in pg.event.get():
             if event.type == QUIT:
                 saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
@@ -356,12 +361,15 @@ while gameOn:
 
 
         if durationSession > 0:
+            # delta3 = datetime.datetime.now() - now
+            # print 'NOW duration Session loop begins line 364', delta3
             try:
+
                 while len(bufferT) < buffersize * nb_channels:
 
                     if len(bufferT) % int(math.floor(1.*buffersize/5)) == 0:
                         screen.blit(background, (0,0))
-                        indColor = get_ind_color(trainingScore(newPosy), 10,0, len(colors))
+                        indColor = get_ind_color(trainingScore(newPosy, maxScore, minScore), 10,0, len(colors))
                         if indColor > 100 :
                             indColor = 100
                         color = (colors[indColor].rgb[0]*255,colors[indColor].rgb[1]*255,colors[indColor].rgb[2]*255)
@@ -381,6 +389,7 @@ while gameOn:
                     bufferT.append(queue.get_nowait())
 
                 if len(bufferT) == 800 :
+
                     bufferT_array = np.asarray(bufferT)
 
                     dataT[0, :] = bufferT_array[ind_channel_1]
@@ -432,8 +441,8 @@ while gameOn:
                         b = maxDisplayY - minRatioAlphaOverDelta * a
                         newPosy = a * medRatioT + b
 
-                    scoreT = scoreT + trainingScore(newPosy)
-                    
+                    scoreT = scoreT + trainingScore(newPosy, maxScore, minScore)
+
                     durationSession = durationSession -  1
 
             except Empty:
@@ -479,8 +488,9 @@ while gameOn:
                         displayNumber(0, screen, 'timeRSV011')
                         pg.display.flip()
 
+
     while restingState2:
-        pg.time.Clock().tick(60)
+        # pg.time.Clock().tick(60)
 
         for event in pg.event.get():
             if event.type == QUIT:

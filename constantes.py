@@ -19,13 +19,10 @@ red = (255,0,0)
 choice = ''
 # Listes des images du jeu
 '''constants for streaming loop'''
-cpt = 0
-cpt2 = 0
 buffersize = 200 # a bit more than one second of data,
 
 bufferRS1 = []
 bufferRS2 = []
-bufferPB = []
 bufferT = []
 
 nb_channels = 4
@@ -47,7 +44,7 @@ mean_array_uvRS1 = []
 
 '''Load images, sonds libraries'''
 buttonText = pg.font.Font('fonts/couture-bld.otf', 15) # font for Menu button
-progressionTextFont = pg.font.Font('fonts/couture-bld.otf', 5) # font for Menu button
+progressionTextFont = pg.font.Font('fonts/couture-bld.otf', 5) # font for questions
 
 buttonTextHuge = pg.font.Font('fonts/couture-bld.otf', 20) # font for Menu button
 image_home = 'images/homev011.png'
@@ -69,20 +66,18 @@ steps = 1.*buffersize/40
 newPosy = maxDisplayY
 veryOldPosy = maxDisplayY
 oldPosy = maxDisplayY
-deltaPosy_1 = 1. * (newPosy - oldPosy) / steps
-deltaPosy_2 = 1. * (oldPosy - veryOldPosy) / steps
+# deltaPosy_1 = 1. * (newPosy - oldPosy) / steps
+# deltaPosy_2 = 1. * (oldPosy - veryOldPosy) / steps
 
 maxRatioAlphaOverDelta = 1
 minRatioAlphaOverDelta = 0
 coef_mad = 3
-veryOldPosy = maxDisplayY
 
 '''Resting state'''
 timer = ['images/0.png', 'images/1.png', 'images/2.png', 'images/3.png', 'images/4.png', 'images/5.png',
                     'images/6.png', 'images/7.png', 'images/8.png', 'images/9.png']
 restingState = 'images/restingState.png'
 restingStateDuration = 40 # in seconds
-sec = 0
 secRS2 = 0
 secRS1 = 0
 durationSessionInit =  350
