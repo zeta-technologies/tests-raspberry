@@ -7,7 +7,7 @@ import signal
 import scipy
 # import matplotlib.mlab as mlab
 import numpy as np
-import pandas as pd
+# import pandas as pd
 import heapq
 from scipy import signal
 import json
@@ -16,7 +16,7 @@ import datetime
 import math
 from time import sleep
 import pygame as pg
-from pyaudio import PyAudio
+# from pyaudio import PyAudio
 from constantes import *
 
 def filter_data(data, fs_hz):
