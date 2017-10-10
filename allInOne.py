@@ -23,8 +23,8 @@ args = parser.parse_args()
 if args.test :
     durationSessionInit = int(args.test)
     durationSession = durationSessionInit
-    restingStateDuration = int(math.floor(int(args.test)/10))
-
+    # restingStateDuration = int(math.floor(int(args.test)/10))
+    restingStateDuration = int(math.floor(int(args.test)))
 '''Data initialization '''
 
 dataT = np.zeros((nb_channels, buffersize))
@@ -494,9 +494,7 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                if sessionRS2 == 0:
-                    saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
-                    sessionRS2 += 1
+                saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
                 saved_bufferRS2_ch1 = []
                 saved_bufferRS2_ch2 = []
                 saved_bufferRS2_ch3 = []
@@ -524,6 +522,7 @@ while gameOn:
                     saved_bufferRS2_ch4 = []
 
         if secRS2 == restingStateDuration :
+
             band_alphaRS2_ch1 = np.asarray(band_alphaRS2_ch1)
             band_alphaRS2_ch2 = np.asarray(band_alphaRS2_ch2)
             band_alphaRS2_ch3 = np.asarray(band_alphaRS2_ch3)
@@ -556,28 +555,36 @@ while gameOn:
             minRatioAlphaOverDelta = medianratioAlphaoverDelta - 3 * madRatioAlphaOverDelta
             maxRatioAlphaOverDelta = medianratioAlphaoverDelta + 3 * madRatioAlphaOverDelta
 
+            metric = (medianratioAlphaoverDeltaEnd - medianratioAlphaoverDelta)
+            displayedMetric = metric * progressionCoeff
+
+            dailyProgressionFile = open('dailyProgression.txt', 'a+')
+            dailyProgressionFile.write(str(metric)+'***_Progression Metric_'+sessionName+'\n') #*** is the marker i use to stop reading the line which means "it's not the metric anymore"
+            dailyProgressionFile.close()
+            dailyProgressionMetrics = [line.rstrip('\n') for line in open('dailyProgression.txt')]
+            dailyProgressionMetrics = [float(i.split('***')[0]) for i in dailyProgressionMetrics] # we take the 0th element beacause '***' can be in the middle of number : for instance '569348278***706958' returns ['569348278','706958']
+            # dailyProgressionMetrics = [ i * progressionCoeff for i in dailyProgressionMetrics]
+
+            screen.blit(endSessionImg, (0,0))
+            # print dailyProgressionMetrics
 
 
-            if sessionRS2 == 0 :
-                metric = (medianratioAlphaoverDeltaEnd - medianratioAlphaoverDelta)
-                displayedMetric = metric * progressionCoeff
-                dailyProgressionFile = open('dailyProgression.txt', 'a+')
-                dailyProgressionFile.write(str(metric)+'***_Progression Metric_'+sessionName+'\n') #*** is the marker i use to stop reading the line which means "it's not the metric anymore"
-                dailyProgressionFile.close()
-                dailyProgressionMetrics = [line.rstrip('\n') for line in open('dailyProgression.txt')]
-                dailyProgressionMetrics = [float(i.split('***')[0]) for i in dailyProgressionMetrics] # we take the 0th element beacause '***' can be in the middle of number : for instance '569348278***706958' returns ['569348278','706958']
-                # dailyProgressionMetrics = [ i * progressionCoeff for i in dailyProgressionMetrics]
-
+            dailyProgressionMetricsDisplayed = progressionFunc(dailyProgressionMetrics, h_display, w_display, h_display * 3/4, h_display*1/4)
+            if sessionRS2 == 0:
                 sessionRS2 += 1
-                screen.blit(endSessionImg, (0,0))
-                # print dailyProgressionMetrics
+                saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
 
-                dailyProgressionMetricsDisplayed = progressionFunc(dailyProgressionMetrics, h_display, w_display, h_display * 3/4, h_display*1/4)
                 for s in range(len(dailyProgressionMetrics)-1): # we dont take the last one, it's today's and we want to print it bigger
-                    # displayedMetric = dailyProgressionMetrics[s]
-                    # print ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s+1])
+                # displayedMetric = dailyProgressionMetrics[s]
+                # print ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s+1])
                     pg.draw.line(screen, 0x4F89D8, ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s+1]), 1 )
-
+            pg.display.flip()
+            time.sleep(2)
+            if print1 < 5:
+                print print1
+                print1 +=1
+            elif print1 == 5 :
+                pg.quit()
                     # if  metric >= 0 :
                     #     progressionText = 'JOUR ' + str(s) + ' :' +  str(displayedMetric)[0]+ '.' + str(displayedMetric)[2:5]
                     #     print progressionText
@@ -585,13 +592,10 @@ while gameOn:
                     #     progressionText = 'JOUR ' + str(s) + ' :' + str(displayedMetric)[1] + '.' + str(displayedMetric)[3:6]
                     #     print progressionText
 
-                # progressionMetricSurf, progressionMetricRect = text_objects(progressionText, progressionTextFont)
-                # progressionMetricRect.center = (s*w_display/(len(dailyProgressionMetrics)-1), 1.*h_display/2)
-                # screen.blit(progressionMetricSurf, progressionMetricRect)
-                pg.display.flip()
+                    # progressionMetricSurf, progressionMetricRect = text_objects(progressionText, progressionTextFont)
+                    # progressionMetricRect.center = (s*w_display/(len(dailyProgressionMetrics)-1), 1.*h_display/2)
+                    # screen.blit(progressionMetricSurf, progressionMetricRect)
 
-                saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
-                pg.time.delay(2000)
 
 
         elif secRS2 < restingStateDuration:
