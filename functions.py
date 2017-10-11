@@ -473,6 +473,8 @@ def get_ind_color(score, scoreMax, scoreMin, nbOfColors):
     if ind >= nbOfColors:
         ind = 99
     # print ind
+    if math.isnan(ind):
+        ind = 0
     return int(ind)
 
 

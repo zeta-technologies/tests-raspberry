@@ -25,7 +25,7 @@ bufferRS1 = []
 bufferRS2 = []
 bufferT = []
 
-nb_channels = 4
+nb_channels = 5
 ind_2_remove_in_buffer1 = []
 ind_time = []
 ind_channel_1 = []
@@ -131,6 +131,7 @@ saved_bufferRS2_ch2 = []
 saved_bufferRS2_ch3 = []
 saved_bufferRS2_ch4 = []
 
+saved_bufferT = []
 saved_bufferT_ch1 = []
 saved_bufferT_ch2 = []
 saved_bufferT_ch3 = []

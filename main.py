@@ -17,14 +17,16 @@ import os, binascii
 from colour import Color
 import argparse
 
+indextmp = 0
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--test")
 args = parser.parse_args()
 if args.test :
     durationSessionInit = int(args.test)
     durationSession = durationSessionInit
-    restingStateDuration = int(math.floor(int(args.test)/100))
-    # restingStateDuration = int(math.floor(int(args.test)))
+    restingStateDuration = int(math.floor(int(args.test)/10))
+
 '''Data initialization '''
 
 dataT = np.zeros((nb_channels, buffersize))
@@ -157,14 +159,14 @@ while gameOn:
     elif restingState1:
 
         if platform == 'darwin' and sessionRS1 == 0: # mac
-            process = Popen(['/usr/local/bin/node', 'openBCIDataStream.js'], stdout=PIPE) # for MAC
+            process = Popen(['/usr/local/bin/node', 'dataStream.js'], stdout=PIPE) # for MAC
             '''launch node process'''
             queue = Queue()
             thread = Thread(target=enqueue_output, args=(process.stdout, queue))
             thread.daemon = True
             thread.start()
         elif platform == 'linux' or platform == 'linux2' and sessionRS1 == 0: #linux
-            process = Popen(['sudo', '/usr/bin/node', 'openBCIDataStream.js'], stdout=PIPE, preexec_fn=os.setsid) # for LINUX
+            process = Popen(['sudo', '/usr/bin/node', 'dataStream.js'], stdout=PIPE, preexec_fn=os.setsid) # for LINUX
             '''launch node process'''
             queue = Queue()
             thread = Thread(target=enqueue_output, args=(process.stdout, queue))
@@ -281,12 +283,14 @@ while gameOn:
 
         elif secRS1 < restingStateDuration:
             try:
-                while len(bufferRS1) < buffersize * nb_channels:
+                # while len(bufferRS1) < buffersize * nb_channels:
+                while indextmp < buffersize * nb_channels:
+                    print queue.get_nowait()
+                    indextmp += 1
 
-                    bufferRS1.append(queue.get_nowait())
                     # print bufferRS1
 
-                if len(bufferRS1) == buffersize * nb_channels:
+                if len(bufferRS1) == 800:
 
                     bufferRS1_array = np.asarray(bufferRS1)
 
@@ -388,8 +392,8 @@ while gameOn:
 
                     bufferT.append(queue.get_nowait())
 
-                if len(bufferT) == buffersize * nb_channels :
-                    queue.queue.clear()
+                if len(bufferT) == 800 :
+
                     bufferT_array = np.asarray(bufferT)
 
                     dataT[0, :] = bufferT_array[ind_channel_1]
@@ -397,11 +401,10 @@ while gameOn:
                     dataT[2, :] = bufferT_array[ind_channel_3]
                     dataT[3, :] = bufferT_array[ind_channel_4]
 
-                    saved_bufferT.extend(bufferT_array)
-                    # saved_bufferT_ch1.extend(dataT[0, :]) # extend instead of append, it does save correctly after that, with extend it does not
-                    # saved_bufferT_ch2.extend(dataT[1, :])
-                    # saved_bufferT_ch3.extend(dataT[2, :])
-                    # saved_bufferT_ch4.extend(dataT[3, :])
+                    saved_bufferT_ch1.extend(dataT[0, :]) # extend instead of append, it does save correctly after that, with extend it does not
+                    saved_bufferT_ch2.extend(dataT[1, :])
+                    saved_bufferT_ch3.extend(dataT[2, :])
+                    saved_bufferT_ch4.extend(dataT[3, :])
 
                     fdataT[0, :] = filter_data(dataT[0, :], fs_hz)
                     fdataT[1, :] = filter_data(dataT[1, :], fs_hz)
@@ -458,8 +461,7 @@ while gameOn:
         elif durationSession == 0 :
             # print saved_bufferT_ch1
             if sessionT == 0:
-                # saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
-                saveData(pathT, sessionT, 'T', '4channels', saved_bufferT)
+                saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
                 sessionT += 1
 
             screen.blit(restingStateImage, (0,0))
@@ -474,7 +476,7 @@ while gameOn:
                         queue.queue.clear()
                         training = 0
                         secRS2 = 0
-                        sessionRS2 = 0 #when it's 1, it wont  data anymore
+                        sessionRS2 = 0 #when it's 1, it wont save data anymore
                         restingState2 = 1
                         bufferRS2 = []
                         band_alphaRS2_ch1 = []
@@ -496,7 +498,9 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                if sessionRS2 == 0:
+                    saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                    sessionRS2 += 1
                 saved_bufferRS2_ch1 = []
                 saved_bufferRS2_ch2 = []
                 saved_bufferRS2_ch3 = []
@@ -524,7 +528,6 @@ while gameOn:
                     saved_bufferRS2_ch4 = []
 
         if secRS2 == restingStateDuration :
-
             band_alphaRS2_ch1 = np.asarray(band_alphaRS2_ch1)
             band_alphaRS2_ch2 = np.asarray(band_alphaRS2_ch2)
             band_alphaRS2_ch3 = np.asarray(band_alphaRS2_ch3)
@@ -557,36 +560,28 @@ while gameOn:
             minRatioAlphaOverDelta = medianratioAlphaoverDelta - 3 * madRatioAlphaOverDelta
             maxRatioAlphaOverDelta = medianratioAlphaoverDelta + 3 * madRatioAlphaOverDelta
 
-            metric = (medianratioAlphaoverDeltaEnd - medianratioAlphaoverDelta)
-            displayedMetric = metric * progressionCoeff
-
-            dailyProgressionFile = open('dailyProgression.txt', 'a+')
-            dailyProgressionFile.write(str(metric)+'***_Progression Metric_'+sessionName+'\n') #*** is the marker i use to stop reading the line which means "it's not the metric anymore"
-            dailyProgressionFile.close()
-            dailyProgressionMetrics = [line.rstrip('\n') for line in open('dailyProgression.txt')]
-            dailyProgressionMetrics = [float(i.split('***')[0]) for i in dailyProgressionMetrics] # we take the 0th element beacause '***' can be in the middle of number : for instance '569348278***706958' returns ['569348278','706958']
-            # dailyProgressionMetrics = [ i * progressionCoeff for i in dailyProgressionMetrics]
-
-            screen.blit(endSessionImg, (0,0))
-            # print dailyProgressionMetrics
 
 
-            dailyProgressionMetricsDisplayed = progressionFunc(dailyProgressionMetrics, h_display, w_display, h_display * 3/4, h_display*1/4)
-            if sessionRS2 == 0:
+            if sessionRS2 == 0 :
+                metric = (medianratioAlphaoverDeltaEnd - medianratioAlphaoverDelta)
+                displayedMetric = metric * progressionCoeff
+                dailyProgressionFile = open('dailyProgression.txt', 'a+')
+                dailyProgressionFile.write(str(metric)+'***_Progression Metric_'+sessionName+'\n') #*** is the marker i use to stop reading the line which means "it's not the metric anymore"
+                dailyProgressionFile.close()
+                dailyProgressionMetrics = [line.rstrip('\n') for line in open('dailyProgression.txt')]
+                dailyProgressionMetrics = [float(i.split('***')[0]) for i in dailyProgressionMetrics] # we take the 0th element beacause '***' can be in the middle of number : for instance '569348278***706958' returns ['569348278','706958']
+                # dailyProgressionMetrics = [ i * progressionCoeff for i in dailyProgressionMetrics]
+
                 sessionRS2 += 1
-                saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                screen.blit(endSessionImg, (0,0))
+                # print dailyProgressionMetrics
 
+                dailyProgressionMetricsDisplayed = progressionFunc(dailyProgressionMetrics, h_display, w_display, h_display * 3/4, h_display*1/4)
                 for s in range(len(dailyProgressionMetrics)-1): # we dont take the last one, it's today's and we want to print it bigger
-                # displayedMetric = dailyProgressionMetrics[s]
-                # print ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s+1])
+                    # displayedMetric = dailyProgressionMetrics[s]
+                    # print ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s+1])
                     pg.draw.line(screen, 0x4F89D8, ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s+1]), 1 )
-            pg.display.flip()
-            time.sleep(2)
-            if print1 < 5:
-                print print1
-                print1 +=1
-            elif print1 == 5 :
-                pg.quit()
+
                     # if  metric >= 0 :
                     #     progressionText = 'JOUR ' + str(s) + ' :' +  str(displayedMetric)[0]+ '.' + str(displayedMetric)[2:5]
                     #     print progressionText
@@ -594,10 +589,13 @@ while gameOn:
                     #     progressionText = 'JOUR ' + str(s) + ' :' + str(displayedMetric)[1] + '.' + str(displayedMetric)[3:6]
                     #     print progressionText
 
-                    # progressionMetricSurf, progressionMetricRect = text_objects(progressionText, progressionTextFont)
-                    # progressionMetricRect.center = (s*w_display/(len(dailyProgressionMetrics)-1), 1.*h_display/2)
-                    # screen.blit(progressionMetricSurf, progressionMetricRect)
+                # progressionMetricSurf, progressionMetricRect = text_objects(progressionText, progressionTextFont)
+                # progressionMetricRect.center = (s*w_display/(len(dailyProgressionMetrics)-1), 1.*h_display/2)
+                # screen.blit(progressionMetricSurf, progressionMetricRect)
+                pg.display.flip()
 
+                saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                pg.time.delay(2000)
 
 
         elif secRS2 < restingStateDuration:
