@@ -23,8 +23,8 @@ args = parser.parse_args()
 if args.test :
     durationSessionInit = int(args.test)
     durationSession = durationSessionInit
-    # restingStateDuration = int(math.floor(int(args.test)/10))
-    restingStateDuration = int(math.floor(int(args.test)))
+    restingStateDuration = int(math.floor(int(args.test)/100))
+    # restingStateDuration = int(math.floor(int(args.test)))
 '''Data initialization '''
 
 dataT = np.zeros((nb_channels, buffersize))
@@ -389,7 +389,7 @@ while gameOn:
                     bufferT.append(queue.get_nowait())
 
                 if len(bufferT) == 800 :
-
+                    queue.queue.clear()
                     bufferT_array = np.asarray(bufferT)
 
                     dataT[0, :] = bufferT_array[ind_channel_1]
