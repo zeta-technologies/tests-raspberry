@@ -23,7 +23,7 @@ args = parser.parse_args()
 if args.test :
     durationSessionInit = int(args.test)
     durationSession = durationSessionInit
-    restingStateDuration = int(math.floor(int(args.test)/100))
+    restingStateDuration = int(math.floor(int(args.test)/10))
     # restingStateDuration = int(math.floor(int(args.test)))
 '''Data initialization '''
 
@@ -263,7 +263,8 @@ while gameOn:
                 if event.type == MOUSEBUTTONUP:
                     mouseRS1 = pg.mouse.get_pos()
                     if sessionRS1 == 0 :
-                        saveAllChannelsData(pathRS1, sessionRS1, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                        saveData(pathRS1, sessionRS1, 'RS', '4channels', saved_bufferRS1 )
+                        # saveAllChannelsData(pathRS1, sessionRS1, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
                         sessionRS1 += 1
                     saved_bufferRS1_ch1 = []
                     saved_bufferRS1_ch2 = []
@@ -281,12 +282,12 @@ while gameOn:
 
         elif secRS1 < restingStateDuration:
             try:
-                while len(bufferRS1) < buffersize * nb_channels:
+                while len(bufferRS1) < buffersize * nb_lines_js:
 
                     bufferRS1.append(queue.get_nowait())
                     # print bufferRS1
 
-                if len(bufferRS1) == buffersize * nb_channels:
+                if len(bufferRS1) == buffersize * nb_lines_js:
 
                     bufferRS1_array = np.asarray(bufferRS1)
 
@@ -294,11 +295,12 @@ while gameOn:
                     dataRS1[1, :, secRS1] = bufferRS1_array[ind_channel_2]
                     dataRS1[2, :, secRS1] = bufferRS1_array[ind_channel_3]
                     dataRS1[3, :, secRS1] = bufferRS1_array[ind_channel_4]
+                    saved_bufferRS1.extend(bufferRS1_array)
 
-                    saved_bufferRS1_ch1.extend(dataRS1[0, :, secRS1])
-                    saved_bufferRS1_ch2.extend(dataRS1[1, :, secRS1])
-                    saved_bufferRS1_ch3.extend(dataRS1[2, :, secRS1])
-                    saved_bufferRS1_ch4.extend(dataRS1[3, :, secRS1])
+                    # saved_bufferRS1_ch1.extend(dataRS1[0, :, secRS1])
+                    # saved_bufferRS1_ch2.extend(dataRS1[1, :, secRS1])
+                    # saved_bufferRS1_ch3.extend(dataRS1[2, :, secRS1])
+                    # saved_bufferRS1_ch4.extend(dataRS1[3, :, secRS1])
 
                     fdataRS1[0, :, secRS1] = filter_data(dataRS1[0, :, secRS1], fs_hz)
                     fdataRS1[1, :, secRS1] = filter_data(dataRS1[1, :, secRS1], fs_hz)
@@ -365,7 +367,7 @@ while gameOn:
             # print 'NOW duration Session loop begins line 364', delta3
             try:
 
-                while len(bufferT) < buffersize * nb_channels:
+                while len(bufferT) < buffersize * nb_lines_js:
 
                     if len(bufferT) % int(math.floor(1.*buffersize/5)) == 0:
                         screen.blit(background, (0,0))
@@ -388,8 +390,8 @@ while gameOn:
 
                     bufferT.append(queue.get_nowait())
 
-                if len(bufferT) == buffersize * nb_channels :
-                    queue.queue.clear()
+                if len(bufferT) == buffersize * nb_lines_js :
+                    # queue.queue.clear()
                     bufferT_array = np.asarray(bufferT)
 
                     dataT[0, :] = bufferT_array[ind_channel_1]
@@ -602,7 +604,7 @@ while gameOn:
 
         elif secRS2 < restingStateDuration:
             try:
-                while len(bufferRS2) < buffersize * nb_channels:
+                while len(bufferRS2) < buffersize * nb_lines_js:
                     bufferRS2.append(queue.get_nowait())
 
                 if len(bufferRS2) == 800:

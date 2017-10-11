@@ -25,7 +25,8 @@ bufferRS1 = []
 bufferRS2 = []
 bufferT = []
 
-nb_channels = 5
+nb_channels = 4
+nb_lines_js = 5
 ind_2_remove_in_buffer1 = []
 ind_time = []
 ind_channel_1 = []
