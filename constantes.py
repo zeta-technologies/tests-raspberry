@@ -165,8 +165,7 @@ print1 = 0
 '''reorder channels index'''
 # the following loop saves the index of the buffer that are interesting, without the channel id every 0 [nb_channels]
 for ind in range(0, buffersize):
-    ind_time.append(ind*4)
-    ind_channel_1.append(ind*4+1)
-    ind_channel_2.append(ind*4+2)
-    ind_channel_3.append(ind*4+3)
-    ind_channel_4.append(ind*4+4)
+    ind_channel_1.append(ind*4)
+    ind_channel_2.append(ind*4+1)
+    ind_channel_3.append(ind*4+2)
+    ind_channel_4.append(ind*4+3)
