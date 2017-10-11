@@ -10,7 +10,8 @@ pids
 *.pid
 *.seed
 *.pid.lock
-
+# DS STORE
+.DS_Store
 # compiled
 *.pyc
 
