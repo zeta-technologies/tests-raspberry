@@ -180,8 +180,17 @@ mean_array_alphaRS2 = []
 mean_array_deltaRS2 = []
 ratio_arrayRS2 = []
 
+'''Band means for Training loop'''
+bandmean_alphaT = np.zeros(nb_channels)
+bandmax_alphaT = np.zeros(nb_channels)
+bandmin_alphaT = np.zeros(nb_channels)
+
+bandmean_deltaT = np.zeros(nb_channels)
+bandmax_deltaT = np.zeros(nb_channels)
+bandmin_deltaT = np.zeros(nb_channels)
+ratioT = np.zeros(nb_channels)
 '''reorder channels index'''
-# the following loop saves the index of the buffer that are interesting, without the channel id every 0 [nb_channels]
+# the following loop saves the index of the buffer that are interesting, without the channel id every 0 [nb_lines_jsnels]
 for ind in range(0, buffersize):
     ind_channel_1.append(ind*4)
     ind_channel_2.append(ind*4+1)

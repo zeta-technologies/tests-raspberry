@@ -571,39 +571,32 @@ while gameOn:
                     fdataT[2, :] = filter_data(dataT[2, :], fs_hz)
                     fdataT[3, :] = filter_data(dataT[3, :], fs_hz)
 
-                    bandmean_alphaF = np.zeros(nb_channels)
-                    bandmax_alphaF = np.zeros(nb_channels)
-                    bandmin_alphaF = np.zeros(nb_channels)
 
-                    bandmean_deltaF = np.zeros(nb_channels)
-                    bandmax_deltaF = np.zeros(nb_channels)
-                    bandmin_deltaF = np.zeros(nb_channels)
-                    ratioF = np.zeros(nb_channels)
 
                     for channel in range(nb_channels):
-                        bandmean_alphaF[channel] = extract_freqbandmean(200, fs_hz, fdataT[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
-                        bandmean_deltaF[channel] = extract_freqbandmean(200, fs_hz, fdataT[channel,:], 3, 4)
-                        ratioF[channel] = 1.* bandmean_alphaF[channel] / bandmean_deltaF[channel]
+                        bandmean_alphaT[channel] = extract_freqbandmean(200, fs_hz, fdataT[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
+                        bandmean_deltaT[channel] = extract_freqbandmean(200, fs_hz, fdataT[channel,:], 3, 4)
+                        ratioT[channel] = 1.* bandmean_alphaT[channel] / bandmean_deltaT[channel]
 
                     # maximiser alpha/delta
                     ''' Get the mean, min and max of the last reslt of all channels'''
-                    newMean_alphaF = np.average(bandmean_alphaF)
+                    newMean_alphaT = np.average(bandmean_alphaT)
                     # maxAlphaF = np.amax(mean_array_uvF)
                     # minAlphaF = np.min(mean_array_uvF)
 
-                    medRatioF = np.median(ratioF)
-                    mean_array_uvF.append(medRatioF)
+                    medRatioT = np.median(ratioT)
+                    mean_array_uvT.append(medRatioT)
 
-                    if medRatioF == maxRatioAlphaOverDelta:
+                    if medRatioT == maxRatioAlphaOverDelta:
                         newPosy = minDisplayY
 
-                    elif medRatioF == minRatioAlphaOverDelta:
+                    elif medRatioT == minRatioAlphaOverDelta:
                         newPosy = maxDisplayY
 
                     else:
                         a = (maxDisplayY - minDisplayY) * 1. / (minRatioAlphaOverDelta - maxRatioAlphaOverDelta)
                         b = maxDisplayY - minRatioAlphaOverDelta * a
-                        newPosy = a * medRatioF + b
+                        newPosy = a * medRatioT + b
 
                     scoreT = scoreT + trainingScore(newPosy)
                     durationSession = durationSession -  1
@@ -966,7 +959,6 @@ while gameOn:
                 if event.key == K_ESCAPE:
                     restingState1 = 0
             elif event.type == MOUSEBUTTONUP:
-                mouseSleep = pg.mouse.get_pos()
                 homeOn = 1
                 training = 0
                 sleep = 0
