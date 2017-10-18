@@ -449,7 +449,7 @@ while gameOn:
             except Empty:
                 continue  # do stuff
             else:
-                # str(bufferT)
+                str(1)
                 # sys.stdout.write(char)
             veryOldPosy = oldPosy
             oldPosy = newPosy
