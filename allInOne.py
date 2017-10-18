@@ -571,8 +571,6 @@ while gameOn:
                     fdataT[2, :] = filter_data(dataT[2, :], fs_hz)
                     fdataT[3, :] = filter_data(dataT[3, :], fs_hz)
 
-
-
                     for channel in range(nb_channels):
                         bandmean_alphaT[channel] = extract_freqbandmean(200, fs_hz, fdataT[channel,:], freqMaxAlpha-2, freqMaxAlpha+2)
                         bandmean_deltaT[channel] = extract_freqbandmean(200, fs_hz, fdataT[channel,:], 3, 4)

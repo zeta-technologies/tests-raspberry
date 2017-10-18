@@ -52,7 +52,8 @@ def extract_freqbandmean(N, fe, signal, fmin, fmax):
     #f = np.linspace(0,fe/2,int(np.floor(N/2)))
     fftsig = abs(np.fft.fft(signal))
     # print fftsig.shape
-    fftsig = fftsig[fmin:fmax]
+    # print np.fft.fftfreq(N, 1./N) # returns array of [0, 1, ..., 99, -100, -99, ..., -1]
+    fftsig = fftsig[fmin+1:fmax+1] # TODO  make sure np.fft.fft returns the value of freq amplitude from 0 to 100hz, and does not
     mean = np.mean(fftsig)
     return mean
 
@@ -634,7 +635,7 @@ def getfreqmaxband(data, rangefreq, nb_freq):
 def saveData(path, session, kind, channel, data):
     # kind is either 'F', 'PB', or 'RS'
     outfile = path+kind+'-'+channel+'-'+'session'+str(session)+'-'+'.txt'
-    
+
     np.savetxt(outfile, np.asarray(data), delimiter=',')
 
 def saveAllChannelsData(path, session, kind, data1, data2, data3, data4):
