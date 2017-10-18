@@ -23,8 +23,8 @@ args = parser.parse_args()
 if args.test :
     durationSessionInit = int(args.test)
     durationSession = durationSessionInit
-    restingStateDuration = int(math.floor(int(args.test)/100))
-    # restingStateDuration = int(math.floor(int(args.test)))
+    # restingStateDuration = int(math.floor(int(args.test)/100))
+    restingStateDuration = int(math.floor(int(args.test)))
 '''Data initialization '''
 
 dataT = np.zeros((nb_channels, buffersize))
