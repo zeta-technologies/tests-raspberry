@@ -118,9 +118,9 @@ while gameOn:
     background = pg.image.load(backgroundImage).convert()
     background = pg.transform.scale(background, (w_display, h_display))
 
-    nextStep = 'Etape suivante cliquez ICI : '
+    nextStep = 'Cliquez ICI pour passer a la suite'
     nextStepSurf, nextStepRect = text_objects(nextStep, buttonTextHuge)
-    nextStepRect.center = (4.*w_display/10, 1.*h_display/4)
+    nextStepRect.center = (5.*w_display/10, 1.*h_display/4)
 
     progression = 'Accrochez-vous ! Voici votre progression jusque la'
     progressionSurf, progressionRect = text_objects(progression, buttonText)
@@ -555,6 +555,9 @@ while gameOn:
             maxRatioAlphaOverDelta = medianratioAlphaoverDelta + 3 * madRatioAlphaOverDelta
 
             metric = (medianratioAlphaoverDeltaEnd - medianratioAlphaoverDelta)
+            if metric < 0 :
+                metric = 0
+
             displayedMetric = metric * progressionCoeff
             if sessionRS2 == 0 :
                 sessionRS2 += 1
