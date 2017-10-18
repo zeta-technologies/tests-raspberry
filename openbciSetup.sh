@@ -9,6 +9,7 @@ sudo aptitude -y hold wolfram-engine
 sudo aptitude -y hold libreoffice
 # sudo apt update
 # sudo apt -y full-upgrade
+
 sudo apt-get -y install Bluetooth
 sudo apt-get -y install blueman
 sudo apt-get -y install bluez

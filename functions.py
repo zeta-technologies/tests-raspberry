@@ -51,14 +51,14 @@ def extract_freqbandmean(N, fe, signal, fmin, fmax):
     #f = np.linspace(0,fe/2,int(np.floor(N/2)))
     fftsig = abs(np.fft.fft(signal))
     # print fftsig.shape
-    fftsig = fftsig[fmin:fmax]
+    fftsig = fftsig[fmin+1:fmax+1]
     mean = np.mean(fftsig)
     return mean
 
 def extract_freqband(N, fe, signal, fmin, fmax):
     fftsig = abs(np.fft.fft(signal))
     # print fftsig.shape
-    fftsig = fftsig[fmin:fmax+1]
+    fftsig = fftsig[fmin+1:fmax+1]
     length = len(fftsig)
     # freq = np.fft.fftfreq(N, timestep)
     return fftsig, length # why is there no indication on the fft length ?
