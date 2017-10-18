@@ -149,7 +149,7 @@ while gameOn:
         screen.blit(endSessionImg, (0,0))
         screen.blit(progressionMetricSurf, progressionMetricRect)
         pg.display.flip()
-        saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+        saveAllChannelsData(pathRS2, sessionRS2, 'RS2-ended', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
 
         pg.time.delay(2000)
         # gameOn = 0
@@ -194,7 +194,7 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathRS1, sessionRS1, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                saveAllChannelsData(pathRS1, sessionRS1, 'RS1-quit', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
                 saved_bufferRS1_ch1 = []
                 saved_bufferRS1_ch2 = []
                 saved_bufferRS1_ch3 = []
@@ -212,7 +212,7 @@ while gameOn:
                     restingState1 = 0
                     bufferRS1 = []
                     queue.queue.clear()
-                    saveAllChannelsData(pathRS1, sessionRS1, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+                    saveAllChannelsData(pathRS1, sessionRS1, 'RS1-return', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
                     saved_bufferRS1_ch1 = []
                     saved_bufferRS1_ch2 = []
                     saved_bufferRS1_ch3 = []
@@ -257,18 +257,17 @@ while gameOn:
             screen.blit(nextStepSurf, nextStepRect)
             pg.display.flip()
 
+            saveAllChannelsData(pathRS1, sessionRS1, 'RS1-end', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+            saved_bufferRS1_ch1 = []
+            saved_bufferRS1_ch2 = []
+            saved_bufferRS1_ch3 = []
+            saved_bufferRS1_ch4 = []
 
             ''' END OF THE SESSION, WAITING FOR THE USER TO CLICK ON THE TEXT BUTTON '''
             for event in pg.event.get():
                 if event.type == MOUSEBUTTONUP:
                     mouseRS1 = pg.mouse.get_pos()
-                    if sessionRS1 == 0 :
-                        saveAllChannelsData(pathRS1, sessionRS1, 'RS', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
-                        sessionRS1 += 1
-                    saved_bufferRS1_ch1 = []
-                    saved_bufferRS1_ch2 = []
-                    saved_bufferRS1_ch3 = []
-                    saved_bufferRS1_ch4 = []
+
                     RS1choice = whichButtonHomeV011(mouseRS1, w_display, h_display)
                     if RS1choice == 2:
                         homeOn = 0
@@ -339,14 +338,14 @@ while gameOn:
         # pg.time.Clock().tick(60)
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                saveAllChannelsData(pathT, sessionT, 'T-quit', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
                 bufferT = []
 
                 pg.quit()
                 sys.exit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
-                    saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                    saveAllChannelsData(pathT, sessionT, 'T-esc', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
                     bufferT = []
 
                     training = 0
@@ -356,7 +355,7 @@ while gameOn:
                     homeOn = 1
                     training = 0
                     restingState1 = 0
-                    saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                    saveAllChannelsData(pathT, sessionT, 'T-return', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
                     bufferT = []
 
 
@@ -457,7 +456,7 @@ while gameOn:
         elif durationSession == 0 :
             # print saved_bufferT_ch1
             if sessionT == 0:
-                saveAllChannelsData(pathT, sessionT, 'T', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
+                saveAllChannelsData(pathT, sessionT, 'T-end', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
                 sessionT += 1
 
             screen.blit(restingStateImage, (0,0))
@@ -494,7 +493,7 @@ while gameOn:
 
         for event in pg.event.get():
             if event.type == QUIT:
-                saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                saveAllChannelsData(pathRS2, sessionRS2, 'RS2-quit', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
                 saved_bufferRS2_ch1 = []
                 saved_bufferRS2_ch2 = []
                 saved_bufferRS2_ch3 = []
@@ -513,9 +512,7 @@ while gameOn:
                     questionnaire = 0
                     bufferRS2 = []
                     queue.queue.clear()
-                    if sessionRS2 == 0:
-                        sessionRS2 += 1
-                        saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                    saveAllChannelsData(pathRS2, sessionRS2, 'RS2-return', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
                     saved_bufferRS2_ch1 = []
                     saved_bufferRS2_ch2 = []
                     saved_bufferRS2_ch3 = []
@@ -557,34 +554,34 @@ while gameOn:
 
             metric = (medianratioAlphaoverDeltaEnd - medianratioAlphaoverDelta)
             displayedMetric = metric * progressionCoeff
-
-            dailyProgressionFile = open('dailyProgression.txt', 'a+')
-            dailyProgressionFile.write(str(metric)+'***_Progression Metric_'+sessionName+'\n') #*** is the marker i use to stop reading the line which means "it's not the metric anymore"
-            dailyProgressionFile.close()
-            dailyProgressionMetrics = [line.rstrip('\n') for line in open('dailyProgression.txt')]
-            dailyProgressionMetrics = [float(i.split('***')[0]) for i in dailyProgressionMetrics] # we take the 0th element beacause '***' can be in the middle of number : for instance '569348278***706958' returns ['569348278','706958']
-            # dailyProgressionMetrics = [ i * progressionCoeff for i in dailyProgressionMetrics]
-
-            screen.blit(endSessionImg, (0,0))
-            # print dailyProgressionMetrics
-
-
-            dailyProgressionMetricsDisplayed = progressionFunc(dailyProgressionMetrics, h_display, w_display, h_display * 3/4, h_display*1/4)
-            if sessionRS2 == 0:
+            if sessionRS2 == 0 :
                 sessionRS2 += 1
-                saveAllChannelsData(pathRS2, sessionRS2, 'RS2', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
+                dailyProgressionFile = open('dailyProgression.txt', 'a+')
+                dailyProgressionFile.write(str(metric)+'***_Progression Metric_'+sessionName+'\n') #*** is the marker i use to stop reading the line which means "it's not the metric anymore"
+                dailyProgressionFile.close()
+                dailyProgressionMetrics = [line.rstrip('\n') for line in open('dailyProgression.txt')]
+                dailyProgressionMetrics = [float(i.split('***')[0]) for i in dailyProgressionMetrics] # we take the 0th element beacause '***' can be in the middle of number : for instance '569348278***706958' returns ['569348278','706958']
+                # dailyProgressionMetrics = [ i * progressionCoeff for i in dailyProgressionMetrics]
+
+                screen.blit(endSessionImg, (0,0))
+                # print dailyProgressionMetrics
+
+                dailyProgressionMetricsDisplayedArray = progressionFunc(dailyProgressionMetrics, h_display, w_display, h_display * 3/4, h_display*1/4)
+                saveAllChannelsData(pathRS2, sessionRS2, 'RS2-end', saved_bufferRS2_ch1, saved_bufferRS2_ch2, saved_bufferRS2_ch3, saved_bufferRS2_ch4)
 
                 for s in range(len(dailyProgressionMetrics)-1): # we dont take the last one, it's today's and we want to print it bigger
                 # displayedMetric = dailyProgressionMetrics[s]
-                # print ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s+1])
-                    pg.draw.line(screen, 0x4F89D8, ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayed[s+1]), 1 )
-            pg.display.flip()
+                # print ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayedArray[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayedArray[s+1])
+                    pg.draw.line(screen, 0x4F89D8, ((s+1)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayedArray[s]), ((s+2)*w_display/(len(dailyProgressionMetrics)+1), dailyProgressionMetricsDisplayedArray[s+1]), 1 )
+                    pg.display.flip()
+
             time.sleep(2)
             if print1 < 5:
                 print print1
                 print1 +=1
             elif print1 == 5 :
                 pg.quit()
+
                     # if  metric >= 0 :
                     #     progressionText = 'JOUR ' + str(s) + ' :' +  str(displayedMetric)[0]+ '.' + str(displayedMetric)[2:5]
                     #     print progressionText
