@@ -77,7 +77,8 @@ coef_mad = 3
 '''Resting state'''
 timer = ['images/0.png', 'images/1.png', 'images/2.png', 'images/3.png', 'images/4.png', 'images/5.png',
                     'images/6.png', 'images/7.png', 'images/8.png', 'images/9.png']
-restingState = 'images/restingState.png'
+restingStateDebutPath = 'images/restingStateDebut.png'
+restingStateFinPath = 'images/restingStateFin.png'
 restingStateDuration = 40 # in seconds
 secRS2 = 0
 secRS1 = 0

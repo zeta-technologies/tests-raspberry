@@ -45,8 +45,10 @@ colors = list(red.range_to(Color("green"), 100))
 '''Resting state'''
 timerImage = pg.image.load(timer[0])
 timerImage = pg.transform.scale(timerImage, (int(math.floor(0.068*w_display)), int(math.floor(0.156*h_display))))
-restingImage = pg.image.load('images/restingState.png').convert()
-restingStateImage = pg.transform.scale(restingImage, (w_display, h_display))
+restingDebutImage = pg.image.load(restingStateDebutPath).convert()
+restingFinImage = pg.image.load(restingStateFinPath).convert()
+restingStateDebutImage = pg.transform.scale(restingDebutImage, (w_display, h_display))
+restingStateFinImage = pg.transform.scale(restingFinImage, (w_display, h_display))
 
 # '''Tinnitus questionnaire '''
 # questionsSerie1Image = pg.image.load(questionsSerie1)
@@ -116,11 +118,11 @@ while gameOn:
     background = pg.image.load(backgroundImage).convert()
     background = pg.transform.scale(background, (w_display, h_display))
 
-    nextStep = 'Etape suivante ICI'
+    nextStep = 'Etape suivante cliquez ICI : '
     nextStepSurf, nextStepRect = text_objects(nextStep, buttonTextHuge)
     nextStepRect.center = (4.*w_display/10, 1.*h_display/4)
 
-    progression = 'Progression'
+    progression = 'Accrochez-vous ! Voici votre progression jusque la'
     progressionSurf, progressionRect = text_objects(progression, buttonText)
     progressionRect.center = (4.*w_display/5, 3.3*h_display/4)
 
@@ -181,7 +183,7 @@ while gameOn:
         band_deltaRS1_ch2 = []
         band_deltaRS1_ch3 = []
         band_deltaRS1_ch4 = []
-        screen.blit(restingStateImage, (0,0))
+        screen.blit(restingStateDebutImage, (0,0))
         displayNumber(0, screen, 'timeRSV011')
         pg.display.flip()
         queue.queue.clear()
@@ -459,7 +461,7 @@ while gameOn:
                 saveAllChannelsData(pathT, sessionT, 'T-end', saved_bufferT_ch1, saved_bufferT_ch2, saved_bufferT_ch3, saved_bufferT_ch4)
                 sessionT += 1
 
-            screen.blit(restingStateImage, (0,0))
+            screen.blit(restingStateFinImage, (0,0))
             screen.blit(nextStepSurf, nextStepRect)
             pg.display.flip()
 
@@ -483,7 +485,7 @@ while gameOn:
                         band_deltaRS2_ch2 = []
                         band_deltaRS2_ch3 = []
                         band_deltaRS2_ch4 = []
-                        screen.blit(restingStateImage, (0,0))
+                        screen.blit(restingStateFinImage, (0,0))
                         displayNumber(0, screen, 'timeRSV011')
                         pg.display.flip()
 
@@ -576,10 +578,10 @@ while gameOn:
                     pg.display.flip()
 
             time.sleep(2)
-            if print1 < 5:
+            if print1 < 4:
                 print print1
                 print1 +=1
-            elif print1 == 5 :
+            elif print1 == 4 :
                 pg.quit()
 
                     # if  metric >= 0 :
