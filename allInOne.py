@@ -259,11 +259,11 @@ while gameOn:
             screen.blit(nextStepSurf, nextStepRect)
             pg.display.flip()
 
-            saveAllChannelsData(pathRS1, sessionRS1, 'RS1-end', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
-            saved_bufferRS1_ch1 = []
-            saved_bufferRS1_ch2 = []
-            saved_bufferRS1_ch3 = []
-            saved_bufferRS1_ch4 = []
+            saveAllChannelsData(pathRS1, sessionRS1, 'RS1', saved_bufferRS1_ch1, saved_bufferRS1_ch2, saved_bufferRS1_ch3, saved_bufferRS1_ch4)
+            # saved_bufferRS1_ch1 = []
+            # saved_bufferRS1_ch2 = []
+            # saved_bufferRS1_ch3 = []
+            # saved_bufferRS1_ch4 = []
 
             ''' END OF THE SESSION, WAITING FOR THE USER TO CLICK ON THE TEXT BUTTON '''
             for event in pg.event.get():
@@ -559,6 +559,7 @@ while gameOn:
                 metric = 0
 
             displayedMetric = metric * progressionCoeff
+            print sessionRS2
             if sessionRS2 == 0 :
                 sessionRS2 += 1
                 dailyProgressionFile = open('dailyProgression.txt', 'a+')
