@@ -27,6 +27,9 @@ if args.test :
     restingStateDuration = int(math.floor(int(args.test)))
 '''Data initialization '''
 
+TESTER_ID = os.environ["TESTER_ID"]
+RASPBERRY_PI_ID = os.environ["RASPBERRY_PI_ID"]
+
 dataT = np.zeros((nb_channels, buffersize))
 fdataT = np.zeros((nb_channels, buffersize))
 
@@ -83,19 +86,20 @@ else :
 sessionsNames.write(sessionName+'\n')
 sessionsNames.close()
 
-'''check if the directory /data already exists'''
-if not os.path.isdir('data'):
-    os.mkdir('data')
+'''check if the directory /data/dataPI_ already exists'''
+dataFolder = "dataPI_"+RASPBERRY_PI_ID+'_'+TESTER_ID+'/'
+if not os.path.isdir('data/'+dataFolder):
+    os.mkdir('data/'+dataFolder)
 
 '''create the paths and folders for the new session'''
-if not os.path.isdir('data/'+sessionName):
-    os.mkdir('data/'+sessionName)
-    os.mkdir('data/'+sessionName+'/training-data')
-    os.mkdir('data/'+sessionName+'/RS1-data')
-    os.mkdir('data/'+sessionName+'/RS2-data')
-    pathT = str('data/'+sessionName+'/training-data/')
-    pathRS1 = str('data/'+sessionName+'/RS1-data/')
-    pathRS2 = str('data/'+sessionName+'/RS2-data/')
+
+os.mkdir('data/'+dataFolder+sessionName)
+os.mkdir('data/'+dataFolder+sessionName+'/training-data')
+os.mkdir('data/'+dataFolder+sessionName+'/RS1-data')
+os.mkdir('data/'+dataFolder+sessionName+'/RS2-data')
+pathT = str('data/'+dataFolder+sessionName+'/training-data/')
+pathRS1 = str('data/'+dataFolder+sessionName+'/RS1-data/')
+pathRS2 = str('data/'+dataFolder+sessionName+'/RS2-data/')
 
 
 print '\n \n \n You are running Zeta Game on ', platform
