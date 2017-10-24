@@ -2,7 +2,7 @@
 sudo date --set 2017-10-10
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 sudo apt -y install nodejs
-
+sudo apt-get -y install sshpass
 sudo apt-get -y purge wolfram-engine
 sudo apt-get -y purge libreoffice
 sudo aptitude -y hold wolfram-engine
