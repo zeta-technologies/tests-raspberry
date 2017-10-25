@@ -88,6 +88,8 @@ sessionsNames.close()
 
 '''check if the directory /data/dataPI_ already exists'''
 dataFolder = "dataPI_"+RASPBERRY_PI_ID+'_'+TESTER_ID+'/'
+if not os.path.isdir('data/'):
+    os.mkdir('data/')
 if not os.path.isdir('data/'+dataFolder):
     os.mkdir('data/'+dataFolder)
 
