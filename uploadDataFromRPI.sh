@@ -14,3 +14,4 @@ sshpass -p "MonAmour" scp -o StrictHostKeyChecking=no -r ~/Desktop/v011/tests-ra
 # https://stackoverflow.com/questions/50096/how-to-pass-password-to-scp
 # We can also communicate trpugh ssh key,
 # cd ~/dataOBCITesteurs
+$SHELL
