@@ -6,7 +6,7 @@
 # The RPI ID will be coded in the data/ name, there
 
 cp sessionsNames.txt dataPI*/
-sshpass -p "MonAmour" scp -r dataPI* root@95.85.52.87:/root/JONRPITESTS
+sshpass -p "MonAmour" scp -o StrictHostKeyChecking=no -r dataPI* root@95.85.52.87:/root/JONRPITESTS
 
 # sshpass enables to connect with pasword in option : -p "MonAmour" is the password
 # dataP* autocomplete with the name of the PI which is not known
