@@ -31,7 +31,8 @@ if args.test :
     restingStateDuration = durationSessionInit
 print durationSessionInit
 print restingStateDuration
-
+print durationSessionSaving
+durationSessionSaving = 180
 dataPB = np.zeros((nb_channels, buffersize))
 fdataPB = np.zeros((nb_channels, buffersize))
 
